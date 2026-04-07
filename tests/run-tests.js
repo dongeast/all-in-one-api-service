@@ -86,6 +86,13 @@ const TEST_CASES = {
     description: '测试SSE解析功能',
     requiresApiKey: false,
     category: 'tests'
+  },
+  'provider-api-list': {
+    name: '提供商API列表测试',
+    file: 'provider-api-list-test.js',
+    description: '测试根据提供商获取API列表功能',
+    requiresApiKey: false,
+    category: 'tests'
   }
 }
 
