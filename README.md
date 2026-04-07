@@ -7,7 +7,7 @@
 | 特性            | 说明                                                     |
 | ------------- | ------------------------------------------------------ |
 | 🚀 **零配置使用**  | 全局配置一次，所有项目自动加载                                        |
-| 🔄 **多服务商支持** | OpenAI、Stability、Replicate、Gemini、Anthropic、Midjourney |
+| 🔄 **多服务商支持** | OpenAI、Stability、Replicate、Gemini、Anthropic、Midjourney、LTX、SkyReels |
 | 📐 **三层架构**   | Service层、API层、Param层分离设计                               |
 | ✅ **参数验证**    | 自动验证输入参数类型、范围、必填项                                      |
 | 📤 **结果标准化**  | 统一的输出结果格式，支持路径提取                                       |
@@ -15,6 +15,8 @@
 | 📝 **动态表单**   | 提供获取入参/出参结构的接口，便于生成表单                                  |
 | 📦 **按需导入**   | 支持 CommonJS、ES Module、Tree Shaking                     |
 | 🌊 **流式响应**   | 支持SSE流式响应，实时输出AI生成内容                                   |
+| 🎯 **模型约束**   | 支持模型能力定义，动态参数约束和依赖关系管理                                  |
+| 🔗 **参数联动**   | 参数间智能联动，根据上下文动态更新可选值和约束范围                               |
 
 ## 📦 安装
 
@@ -1125,6 +1127,334 @@ Model: dall-e-3
 | revisedPrompt | string | OpenAI优化后的提示词 |
 ```
 
+## 🎯 模型自定义参数支持
+
+### 概述
+
+框架新增了对模型自定义参数的支持，允许定义模型的能力约束，实现参数间的智能联动和动态约束。这对于视频生成等需要复杂参数组合的场景特别有用。
+
+### 核心功能
+
+#### 1. 模型能力定义
+
+定义每个模型支持的参数组合和约束：
+
+```javascript
+// src/params/providers/ltx/model-capabilities.js
+module.exports = {
+  'ltx-2-3-fast': {
+    aspectRatios: ['16:9', '9:16'],
+    resolutions: {
+      '1080p': {
+        landscape: '1920x1080',
+        portrait: '1080x1920',
+        fps: {
+          24: { duration: { min: 6, max: 20, step: 2 } },
+          25: { duration: { min: 6, max: 20, step: 2 } },
+          48: { duration: { min: 6, max: 10, step: 2 } },
+          50: { duration: { min: 6, max: 10, step: 2 } }
+        }
+      },
+      '1440p': {
+        landscape: '2560x1440',
+        portrait: '1440x2560',
+        fps: {
+          24: { duration: { min: 6, max: 10, step: 2 } },
+          25: { duration: { min: 6, max: 10, step: 2 } }
+        }
+      }
+    },
+    endpoints: ['text-to-video', 'image-to-video']
+  }
+}
+```
+
+#### 2. 参数依赖关系
+
+系统自动管理参数间的依赖关系：
+
+```javascript
+const { Services, APIs } = require('all-in-one-api-service')
+
+const ltxService = new Services.LTX()
+const videoAPI = new APIs.LTX.Video.GenerateVideoFromText(ltxService)
+
+// 获取参数配置
+const config = videoAPI.getParamConfig({ model: 'ltx-2-3-fast' })
+
+console.log(config.parameters)
+// [
+//   {
+//     name: 'resolution',
+//     dependencies: ['model'],
+//     enabled: true,
+//     options: ['1920x1080', '1080x1920', '2560x1440', ...],
+//     constraintSource: 'model'
+//   },
+//   {
+//     name: 'fps',
+//     dependencies: ['model', 'resolution'],
+//     enabled: false, // 等待选择 resolution
+//     ...
+//   }
+// ]
+```
+
+#### 3. 动态参数约束
+
+根据已选择的参数动态更新其他参数的约束：
+
+```javascript
+// 初始状态
+const config0 = videoAPI.getParamConfig({})
+const resolutionParam = config0.parameters.find(p => p.name === 'resolution')
+console.log(resolutionParam.enabled) // false - 等待选择 model
+
+// 选择模型后
+const config1 = videoAPI.getParamConfig({ model: 'ltx-2-3-fast' })
+const resolutionParam1 = config1.parameters.find(p => p.name === 'resolution')
+console.log(resolutionParam1.enabled) // true
+console.log(resolutionParam1.options) // ['1920x1080', '1080x1920', ...]
+
+// 选择分辨率后
+const config2 = videoAPI.getParamConfig({ 
+  model: 'ltx-2-3-fast', 
+  resolution: '1080x1920' 
+})
+const fpsParam = config2.parameters.find(p => p.name === 'fps')
+console.log(fpsParam.options) // [24, 25, 48, 50]
+
+const durationParam = config2.parameters.find(p => p.name === 'duration')
+console.log(durationParam.enabled) // false - 等待选择 fps
+
+// 选择帧率后
+const config3 = videoAPI.getParamConfig({ 
+  model: 'ltx-2-3-fast', 
+  resolution: '1080x1920',
+  fps: 24
+})
+const durationParam3 = config3.parameters.find(p => p.name === 'duration')
+console.log(durationParam3.min) // 6
+console.log(durationParam3.max) // 20
+console.log(durationParam3.step) // 2
+```
+
+### 使用示例
+
+#### 完整的视频生成流程
+
+```javascript
+const { Services, APIs } = require('all-in-one-api-service')
+
+async function generateVideo() {
+  const ltxService = new Services.LTX()
+  const videoAPI = new APIs.LTX.Video.GenerateVideoFromText(ltxService)
+  
+  // 步骤1: 获取初始参数配置
+  const initialConfig = videoAPI.getParamConfig({})
+  console.log('下一步应该选择:', initialConfig.state.nextParam) // 'model'
+  
+  // 步骤2: 选择模型
+  const model = 'ltx-2-3-fast'
+  const modelConfig = videoAPI.getParamConfig({ model })
+  console.log('可用分辨率:', modelConfig.parameters.find(p => p.name === 'resolution').options)
+  
+  // 步骤3: 选择分辨率
+  const resolution = '1080x1920'
+  const resolutionConfig = videoAPI.getParamConfig({ model, resolution })
+  console.log('可用帧率:', resolutionConfig.parameters.find(p => p.name === 'fps').options)
+  
+  // 步骤4: 选择帧率
+  const fps = 24
+  const fpsConfig = videoAPI.getParamConfig({ model, resolution, fps })
+  const durationParam = fpsConfig.parameters.find(p => p.name === 'duration')
+  console.log(`时长范围: ${durationParam.min}-${durationParam.max}秒，步长: ${durationParam.step}秒`)
+  
+  // 步骤5: 执行视频生成
+  const result = await videoAPI.execute({
+    prompt: 'A cat playing piano',
+    model,
+    resolution,
+    fps,
+    duration: 10
+  })
+  
+  console.log(result.data.videoUrl)
+}
+```
+
+#### 参数验证与建议
+
+```javascript
+const { Services, APIs } = require('all-in-one-api-service')
+
+const ltxService = new Services.LTX()
+const videoAPI = new APIs.LTX.Video.GenerateVideoFromText(ltxService)
+
+// 验证参数组合
+const validationResult = videoAPI.validateParamsWithContext({
+  model: 'ltx-2-3-fast',
+  resolution: '1080x1920',
+  fps: 24,
+  duration: 30 // 超出范围
+})
+
+if (!validationResult.valid) {
+  console.log('验证失败:', validationResult.errors)
+  // [{
+  //   message: '模型 "ltx-2-3-fast" 在分辨率 "1080x1920" 和 FPS "24" 下，时长 "30秒" 超出允许范围（6-20秒）',
+  //   suggestions: {
+  //     durationRange: { min: 6, max: 20 },
+  //     suggestedFPS: [24, 25] // 支持更长时长的帧率
+  //   }
+  // }]
+  
+  console.log('参数状态:', validationResult.state)
+  // {
+  //   complete: false,
+  //   missingParams: [],
+  //   providedParams: ['model', 'resolution', 'fps', 'duration'],
+  //   progress: 1
+  // }
+}
+```
+
+### 参数状态分析
+
+系统自动分析参数状态并提供智能提示：
+
+```javascript
+const config = videoAPI.getParamConfig({ model: 'ltx-2-3-fast' })
+
+console.log(config.state)
+// {
+//   complete: false,           // 是否所有必填参数都已提供
+//   missingParams: ['prompt'], // 缺少的必填参数
+//   providedParams: ['model'], // 已提供的参数
+//   enabledParams: ['prompt', 'resolution'], // 当前启用的参数
+//   nextParam: 'prompt',       // 建议下一个填写的参数
+//   progress: 0.5              // 完成进度 (0-1)
+// }
+```
+
+### 获取可用选项
+
+根据上下文获取参数的可用选项：
+
+```javascript
+// 获取特定模型的分辨率选项
+const options = videoAPI.getAvailableOptions('ltx-2-3-fast', {
+  aspectRatio: '16:9'
+})
+
+console.log(options)
+// {
+//   aspectRatios: ['16:9', '9:16'],
+//   resolutions: {
+//     '1080p': { value: '1920x1080', orientation: 'landscape' },
+//     '1440p': { value: '2560x1440', orientation: 'landscape' }
+//   },
+//   fps: [],
+//   duration: null
+// }
+```
+
+### React 动态表单示例
+
+```javascript
+import React, { useState, useEffect } from 'react'
+import { Services, APIs } from 'all-in-one-api-service'
+
+function VideoGeneratorForm() {
+  const [videoAPI] = useState(() => {
+    const ltxService = new Services.LTX()
+    return new APIs.LTX.Video.GenerateVideoFromText(ltxService)
+  })
+  
+  const [config, setConfig] = useState(() => videoAPI.getParamConfig({}))
+  const [formData, setFormData] = useState({})
+  
+  useEffect(() => {
+    // 当表单数据变化时，更新参数配置
+    setConfig(videoAPI.getParamConfig(formData))
+  }, [formData, videoAPI])
+  
+  const handleChange = (paramName, value) => {
+    setFormData(prev => {
+      const newFormData = { ...prev, [paramName]: value }
+      
+      // 清除受影响参数的值
+      const param = config.parameters.find(p => p.name === paramName)
+      if (param && param.affects) {
+        param.affects.forEach(affectedParam => {
+          delete newFormData[affectedParam]
+        })
+      }
+      
+      return newFormData
+    })
+  }
+  
+  return (
+    <form>
+      {config.parameters.map(param => (
+        <div key={param.name}>
+          <label>
+            {param.name}
+            {param.required && <span>*</span>}
+          </label>
+          
+          {!param.enabled ? (
+            <div className="disabled">
+              等待选择: {param.dependencies.join(', ')}
+            </div>
+          ) : param.type === 'enum' ? (
+            <select
+              value={formData[param.name] || ''}
+              onChange={(e) => handleChange(param.name, e.target.value)}
+            >
+              <option value="">请选择</option>
+              {param.options && param.options.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          ) : param.type === 'number' ? (
+            <input
+              type="number"
+              value={formData[param.name] || ''}
+              min={param.min}
+              max={param.max}
+              step={param.step}
+              onChange={(e) => handleChange(param.name, Number(e.target.value))}
+            />
+          ) : (
+            <input
+              type="text"
+              value={formData[param.name] || ''}
+              onChange={(e) => handleChange(param.name, e.target.value)}
+            />
+          )}
+          
+          <small>{param.description}</small>
+          {param.constraintSource && (
+            <small className="constraint">
+              约束来源: {param.constraintSource}
+            </small>
+          )}
+        </div>
+      ))}
+      
+      <div className="progress">
+        完成进度: {(config.state.progress * 100).toFixed(0)}%
+        {config.state.nextParam && (
+          <span> - 下一步: {config.state.nextParam}</span>
+        )}
+      </div>
+    </form>
+  )
+}
+```
+
 ### TypeScript类型定义
 
 本模块提供完整的TypeScript类型定义，方便在TypeScript项目中使用：
@@ -1351,6 +1681,8 @@ console.log(renderForm(inputInfo))
 | **Google Gemini** | Imagen                                 | Gemini Pro, Gemini Ultra     | -            | -                | 🚧 计划中 |
 | **Anthropic**     | -                                      | Claude 3 Opus, Sonnet, Haiku | -            | -                | 🚧 计划中 |
 | **Midjourney**    | Midjourney V6                          | -                            | -            | -                | 🚧 计划中 |
+| **LTX**           | -                                      | -                            | 文本生成视频, 图像生成视频, 音频生成视频, 视频扩展, 视频重拍 | - | 🚧 计划中 |
+| **SkyReels**      | -                                      | -                            | 文本生成视频, 图像生成视频, 视频风格重绘, 口型同步, 多角色头像 | - | 🚧 计划中 |
 
 ## ⚙️ 配置
 
@@ -1490,6 +1822,57 @@ class BaseAPI<T = any> {
   
   getParamDetail(paramName: string): ParamInfo | null
   generateDocs(format: 'markdown' | 'json' | 'html'): string
+  
+  // 新增：模型参数支持
+  getParamConfig(context?: Record<string, any>): ParamConfig
+  validateParamsWithContext(params: Record<string, any>): ValidationWithContextResult
+  getModelParamOptions(model?: string): ModelCapabilities | null
+  getAvailableOptions(model: string, context?: Record<string, any>): AvailableOptions | null
+}
+
+// 新增类型定义
+interface ParamConfig {
+  apiName: string
+  modelName: string
+  parameters: ParameterInfo[]
+  state: ParamState
+  hasModelCapabilities: boolean
+  modelCapabilities?: ModelCapabilities
+}
+
+interface ParameterInfo {
+  name: string
+  type: string
+  required: boolean
+  description: string
+  default?: any
+  dependencies: string[]
+  affects: string[]
+  visible: boolean
+  enabled: boolean
+  constraintSource: string | null
+  options?: any[]
+  min?: number
+  max?: number
+  step?: number
+}
+
+interface ParamState {
+  complete: boolean
+  missingParams: string[]
+  providedParams: string[]
+  enabledParams: string[]
+  nextParam: string | null
+  progress: number
+}
+
+interface ValidationWithContextResult {
+  valid: boolean
+  errors: Array<{
+    message: string
+    suggestions: Record<string, any>
+  }>
+  state: ParamState
 }
 ```
 
@@ -1550,6 +1933,36 @@ npm run lint
 ```
 
 ## 📝 更新日志
+
+### v1.2.0
+
+- ✨ 新增模型自定义参数支持
+  - 新增 `ModelConstraintValidator` 模型约束验证器
+  - 新增 `ParamConfigManager` 参数配置管理器
+  - 支持 `modelCapabilities` 模型能力定义
+  - 实现参数依赖关系管理
+  - 实现动态参数约束和联动
+  - 新增 `getParamConfig()` 获取参数配置
+  - 新增 `validateParamsWithContext()` 验证参数并返回建议
+  - 新增 `getModelParamOptions()` 获取模型参数选项
+  - 新增 `getAvailableOptions()` 获取可用参数选项
+- 🎬 新增 LTX 视频生成服务商
+  - 支持文本生成视频
+  - 支持图像生成视频
+  - 支持音频生成视频
+  - 支持视频时长扩展
+  - 支持视频片段重拍
+- 🎭 新增 SkyReels 视频服务商
+  - 支持文本生成视频
+  - 支持图像生成视频
+  - 支持视频风格重绘
+  - 支持口型同步
+  - 支持多角色头像生成
+- 📝 完善参数状态分析
+  - 自动识别缺少的参数
+  - 自动提示下一步应该选择什么
+  - 自动计算完成进度
+  - 参数验证失败时提供修正建议
 
 ### v1.1.0
 
