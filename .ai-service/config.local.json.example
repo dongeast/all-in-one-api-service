@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "defaultProvider": "openai",
+  "providers": {
+    "openai": {
+      "apiKey": "YOUR_REAL_OPENAI_API_KEY_HERE"
+    }
+  }
+}

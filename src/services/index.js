@@ -1,0 +1,23 @@
+/**
+ * Service层入口
+ */
+
+const BaseService = require('./base-service')
+const OpenAIService = require('./openai-service')
+const StabilityService = require('./stability-service')
+const ReplicateService = require('./replicate-service')
+const GeminiService = require('./gemini-service')
+const AnthropicService = require('./anthropic-service')
+const MidjourneyService = require('./midjourney-service')
+const CustomService = require('./custom-service')
+
+module.exports = {
+  BaseService,
+  OpenAI: OpenAIService,
+  Stability: StabilityService,
+  Replicate: ReplicateService,
+  Gemini: GeminiService,
+  Anthropic: AnthropicService,
+  Midjourney: MidjourneyService,
+  Custom: CustomService
+}

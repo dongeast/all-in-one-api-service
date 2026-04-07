@@ -1,0 +1,73 @@
+{
+  "name": "all-in-one-api-service",
+  "version": "1.0.0",
+  "description": "统一的AI接口处理模块",
+  "main": "index.js",
+  "module": "index.esm.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./index.esm.js",
+      "types": "./index.d.ts"
+    },
+    "./services": "./src/services/index.js",
+    "./apis": "./src/apis/index.js",
+    "./apis/openai": "./src/apis/openai/index.js",
+    "./apis/openai/image": "./src/apis/openai/image/index.js",
+    "./apis/openai/text": "./src/apis/openai/text/index.js",
+    "./apis/openai/video": "./src/apis/openai/video/index.js",
+    "./apis/openai/audio": "./src/apis/openai/audio/index.js",
+    "./apis/stability": "./src/apis/stability/index.js",
+    "./apis/stability/image": "./src/apis/stability/image/index.js",
+    "./apis/replicate": "./src/apis/replicate/index.js",
+    "./apis/gemini": "./src/apis/gemini/index.js",
+    "./apis/anthropic": "./src/apis/anthropic/index.js",
+    "./apis/midjourney": "./src/apis/midjourney/index.js",
+    "./params": "./src/params/index.js",
+    "./utils": "./src/utils/index.js",
+    "./config": "./src/config/index.js"
+  },
+  "files": [
+    "index.js",
+    "index.esm.js",
+    "index.d.ts",
+    "src/**/*"
+  ],
+  "scripts": {
+    "test": "node tests/run-tests.js --tests",
+    "test:all": "node tests/run-tests.js --all",
+    "test:examples": "node tests/run-tests.js --examples",
+    "test:stream": "node tests/run-tests.js stream-basic",
+    "test:list": "node tests/run-tests.js --list",
+    "lint": "eslint src/",
+    "build": "echo \"No build step required for CommonJS module\"",
+    "setup": "node scripts/setup-config.js"
+  },
+  "keywords": [
+    "ai",
+    "openai",
+    "image-generation",
+    "text-generation",
+    "video-generation",
+    "stability-ai",
+    "replicate",
+    "gemini",
+    "anthropic",
+    "midjourney"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
+  "optionalDependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
