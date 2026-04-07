@@ -7,6 +7,7 @@ const { deepMerge, deepClone } = require('../utils/helpers')
 const { validateParams, checkDependencies } = require('./validators')
 const { transformParams } = require('./transformers')
 const { extractOutput, extractSingleField } = require('./extractors')
+const { ModelConstraintValidator } = require('./model-constraint-validator')
 
 /**
  * Param基类
@@ -21,6 +22,7 @@ class BaseParam {
       input: schema.input || {},
       output: schema.output || {}
     }
+    this.modelCapabilities = schema.modelCapabilities || null
   }
 
   /**
@@ -29,12 +31,29 @@ class BaseParam {
    * @returns {{valid: boolean, errors: string[]}} 验证结果
    */
   validate(params) {
-    const validationResult = validateParams(params, this.schema)
+    const validationResult = validateParams(params, this.schema, {
+      modelCapabilities: this.modelCapabilities
+    })
     if (!validationResult.valid) {
       return validationResult
     }
 
     return checkDependencies(params, this.schema)
+  }
+
+  /**
+   * 获取模型可用参数选项
+   * @param {string} model - 模型名称
+   * @param {object} context - 上下文参数
+   * @returns {object|null} 可用选项
+   */
+  getAvailableOptions(model, context = {}) {
+    if (!this.modelCapabilities || !this.modelCapabilities[model]) {
+      return null
+    }
+
+    const validator = new ModelConstraintValidator()
+    return validator.getAvailableOptions(model, this.modelCapabilities, context)
   }
 
   /**

@@ -10,6 +10,7 @@ const GeminiService = require('./gemini-service')
 const AnthropicService = require('./anthropic-service')
 const MidjourneyService = require('./midjourney-service')
 const SkyreelsService = require('./skyreels-service')
+const LTXService = require('./ltx-service')
 const CustomService = require('./custom-service')
 
 module.exports = {
@@ -21,5 +22,6 @@ module.exports = {
   Anthropic: AnthropicService,
   Midjourney: MidjourneyService,
   Skyreels: SkyreelsService,
+  LTX: LTXService,
   Custom: CustomService
 }

@@ -40,6 +40,13 @@
       "timeout": 120000,
       "retryCount": 3,
       "retryDelay": 2000
+    },
+    "ltx": {
+      "apiKey": "YOUR_LTX_API_KEY",
+      "baseURL": "https://api.ltx.video",
+      "timeout": 300000,
+      "retryCount": 3,
+      "retryDelay": 2000
     }
   },
   "logging": {

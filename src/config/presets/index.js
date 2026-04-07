@@ -9,6 +9,7 @@ const gemini = require('./gemini')
 const anthropic = require('./anthropic')
 const midjourney = require('./midjourney')
 const skyreels = require('./skyreels')
+const ltx = require('./ltx')
 
 module.exports = {
   version: '1.0',
@@ -20,7 +21,8 @@ module.exports = {
     gemini,
     anthropic,
     midjourney,
-    skyreels
+    skyreels,
+    ltx
   },
   logging: {
     level: 'info',

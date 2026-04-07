@@ -6,6 +6,7 @@
 const { generateId, formatError } = require('../utils/helpers')
 const { createLogger } = require('../utils/logger')
 const BaseParam = require('../params/base-param')
+const ParamConfigManager = require('../params/param-config-manager')
 
 /**
  * API基类
@@ -21,6 +22,7 @@ class BaseAPI {
     this.param = paramSchema ? new BaseParam(paramSchema) : new BaseParam()
     this.logger = service.logger || createLogger({ level: 'INFO' })
     this.apiName = this.constructor.name
+    this.configManager = new ParamConfigManager()
   }
 
   /**
@@ -304,6 +306,104 @@ class BaseAPI {
    */
   getParamDetail(paramName) {
     return this.param.getParamDetail(paramName)
+  }
+
+  /**
+   * 获取参数配置（统一接口）
+   * @param {object} context - 当前参数上下文
+   * @returns {object} 参数配置
+   */
+  getParamConfig(context = {}) {
+    const schema = this.param.getSchema()
+    schema.apiName = this.apiName
+    schema.modelName = this.getModelName()
+    
+    return this.configManager.getParamConfig(
+      schema,
+      context,
+      this.param.modelCapabilities
+    )
+  }
+
+  /**
+   * 验证参数并返回建议（统一接口）
+   * @param {object} params - 参数对象
+   * @returns {object} 验证结果
+   */
+  validateParamsWithContext(params) {
+    const validationResult = this.param.validate(params)
+    const config = this.getParamConfig(params)
+    
+    return {
+      valid: validationResult.valid,
+      errors: validationResult.errors.map(error => ({
+        message: error,
+        suggestions: this.getSuggestions(error, params)
+      })),
+      state: config.state
+    }
+  }
+
+  /**
+   * 获取错误建议
+   * @param {string} error - 错误信息
+   * @param {object} params - 参数对象
+   * @returns {object} 建议信息
+   */
+  getSuggestions(error, params) {
+    const suggestions = {}
+    
+    if (error.includes('时长') && error.includes('超出允许范围')) {
+      if (params.model && params.resolution && params.fps) {
+        const config = this.getParamConfig(params)
+        const durationParam = config.parameters.find(p => p.name === 'duration')
+        if (durationParam) {
+          suggestions.durationRange = {
+            min: durationParam.min,
+            max: durationParam.max
+          }
+          
+          const fpsParam = config.parameters.find(p => p.name === 'fps')
+          if (fpsParam && fpsParam.options) {
+            suggestions.suggestedFPS = fpsParam.options.filter(fps => {
+              const testParams = { ...params, fps }
+              const testConfig = this.getParamConfig(testParams)
+              const testDuration = testConfig.parameters.find(p => p.name === 'duration')
+              return testDuration && testDuration.max >= params.duration
+            })
+          }
+        }
+      }
+    }
+    
+    return suggestions
+  }
+
+  /**
+   * 获取模型参数选项
+   * @param {string} model - 模型名称（可选）
+   * @returns {object|null} 参数选项
+   */
+  getModelParamOptions(model) {
+    if (!this.param.modelCapabilities) {
+      return null
+    }
+
+    if (model) {
+      return this.param.modelCapabilities[model] || null
+    }
+
+    return this.param.modelCapabilities
+  }
+
+  /**
+   * 获取可用的参数选项（根据上下文）
+   * @param {string} model - 模型名称
+   * @param {object} context - 上下文参数
+   * @returns {object|null} 可用选项
+   */
+  getAvailableOptions(model, context = {}) {
+    return this.param.getAvailableOptions(model, context)
   }
 
   /**

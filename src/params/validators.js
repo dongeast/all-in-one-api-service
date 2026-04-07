@@ -3,6 +3,8 @@
  * 用于验证输入参数
  */
 
+const { ModelConstraintValidator } = require('./model-constraint-validator')
+
 /**
  * 验证结果类
  */
@@ -71,6 +73,20 @@ function validateNumber(value, schema) {
 
   if (schema.integer && !Number.isInteger(value)) {
     errors.push('Number must be an integer')
+  }
+
+  // 验证步长
+  if (schema.step !== undefined && schema.step > 0 && schema.min !== undefined) {
+    const offset = (value - schema.min) % schema.step
+    if (offset !== 0) {
+      const lowerValue = value - offset
+      const upperValue = lowerValue + schema.step
+      
+      errors.push(
+        `Number does not match step requirement (step: ${schema.step}). ` +
+        `Closest valid values: ${lowerValue >= schema.min ? lowerValue : ''}${lowerValue >= schema.min && upperValue <= (schema.max || Infinity) ? ', ' : ''}${upperValue <= (schema.max || Infinity) ? upperValue : ''}`
+      )
+    }
   }
 
   return new ValidationResult(errors.length === 0, errors)
@@ -213,9 +229,11 @@ function validate(value, schema) {
  * 验证参数对象
  * @param {object} params - 参数对象
  * @param {object} schema - 参数模式定义
+ * @param {object} options - 验证选项（可选）
+ * @param {object} options.modelCapabilities - 模型能力定义
  * @returns {ValidationResult} 验证结果
  */
-function validateParams(params, schema) {
+function validateParams(params, schema, options = {}) {
   const errors = []
 
   if (!schema || !schema.input) {
@@ -237,6 +255,18 @@ function validateParams(params, schema) {
     const result = validate(value, fieldSchema)
     if (!result.valid) {
       errors.push(`Parameter "${key}": ${result.errors.join(', ')}`)
+    }
+  }
+
+  if (options.modelCapabilities && params.model) {
+    const constraintValidator = new ModelConstraintValidator()
+    const constraintResult = constraintValidator.validate(
+      params.model,
+      params,
+      options.modelCapabilities
+    )
+    if (!constraintResult.valid) {
+      errors.push(...constraintResult.errors)
     }
   }
 

@@ -11,6 +11,7 @@ const Gemini = require('./gemini')
 const Anthropic = require('./anthropic')
 const Midjourney = require('./midjourney')
 const Skyreels = require('./skyreels')
+const LTX = require('./ltx')
 
 module.exports = {
   BaseAPI,
@@ -20,5 +21,6 @@ module.exports = {
   Gemini,
   Anthropic,
   Midjourney,
-  Skyreels
+  Skyreels,
+  LTX
 }
