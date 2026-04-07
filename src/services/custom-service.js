@@ -29,10 +29,7 @@ class CustomService extends BaseService {
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = require('../config').getConfigManager()
       const providerConfig = configManager.getProviderConfig(this.providerName)
-      this.config = {
-        ...providerConfig,
-        ...this.config
-      }
+      this.config = BaseService.mergeConfig(providerConfig, this.config)
     }
 
     await super.initialize()

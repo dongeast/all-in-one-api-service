@@ -8,6 +8,7 @@ const replicate = require('./replicate')
 const gemini = require('./gemini')
 const anthropic = require('./anthropic')
 const midjourney = require('./midjourney')
+const skyreels = require('./skyreels')
 
 module.exports = {
   version: '1.0',
@@ -18,7 +19,8 @@ module.exports = {
     replicate,
     gemini,
     anthropic,
-    midjourney
+    midjourney,
+    skyreels
   },
   logging: {
     level: 'info',

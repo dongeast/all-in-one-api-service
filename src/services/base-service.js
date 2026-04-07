@@ -109,6 +109,27 @@ class BaseService {
   }
 
   /**
+   * 合并配置（过滤掉 undefined 值）
+   * @param {object} baseConfig - 基础配置（优先级低）
+   * @param {object} overrideConfig - 覆盖配置（优先级高）
+   * @returns {object} 合并后的配置
+   */
+  static mergeConfig(baseConfig = {}, overrideConfig = {}) {
+    // 过滤掉 undefined 值
+    const filteredOverride = {}
+    Object.keys(overrideConfig).forEach(key => {
+      if (overrideConfig[key] !== undefined) {
+        filteredOverride[key] = overrideConfig[key]
+      }
+    })
+
+    return {
+      ...baseConfig,
+      ...filteredOverride
+    }
+  }
+
+  /**
    * 初始化服务
    * @returns {Promise<void>}
    */

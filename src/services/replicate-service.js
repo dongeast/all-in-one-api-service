@@ -30,10 +30,7 @@ class ReplicateService extends BaseService {
     if (!this.config.apiToken && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
       const providerConfig = configManager.getProviderConfig('replicate')
-      this.config = {
-        ...providerConfig,
-        ...this.config
-      }
+      this.config = BaseService.mergeConfig(providerConfig, this.config)
     }
 
     await super.initialize()

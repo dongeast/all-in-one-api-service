@@ -30,10 +30,7 @@ class OpenAIService extends BaseService {
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
       const providerConfig = configManager.getProviderConfig('openai')
-      this.config = {
-        ...providerConfig,
-        ...this.config
-      }
+      this.config = BaseService.mergeConfig(providerConfig, this.config)
     }
 
     await super.initialize()

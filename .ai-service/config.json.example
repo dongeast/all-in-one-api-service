@@ -33,6 +33,13 @@
       "apiKey": "YOUR_MIDJOURNEY_API_KEY",
       "baseURL": "https://api.midjourney.com/v1",
       "timeout": 120000
+    },
+    "skyreels": {
+      "apiKey": "YOUR_SKYREELS_API_KEY",
+      "baseURL": "https://api-gateway.skyreels.ai/api/v1",
+      "timeout": 120000,
+      "retryCount": 3,
+      "retryDelay": 2000
     }
   },
   "logging": {

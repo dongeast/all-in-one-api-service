@@ -8,6 +8,7 @@ const replicate = require('./replicate')
 const gemini = require('./gemini')
 const anthropic = require('./anthropic')
 const midjourney = require('./midjourney')
+const skyreels = require('./skyreels')
 
 module.exports = {
   openai,
@@ -15,5 +16,6 @@ module.exports = {
   replicate,
   gemini,
   anthropic,
-  midjourney
+  midjourney,
+  skyreels
 }

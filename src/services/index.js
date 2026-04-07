@@ -9,6 +9,7 @@ const ReplicateService = require('./replicate-service')
 const GeminiService = require('./gemini-service')
 const AnthropicService = require('./anthropic-service')
 const MidjourneyService = require('./midjourney-service')
+const SkyreelsService = require('./skyreels-service')
 const CustomService = require('./custom-service')
 
 module.exports = {
@@ -19,5 +20,6 @@ module.exports = {
   Gemini: GeminiService,
   Anthropic: AnthropicService,
   Midjourney: MidjourneyService,
+  Skyreels: SkyreelsService,
   Custom: CustomService
 }

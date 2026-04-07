@@ -10,6 +10,7 @@ const Replicate = require('./replicate')
 const Gemini = require('./gemini')
 const Anthropic = require('./anthropic')
 const Midjourney = require('./midjourney')
+const Skyreels = require('./skyreels')
 
 module.exports = {
   BaseAPI,
@@ -18,5 +19,6 @@ module.exports = {
   Replicate,
   Gemini,
   Anthropic,
-  Midjourney
+  Midjourney,
+  Skyreels
 }
