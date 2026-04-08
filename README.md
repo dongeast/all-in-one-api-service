@@ -1680,6 +1680,463 @@ function validateParamInRealTime(apiInstance, paramName, value) {
 }
 ```
 
+## 🔍 查询服务与国际化
+
+本框架提供了强大的查询服务和国际化支持，方便外部项目快速查询 API、模型和服务商信息。
+
+### 引入方式
+
+```javascript
+const {
+  QueryService,
+  Constants,
+  setLanguage,
+  getLanguage,
+  t
+} = require('all-in-one-api-service')
+```
+
+### 国际化 (i18n)
+
+#### 设置语言
+
+```javascript
+const { setLanguage, getLanguage } = require('all-in-one-api-service')
+
+// 设置为中文
+setLanguage('zh-CN')
+
+// 设置为英文
+setLanguage('en-US')
+
+// 获取当前语言
+const currentLang = getLanguage()
+console.log(currentLang) // 'zh-CN' 或 'en-US'
+```
+
+#### 翻译文本
+
+```javascript
+const { t, setLanguage } = require('all-in-one-api-service')
+
+// 设置语言
+setLanguage('zh-CN')
+
+// 翻译文本
+console.log(t('api.text_to_video')) // '文本生成视频'
+console.log(t('provider.ltx')) // 'LTX'
+console.log(t('model.ltx-2-fast')) // 'LTX 2 Fast'
+
+// 切换语言
+setLanguage('en-US')
+console.log(t('api.text_to_video')) // 'Text to Video'
+```
+
+#### 支持的语言
+
+| 语言代码 | 语言名称 |
+|---------|---------|
+| `zh-CN` | 简体中文 (默认) |
+| `en-US` | English |
+
+### QueryService 查询服务
+
+QueryService 提供了丰富的查询方法，用于查询 API、模型、服务商等元数据信息。
+
+#### 查询 API
+
+##### 按类型查询 API
+
+```javascript
+const { QueryService, Constants } = require('all-in-one-api-service')
+const { APITypes, Providers } = Constants
+
+// 查询所有 Text to Video API
+const allTextToVideoAPIs = QueryService.getAPIsByType(APITypes.TEXT_TO_VIDEO)
+
+// 查询指定服务商的 Text to Video API
+const ltxTextToVideoAPIs = QueryService.getAPIsByType(APITypes.TEXT_TO_VIDEO, {
+  provider: Providers.LTX
+})
+
+console.log(`共找到 ${allTextToVideoAPIs.length} 个 Text to Video API`)
+```
+
+##### 按服务商查询 API
+
+```javascript
+const { QueryService, Constants } = require('all-in-one-api-service')
+const { Providers } = Constants
+
+// 获取 LTX 服务商的所有 API
+const ltxAPIs = QueryService.getAPIsByProvider(Providers.LTX)
+
+console.log(`LTX 服务商共有 ${ltxAPIs.length} 个 API`)
+ltxAPIs.forEach(api => {
+  console.log(`- ${api.displayName}: ${api.description}`)
+})
+```
+
+##### 按模型查询 API
+
+```javascript
+const { QueryService } = require('all-in-one-api-service')
+
+// 查询支持指定模型的 API
+const apis = QueryService.getAPIsByModel('ltx-2-fast')
+
+console.log(`模型 "ltx-2-fast" 支持 ${apis.length} 个 API`)
+apis.forEach(api => {
+  console.log(`- ${api.displayName}`)
+})
+```
+
+##### 获取 API 详情
+
+```javascript
+const { QueryService } = require('all-in-one-api-service')
+
+// 获取 API 详细信息
+const apiDetail = QueryService.getAPIDetail('generate-video-from-text')
+
+if (apiDetail) {
+  console.log('API 名称:', apiDetail.name)
+  console.log('显示名称:', apiDetail.displayName)
+  console.log('描述:', apiDetail.description)
+  console.log('端点:', apiDetail.endpoint)
+  console.log('支持模型:', apiDetail.models?.join(', '))
+  console.log('提供商:', apiDetail.provider)
+  console.log('类型:', apiDetail.type)
+  console.log('标签:', apiDetail.tags?.join(', '))
+}
+```
+
+##### 检查 API 是否存在
+
+```javascript
+const { QueryService } = require('all-in-one-api-service')
+
+// 检查 API 是否存在
+const exists = QueryService.hasAPI('generate-video-from-text')
+console.log('API 存在:', exists) // true 或 false
+```
+
+##### 获取最佳 API
+
+```javascript
+const { QueryService, Constants } = require('all-in-one-api-service')
+const { APITypes, Providers } = Constants
+
+// 根据条件获取最佳 API（按优先级排序）
+const bestAPI = QueryService.getBestAPI(
+  APITypes.TEXT_TO_VIDEO,
+  'ltx-2-pro',
+  { provider: Providers.LTX }
+)
+
+if (bestAPI) {
+  console.log('最佳 API:', bestAPI.displayName)
+  console.log('优先级:', bestAPI.priority)
+}
+```
+
+##### 根据输入输出类型查找接口
+
+```javascript
+const { QueryService, Constants } = require('all-in-one-api-service')
+const { MediaTypes } = Constants
+
+// 查找输入为文本、输出为视频的 API
+const textToVideoAPIs = QueryService.findByInputOutput(
+  MediaTypes.TEXT,
+  MediaTypes.VIDEO
+)
+
+console.log(`找到 ${textToVideoAPIs.length} 个文本转视频 API`)
+textToVideoAPIs.forEach(api => {
+  console.log(`- ${api.displayName} (提供商: ${api.provider})`)
+})
+```
+
+#### 查询模型
+
+##### 获取所有模型
+
+```javascript
+const { QueryService } = require('all-in-one-api-service')
+
+// 获取所有模型列表
+const allModels = QueryService.getAllModels()
+
+console.log(`共有 ${allModels.length} 个模型`)
+allModels.forEach(model => {
+  console.log(`- ${model.displayName} (${model.name})`)
+  console.log(`  系列: ${model.series || 'N/A'}`)
+  console.log(`  提供商: ${model.provider}`)
+})
+```
+
+##### 获取模型详情
+
+```javascript
+const { QueryService } = require('all-in-one-api-service')
+
+// 获取模型详细信息
+const modelDetail = QueryService.getModelDetail('ltx-2-fast')
+
+if (modelDetail) {
+  console.log('模型名称:', modelDetail.name)
+  console.log('显示名称:', modelDetail.displayName)
+  console.log('描述:', modelDetail.description)
+  console.log('系列:', modelDetail.series)
+  console.log('提供商:', modelDetail.provider)
+  console.log('类型:', modelDetail.type)
+  console.log('媒体类型:', modelDetail.mediaType)
+  console.log('优先级:', modelDetail.priority)
+  console.log('标签:', modelDetail.tags?.join(', '))
+  console.log('能力:', modelDetail.capabilities)
+}
+```
+
+##### 按服务商获取模型
+
+```javascript
+const { QueryService, Constants } = require('all-in-one-api-service')
+const { Providers } = Constants
+
+// 获取指定服务商的所有模型
+const ltxModels = QueryService.getModelsByProvider(Providers.LTX)
+
+console.log(`LTX 服务商共有 ${ltxModels.length} 个模型`)
+```
+
+##### 按系列获取模型
+
+```javascript
+const { QueryService, Constants } = require('all-in-one-api-service')
+const { Series } = Constants
+
+// 获取指定系列的所有模型
+const seedanceModels = QueryService.getModelsBySeries(Series.SEEDANCE)
+
+console.log(`Seedance 系列共有 ${seedanceModels.length} 个模型`)
+```
+
+##### 按类型获取模型
+
+```javascript
+const { QueryService, Constants } = require('all-in-one-api-service')
+const { APITypes } = Constants
+
+// 获取支持指定类型的所有模型
+const textToVideoModels = QueryService.getModelsByType(APITypes.TEXT_TO_VIDEO)
+
+console.log(`支持 Text to Video 的模型共有 ${textToVideoModels.length} 个`)
+```
+
+#### 查询服务商
+
+##### 获取所有服务商
+
+```javascript
+const { QueryService } = require('all-in-one-api-service')
+
+// 获取所有服务商列表
+const providers = QueryService.getAllProviders()
+
+console.log(`共有 ${providers.length} 个服务商`)
+providers.forEach(provider => {
+  console.log(`- ${provider}`)
+})
+```
+
+#### 获取统计信息
+
+```javascript
+const { QueryService } = require('all-in-one-api-service')
+
+// 获取系统统计信息
+const stats = QueryService.getStats()
+
+console.log('总模型数:', stats.totalModels)
+console.log('总接口数:', stats.totalAPIs)
+console.log('服务商:', stats.providers.join(', '))
+console.log('支持的类型数:', stats.supportedTypes)
+console.log('支持的媒体类型数:', stats.supportedMediaTypes)
+```
+
+#### 获取支持的类型
+
+```javascript
+const { QueryService } = require('all-in-one-api-service')
+
+// 获取所有支持的 API 类型
+const types = QueryService.getSupportedTypes()
+console.log('支持的 API 类型:', types)
+
+// 获取所有支持的媒体类型
+const mediaTypes = QueryService.getSupportedMediaTypes()
+console.log('支持的媒体类型:', mediaTypes)
+```
+
+### 常量定义
+
+框架提供了丰富的常量定义，方便在代码中使用。
+
+```javascript
+const { Constants } = require('all-in-one-api-service')
+
+const {
+  APITypes,        // API 类型常量
+  MediaTypes,      // 媒体类型常量
+  Providers,       // 服务商常量
+  Series,          // 模型系列常量
+  SeriesMeta,      // 模型系列元数据
+  ProviderMeta,    // 服务商元数据
+  ProviderPriority // 服务商优先级
+} = Constants
+```
+
+#### API 类型 (APITypes)
+
+```javascript
+const { APITypes } = Constants
+
+console.log(APITypes.TEXT_TO_VIDEO)    // 'text_to_video'
+console.log(APITypes.IMAGE_TO_VIDEO)   // 'image_to_video'
+console.log(APITypes.AUDIO_TO_VIDEO)   // 'audio_to_video'
+console.log(APITypes.TEXT_TO_IMAGE)    // 'text_to_image'
+console.log(APITypes.TEXT_TO_SPEECH)   // 'text_to_speech'
+// ... 更多类型
+```
+
+#### 媒体类型 (MediaTypes)
+
+```javascript
+const { MediaTypes } = Constants
+
+console.log(MediaTypes.TEXT)   // 'text'
+console.log(MediaTypes.IMAGE)  // 'image'
+console.log(MediaTypes.VIDEO)  // 'video'
+console.log(MediaTypes.AUDIO)  // 'audio'
+console.log(MediaTypes.AUDIO_3D) // '3d'
+```
+
+#### 服务商 (Providers)
+
+```javascript
+const { Providers } = Constants
+
+console.log(Providers.LTX)        // 'ltx'
+console.log(Providers.SKYREELS)   // 'skyreels'
+console.log(Providers.MUREKA)     // 'mureka'
+console.log(Providers.VOLCENGINE) // 'volcengine'
+// ... 更多服务商
+```
+
+#### 模型系列 (Series)
+
+```javascript
+const { Series, SeriesMeta } = Constants
+
+console.log(Series.LTX)       // 'ltx'
+console.log(Series.SKYREELS)  // 'skyreels'
+console.log(Series.MUREKA)    // 'mureka'
+console.log(Series.SEEDANCE)  // 'seedance'
+console.log(Series.SEEDREAM)  // 'seedream'
+console.log(Series.SEED3D)    // 'seed3d'
+
+// 获取系列元数据
+console.log(SeriesMeta[Series.SEEDANCE])
+// {
+//   name: 'seedance',
+//   displayName: 'Seedance',
+//   description: '火山引擎视频生成模型系列',
+//   provider: 'volcengine',
+//   mediaType: 'video'
+// }
+```
+
+### 完整使用示例
+
+```javascript
+const {
+  QueryService,
+  Constants,
+  setLanguage,
+  t
+} = require('all-in-one-api-service')
+
+// 设置中文
+setLanguage('zh-CN')
+
+const { APITypes, Providers, Series, MediaTypes } = Constants
+
+// 示例1: 查询 LTX 服务商的 Text to Video API
+console.log('\n=== 查询 LTX Text to Video API ===')
+const ltxAPIs = QueryService.getAPIsByType(APITypes.TEXT_TO_VIDEO, {
+  provider: Providers.LTX
+})
+ltxAPIs.forEach(api => {
+  console.log(`- ${api.displayName}: ${api.description}`)
+})
+
+// 示例2: 获取模型详情（包含系列信息）
+console.log('\n=== 模型详情 ===')
+const modelDetail = QueryService.getModelDetail('ltx-2-fast')
+console.log(`模型: ${modelDetail.displayName}`)
+console.log(`系列: ${modelDetail.series}`)
+console.log(`提供商: ${modelDetail.provider}`)
+
+// 示例3: 按系列查询模型
+console.log('\n=== Seedance 系列模型 ===')
+const seedanceModels = QueryService.getModelsBySeries(Series.SEEDANCE)
+seedanceModels.forEach(model => {
+  console.log(`- ${model.displayName}`)
+})
+
+// 示例4: 根据输入输出查找接口
+console.log('\n=== 文本转视频接口 ===')
+const textToVideoAPIs = QueryService.findByInputOutput(
+  MediaTypes.TEXT,
+  MediaTypes.VIDEO
+)
+console.log(`共找到 ${textToVideoAPIs.length} 个接口`)
+
+// 示例5: 获取系统统计
+console.log('\n=== 系统统计 ===')
+const stats = QueryService.getStats()
+console.log(`总模型数: ${stats.totalModels}`)
+console.log(`总接口数: ${stats.totalAPIs}`)
+console.log(`服务商: ${stats.providers.join(', ')}`)
+
+// 示例6: 使用翻译
+console.log('\n=== 翻译示例 ===')
+console.log(t('api.text_to_video')) // 文本生成视频
+console.log(t('provider.ltx'))      // LTX
+```
+
+### QueryService API 参考
+
+| 方法 | 参数 | 返回值 | 说明 |
+|-----|------|-------|------|
+| `getAPIsByType(type, options?)` | type: API类型, options: { provider? } | API[] | 按类型查询 API |
+| `getAPIsByProvider(provider)` | provider: 服务商名称 | API[] | 按服务商查询 API |
+| `getAPIsByModel(modelName)` | modelName: 模型名称 | API[] | 按模型查询 API |
+| `getAPIDetail(apiName)` | apiName: API名称 | API \| null | 获取 API 详情 |
+| `hasAPI(apiName)` | apiName: API名称 | boolean | 检查 API 是否存在 |
+| `getBestAPI(type, model?, options?)` | type: API类型, model: 模型名, options: { provider? } | API \| null | 获取最佳 API |
+| `findByInputOutput(inputType, outputType)` | inputType: 输入类型, outputType: 输出类型 | API[] | 根据输入输出查找接口 |
+| `getAllModels()` | - | Model[] | 获取所有模型 |
+| `getModelDetail(modelName)` | modelName: 模型名称 | Model \| null | 获取模型详情 |
+| `getModelsByProvider(provider)` | provider: 服务商名称 | Model[] | 按服务商获取模型 |
+| `getModelsBySeries(series)` | series: 系列名称 | Model[] | 按系列获取模型 |
+| `getModelsByType(type)` | type: API类型 | Model[] | 按类型获取模型 |
+| `getAllProviders()` | - | string[] | 获取所有服务商 |
+| `getStats()` | - | Stats | 获取统计信息 |
+| `getSupportedTypes()` | - | string[] | 获取支持的 API 类型 |
+| `getSupportedMediaTypes()` | - | string[] | 获取支持的媒体类型 |
+
 ## 🔧 高级用法
 
 ### 自定义参数模式

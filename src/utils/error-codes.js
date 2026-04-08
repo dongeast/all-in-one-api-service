@@ -1,8 +1,63 @@
 /**
  * 错误码定义
+ * 支持多语言错误消息
  */
 
-module.exports = {
+const { t } = require('./i18n')
+
+/**
+ * 错误码映射到翻译键
+ */
+const ErrorCodeKeys = {
+  E001: 'api.serviceNotInitialized',
+  E002: 'api.invalidAPIKey',
+  E003: 'api.validationFailed',
+  E004: 'api.requiredParamMissing',
+  E005: 'api.paramTypeError',
+  E006: 'api.paramValueOutOfRange',
+  E007: 'api.apiCallFailed',
+  E008: 'api.networkTimeout',
+  E009: 'api.responseParsingFailed',
+  E010: 'api.serviceUnavailable',
+  E011: 'api.configLoadFailed',
+  E012: 'api.unsupportedAPIType',
+  E013: 'api.taskTimeout',
+  E014: 'api.taskFailed',
+  E015: 'api.taskCanceled'
+}
+
+/**
+ * 获取错误消息
+ * @param {string} code - 错误码
+ * @param {string} language - 语言代码(可选)
+ * @returns {string} 错误消息
+ */
+function getErrorMessage(code, language) {
+  const key = ErrorCodeKeys[code]
+  if (!key) {
+    return code
+  }
+  return t(key, { language })
+}
+
+/**
+ * 获取错误对象
+ * @param {string} code - 错误码
+ * @param {string} language - 语言代码(可选)
+ * @returns {object} 错误对象
+ */
+function getError(code, language) {
+  return {
+    code,
+    message: getErrorMessage(code, language)
+  }
+}
+
+/**
+ * 错误码定义(向后兼容)
+ * 保留原有的 message(中文) 和 description(英文) 字段
+ */
+const ErrorCodes = {
   E001: {
     code: 'E001',
     message: '服务未初始化',
@@ -79,3 +134,8 @@ module.exports = {
     description: 'Task was canceled'
   }
 }
+
+module.exports = ErrorCodes
+module.exports.getError = getError
+module.exports.getErrorMessage = getErrorMessage
+module.exports.ErrorCodeKeys = ErrorCodeKeys

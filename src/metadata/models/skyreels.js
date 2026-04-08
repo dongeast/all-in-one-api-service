@@ -2,7 +2,7 @@
  * Skyreels 模型元数据定义
  */
 
-const { APITypes, MediaTypes, Providers } = require('../../constants')
+const { APITypes, MediaTypes, Providers, Series } = require('../../constants')
 const { ModelTags } = require('../../constants/tags')
 
 module.exports = {
@@ -11,6 +11,7 @@ module.exports = {
     displayName: 'Skyreels V4',
     description: 'Skyreels最新视频生成模型，支持文本和图片生成视频',
     logo: '',
+    series: Series.SKYREELS,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE, ModelTags.RECOMMENDED],
@@ -30,6 +31,7 @@ module.exports = {
     displayName: 'Skyreels V3',
     description: 'Skyreels视频生成模型，支持文本和图片生成视频',
     logo: '',
+    series: Series.SKYREELS,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.STABLE],
@@ -49,6 +51,7 @@ module.exports = {
     displayName: 'Skyreels Avatar',
     description: 'Skyreels数字人模型，支持口型同步和动作生成',
     logo: '',
+    series: Series.SKYREELS,
     type: [APITypes.AVATAR_GENERATION, APITypes.LIP_SYNC],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.STABLE],

@@ -1,10 +1,12 @@
 /**
  * 参数验证器
  * 用于验证输入参数
+ * 支持多语言错误消息
  */
 
 const { ModelConstraintValidator } = require('./model-constraint-validator')
 const ConstraintEngine = require('./constraint-engine')
+const { t } = require('../utils/i18n')
 
 /**
  * 验证结果类
@@ -25,26 +27,27 @@ class ValidationResult {
  * 验证字符串类型
  * @param {any} value - 值
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateString(value, schema) {
+function validateString(value, schema, language) {
   const errors = []
 
   if (typeof value !== 'string') {
-    errors.push(`Expected string, got ${typeof value}`)
+    errors.push(t('validation.expectedString', { language, type: typeof value }))
     return new ValidationResult(false, errors)
   }
 
   if (schema.minLength !== undefined && value.length < schema.minLength) {
-    errors.push(`String length must be at least ${schema.minLength}`)
+    errors.push(t('validation.stringMinLength', { language, min: schema.minLength }))
   }
 
   if (schema.maxLength !== undefined && value.length > schema.maxLength) {
-    errors.push(`String length must be at most ${schema.maxLength}`)
+    errors.push(t('validation.stringMaxLength', { language, max: schema.maxLength }))
   }
 
   if (schema.pattern && !schema.pattern.test(value)) {
-    errors.push(`String does not match pattern ${schema.pattern}`)
+    errors.push(t('validation.stringPattern', { language, pattern: schema.pattern }))
   }
 
   return new ValidationResult(errors.length === 0, errors)
@@ -54,39 +57,48 @@ function validateString(value, schema) {
  * 验证数字类型
  * @param {any} value - 值
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateNumber(value, schema) {
+function validateNumber(value, schema, language) {
   const errors = []
 
   if (typeof value !== 'number' || isNaN(value)) {
-    errors.push(`Expected number, got ${typeof value}`)
+    errors.push(t('validation.expectedNumber', { language, type: typeof value }))
     return new ValidationResult(false, errors)
   }
 
   if (schema.min !== undefined && value < schema.min) {
-    errors.push(`Number must be at least ${schema.min}`)
+    errors.push(t('validation.numberMin', { language, min: schema.min }))
   }
 
   if (schema.max !== undefined && value > schema.max) {
-    errors.push(`Number must be at most ${schema.max}`)
+    errors.push(t('validation.numberMax', { language, max: schema.max }))
   }
 
   if (schema.integer && !Number.isInteger(value)) {
-    errors.push('Number must be an integer')
+    errors.push(t('validation.numberInteger', { language }))
   }
 
-  // 验证步长
   if (schema.step !== undefined && schema.step > 0 && schema.min !== undefined) {
     const offset = (value - schema.min) % schema.step
     if (offset !== 0) {
       const lowerValue = value - offset
       const upperValue = lowerValue + schema.step
+      const values = []
       
-      errors.push(
-        `Number does not match step requirement (step: ${schema.step}). ` +
-        `Closest valid values: ${lowerValue >= schema.min ? lowerValue : ''}${lowerValue >= schema.min && upperValue <= (schema.max || Infinity) ? ', ' : ''}${upperValue <= (schema.max || Infinity) ? upperValue : ''}`
-      )
+      if (lowerValue >= schema.min) {
+        values.push(lowerValue)
+      }
+      if (upperValue <= (schema.max || Infinity)) {
+        values.push(upperValue)
+      }
+      
+      errors.push(t('validation.numberStep', { 
+        language, 
+        step: schema.step,
+        values: values.join(', ')
+      }))
     }
   }
 
@@ -97,13 +109,14 @@ function validateNumber(value, schema) {
  * 验证布尔类型
  * @param {any} value - 值
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateBoolean(value, schema) {
+function validateBoolean(value, schema, language) {
   const errors = []
 
   if (typeof value !== 'boolean') {
-    errors.push(`Expected boolean, got ${typeof value}`)
+    errors.push(t('validation.expectedBoolean', { language, type: typeof value }))
     return new ValidationResult(false, errors)
   }
 
@@ -114,18 +127,19 @@ function validateBoolean(value, schema) {
  * 验证枚举类型
  * @param {any} value - 值
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateEnum(value, schema) {
+function validateEnum(value, schema, language) {
   const errors = []
 
   if (!schema.options || !Array.isArray(schema.options)) {
-    errors.push('Enum schema must have options array')
+    errors.push(t('validation.enumSchema', { language }))
     return new ValidationResult(false, errors)
   }
 
   if (!schema.options.includes(value)) {
-    errors.push(`Value must be one of: ${schema.options.join(', ')}`)
+    errors.push(t('validation.enumInvalid', { language, options: schema.options.join(', ') }))
     return new ValidationResult(false, errors)
   }
 
@@ -136,29 +150,34 @@ function validateEnum(value, schema) {
  * 验证数组类型
  * @param {any} value - 值
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateArray(value, schema) {
+function validateArray(value, schema, language) {
   const errors = []
 
   if (!Array.isArray(value)) {
-    errors.push(`Expected array, got ${typeof value}`)
+    errors.push(t('validation.expectedArray', { language, type: typeof value }))
     return new ValidationResult(false, errors)
   }
 
   if (schema.minItems !== undefined && value.length < schema.minItems) {
-    errors.push(`Array must have at least ${schema.minItems} items`)
+    errors.push(t('validation.arrayMinItems', { language, min: schema.minItems }))
   }
 
   if (schema.maxItems !== undefined && value.length > schema.maxItems) {
-    errors.push(`Array must have at most ${schema.maxItems} items`)
+    errors.push(t('validation.arrayMaxItems', { language, max: schema.maxItems }))
   }
 
   if (schema.itemSchema) {
     for (let i = 0; i < value.length; i++) {
-      const itemResult = validate(value[i], schema.itemSchema)
+      const itemResult = validate(value[i], schema.itemSchema, language)
       if (!itemResult.valid) {
-        errors.push(`Item ${i}: ${itemResult.errors.join(', ')}`)
+        errors.push(t('validation.arrayItemInvalid', { 
+          language, 
+          index: i, 
+          error: itemResult.errors.join(', ') 
+        }))
       }
     }
   }
@@ -170,22 +189,27 @@ function validateArray(value, schema) {
  * 验证对象类型
  * @param {any} value - 值
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateObject(value, schema) {
+function validateObject(value, schema, language) {
   const errors = []
 
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    errors.push(`Expected object, got ${typeof value}`)
+    errors.push(t('validation.expectedObject', { language, type: typeof value }))
     return new ValidationResult(false, errors)
   }
 
   if (schema.properties) {
     for (const [key, propSchema] of Object.entries(schema.properties)) {
       if (value[key] !== undefined) {
-        const propResult = validate(value[key], propSchema)
+        const propResult = validate(value[key], propSchema, language)
         if (!propResult.valid) {
-          errors.push(`Property "${key}": ${propResult.errors.join(', ')}`)
+          errors.push(t('validation.objectPropertyInvalid', { 
+            language, 
+            key, 
+            error: propResult.errors.join(', ') 
+          }))
         }
       }
     }
@@ -198,13 +222,14 @@ function validateObject(value, schema) {
  * 验证文件类型
  * @param {any} value - 值
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateFile(value, schema) {
+function validateFile(value, schema, language) {
   const errors = []
 
   if (!value) {
-    errors.push('File is required')
+    errors.push(t('validation.fileRequired', { language }))
     return new ValidationResult(false, errors)
   }
 
@@ -212,13 +237,13 @@ function validateFile(value, schema) {
     const { maxSize, formats } = schema.constraints
 
     if (maxSize && value.length && value.length > maxSize) {
-      errors.push(`File size must be at most ${maxSize} bytes`)
+      errors.push(t('validation.fileSizeMax', { language, max: maxSize }))
     }
 
     if (formats && value.name) {
       const ext = value.name.split('.').pop().toLowerCase()
       if (!formats.includes(ext)) {
-        errors.push(`File format must be one of: ${formats.join(', ')}`)
+        errors.push(t('validation.fileFormatInvalid', { language, formats: formats.join(', ') }))
       }
     }
   }
@@ -230,15 +255,16 @@ function validateFile(value, schema) {
  * 验证参数值
  * @param {any} value - 值
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validate(value, schema) {
+function validate(value, schema, language) {
   if (!schema) {
     return new ValidationResult(true, [])
   }
 
   if (schema.customValidator) {
-    return schema.customValidator(value)
+    return schema.customValidator(value, language)
   }
 
   const validators = {
@@ -253,10 +279,10 @@ function validate(value, schema) {
 
   const validator = validators[schema.type]
   if (!validator) {
-    return new ValidationResult(false, [`Unknown type: ${schema.type}`])
+    return new ValidationResult(false, [t('validation.unknownType', { language, type: schema.type })])
   }
 
-  return validator(value, schema)
+  return validator(value, schema, language)
 }
 
 /**
@@ -268,10 +294,12 @@ function validate(value, schema) {
  * @param {Array} options.compositeConstraints - 复合约束定义
  * @param {Array<Array<string>>} options.mutuallyExclusive - 互斥参数组列表
  * @param {object} options.conditionalRequired - 条件必填定义
+ * @param {string} options.language - 语言代码
  * @returns {ValidationResult} 验证结果
  */
 function validateParams(params, schema, options = {}) {
   const errors = []
+  const language = options.language
 
   if (!schema || !schema.input) {
     return new ValidationResult(true, [])
@@ -284,14 +312,18 @@ function validateParams(params, schema, options = {}) {
 
     if (value === undefined || value === null) {
       if (fieldSchema.required) {
-        errors.push(`Required parameter "${key}" is missing`)
+        errors.push(t('validation.requiredParamMissing', { language, param: key }))
       }
       continue
     }
 
-    const result = validate(value, fieldSchema)
+    const result = validate(value, fieldSchema, language)
     if (!result.valid) {
-      errors.push(`Parameter "${key}": ${result.errors.join(', ')}`)
+      errors.push(t('validation.paramValidationFailed', { 
+        language, 
+        param: key, 
+        error: result.errors.join(', ') 
+      }))
     }
   }
 
@@ -300,7 +332,8 @@ function validateParams(params, schema, options = {}) {
     const constraintResult = constraintValidator.validate(
       params.model,
       params,
-      options.modelCapabilities
+      options.modelCapabilities,
+      language
     )
     if (!constraintResult.valid) {
       errors.push(...constraintResult.errors)
@@ -309,28 +342,28 @@ function validateParams(params, schema, options = {}) {
 
   if (options.compositeConstraints) {
     const engine = new ConstraintEngine()
-    const compositeResult = engine.validateAll(params, options.compositeConstraints)
+    const compositeResult = engine.validateAll(params, options.compositeConstraints, language)
     if (!compositeResult.valid) {
       errors.push(...compositeResult.errors)
     }
   }
 
   if (options.mutuallyExclusive) {
-    const mutexResult = validateMutuallyExclusive(params, options.mutuallyExclusive)
+    const mutexResult = validateMutuallyExclusive(params, options.mutuallyExclusive, language)
     if (!mutexResult.valid) {
       errors.push(...mutexResult.errors)
     }
   }
 
   if (options.conditionalRequired) {
-    const condResult = validateConditionalRequired(params, options.conditionalRequired)
+    const condResult = validateConditionalRequired(params, options.conditionalRequired, language)
     if (!condResult.valid) {
       errors.push(...condResult.errors)
     }
   }
 
   if (schema.customValidator) {
-    const customResult = schema.customValidator(params)
+    const customResult = schema.customValidator(params, language)
     if (!customResult.valid) {
       errors.push(...customResult.errors)
     }
@@ -343,9 +376,10 @@ function validateParams(params, schema, options = {}) {
  * 检查依赖条件
  * @param {object} params - 参数对象
  * @param {object} schema - 参数模式
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function checkDependencies(params, schema) {
+function checkDependencies(params, schema, language) {
   const errors = []
 
   if (!schema || !schema.input) {
@@ -356,9 +390,12 @@ function checkDependencies(params, schema) {
     if (fieldSchema.dependsOn && params[key] !== undefined) {
       for (const [depKey, depValue] of Object.entries(fieldSchema.dependsOn)) {
         if (params[depKey] !== depValue) {
-          errors.push(
-            `Parameter "${key}" requires "${depKey}" to be "${depValue}"`
-          )
+          errors.push(t('validation.dependencyFailed', { 
+            language, 
+            param: key, 
+            dep: depKey, 
+            value: depValue 
+          }))
         }
       }
     }
@@ -371,18 +408,20 @@ function checkDependencies(params, schema) {
  * 验证互斥参数
  * @param {object} params - 参数对象
  * @param {Array<Array<string>>} mutuallyExclusiveGroups - 互斥参数组列表
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateMutuallyExclusive(params, mutuallyExclusiveGroups = []) {
+function validateMutuallyExclusive(params, mutuallyExclusiveGroups = [], language) {
   const errors = []
 
   for (const group of mutuallyExclusiveGroups) {
     const provided = group.filter(name => params[name] !== undefined && params[name] !== null)
     
     if (provided.length > 1) {
-      errors.push(
-        `Parameters ${provided.map(p => `"${p}"`).join(', ')} are mutually exclusive. Only one of them can be provided.`
-      )
+      errors.push(t('validation.mutexParams', { 
+        language, 
+        params: provided.map(p => `"${p}"`).join(', ') 
+      }))
     }
   }
 
@@ -393,9 +432,10 @@ function validateMutuallyExclusive(params, mutuallyExclusiveGroups = []) {
  * 验证条件必填参数
  * @param {object} params - 参数对象
  * @param {object} conditionalRequired - 条件必填定义
+ * @param {string} language - 语言代码(可选)
  * @returns {ValidationResult} 验证结果
  */
-function validateConditionalRequired(params, conditionalRequired = {}) {
+function validateConditionalRequired(params, conditionalRequired = {}, language) {
   const errors = []
 
   for (const [paramName, conditions] of Object.entries(conditionalRequired)) {
@@ -407,15 +447,29 @@ function validateConditionalRequired(params, conditionalRequired = {}) {
         if (hasValue !== undefined) {
           if (Array.isArray(hasValue)) {
             if (hasValue.includes(paramValue)) {
-              errors.push(`Parameter "${paramName}" is required when "${when}" is one of: ${hasValue.join(', ')}`)
+              errors.push(t('validation.conditionalRequiredList', { 
+                language, 
+                param: paramName, 
+                when, 
+                values: hasValue.join(', ') 
+              }))
             }
           } else {
             if (paramValue === hasValue) {
-              errors.push(`Parameter "${paramName}" is required when "${when}" is "${hasValue}"`)
+              errors.push(t('validation.conditionalRequired', { 
+                language, 
+                param: paramName, 
+                when, 
+                value: hasValue 
+              }))
             }
           }
         } else if (paramValue !== undefined && paramValue !== null) {
-          errors.push(`Parameter "${paramName}" is required when "${when}" is provided`)
+          errors.push(t('validation.conditionalRequiredAny', { 
+            language, 
+            param: paramName, 
+            when 
+          }))
         }
       }
     }

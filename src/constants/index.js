@@ -12,6 +12,14 @@ const {
   sortByProviderPriority,
   getHighestPriorityProvider
 } = require('./providers')
+const {
+  Languages,
+  DEFAULT_LANGUAGE,
+  LanguageNames,
+  LanguageAliases,
+  normalizeLanguage
+} = require('./languages')
+const { Series, SeriesMeta } = require('./series')
 
 module.exports = {
   APITypes,
@@ -25,5 +33,12 @@ module.exports = {
   ProviderMeta,
   getProviderPriority,
   sortByProviderPriority,
-  getHighestPriorityProvider
+  getHighestPriorityProvider,
+  Languages,
+  DEFAULT_LANGUAGE,
+  LanguageNames,
+  LanguageAliases,
+  normalizeLanguage,
+  Series,
+  SeriesMeta
 }

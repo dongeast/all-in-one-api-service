@@ -1,0 +1,14 @@
+{
+  "docs": {
+    "inputParameters": "Input Parameters",
+    "outputFields": "Output Fields",
+    "name": "Name",
+    "type": "Type",
+    "required": "Required",
+    "default": "Default",
+    "description": "Description",
+    "yes": "Yes",
+    "no": "No",
+    "model": "Model"
+  }
+}

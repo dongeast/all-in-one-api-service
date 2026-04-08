@@ -1,0 +1,14 @@
+{
+  "docs": {
+    "inputParameters": "输入参数",
+    "outputFields": "输出字段",
+    "name": "名称",
+    "type": "类型",
+    "required": "必填",
+    "default": "默认值",
+    "description": "描述",
+    "yes": "是",
+    "no": "否",
+    "model": "模型"
+  }
+}

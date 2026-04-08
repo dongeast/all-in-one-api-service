@@ -2,6 +2,8 @@
  * 源码入口
  */
 
+require('./locales')
+
 const Services = require('./services')
 const APIs = require('./apis')
 const Params = require('./params')
@@ -12,6 +14,8 @@ const Constants = require('./constants')
 const Registry = require('./registry')
 const QueryService = require('./services/query-service')
 
+const { setLanguage, getLanguage, t } = require('./utils/i18n')
+
 module.exports = {
   Services,
   APIs,
@@ -20,5 +24,8 @@ module.exports = {
   Utils,
   Constants,
   Registry,
-  QueryService
+  QueryService,
+  setLanguage,
+  getLanguage,
+  t
 }

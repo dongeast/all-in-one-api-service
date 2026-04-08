@@ -1,0 +1,274 @@
+{
+  "apis": {
+    "ltx": {
+      "generate-video-from-text": {
+        "displayName": "文本生成视频",
+        "description": "根据文本提示生成视频"
+      },
+      "generate-video-from-image": {
+        "displayName": "图片生成视频",
+        "description": "根据图片生成视频"
+      },
+      "generate-video-from-audio": {
+        "displayName": "音频生成视频",
+        "description": "根据音频生成视频"
+      },
+      "extend-video-duration": {
+        "displayName": "延长视频时长",
+        "description": "延长已有视频的时长"
+      },
+      "retake-video-section": {
+        "displayName": "重拍视频片段",
+        "description": "重新生成视频的某个片段"
+      }
+    },
+    "mureka": {
+      "generate-song": {
+        "displayName": "生成歌曲",
+        "description": "根据歌词和风格生成歌曲"
+      },
+      "extend-song": {
+        "displayName": "延长歌曲",
+        "description": "延长已有歌曲"
+      },
+      "query-song-task": {
+        "displayName": "查询歌曲任务",
+        "description": "查询歌曲生成任务状态"
+      },
+      "generate-lyrics": {
+        "displayName": "生成歌词",
+        "description": "根据主题生成歌词"
+      },
+      "generate-instrumental": {
+        "displayName": "生成伴奏",
+        "description": "根据风格生成伴奏"
+      },
+      "create-speech": {
+        "displayName": "创建语音",
+        "description": "将文本转换为语音"
+      },
+      "vocal-cloning": {
+        "displayName": "声音克隆",
+        "description": "克隆声音特征"
+      },
+      "upload-file": {
+        "displayName": "上传文件",
+        "description": "上传一个文件"
+      },
+      "create-upload": {
+        "displayName": "创建上传",
+        "description": "创建上传会话"
+      },
+      "add-upload-part": {
+        "displayName": "添加上传分片",
+        "description": "添加分片到上传会话"
+      },
+      "complete-upload": {
+        "displayName": "完成上传",
+        "description": "完成上传会话"
+      },
+      "describe-song": {
+        "displayName": "描述歌曲",
+        "description": "描述歌曲特征"
+      },
+      "recognize-song": {
+        "displayName": "识别歌曲",
+        "description": "从音频识别歌曲"
+      },
+      "stem-song": {
+        "displayName": "分离音轨",
+        "description": "将歌曲分离为音轨"
+      },
+      "extend-lyrics": {
+        "displayName": "扩展歌词",
+        "description": "扩展现有歌词"
+      },
+      "query-instrumental-task": {
+        "displayName": "查询伴奏任务",
+        "description": "查询伴奏生成任务状态"
+      },
+      "create-podcast": {
+        "displayName": "创建播客",
+        "description": "创建一个播客"
+      }
+    },
+    "skyreels": {
+      "text-to-video-generation-task-submission": {
+        "displayName": "提交文本生成视频任务",
+        "description": "根据文本提交视频生成任务"
+      },
+      "text-to-video-generation-task-query": {
+        "displayName": "查询文本生成视频任务",
+        "description": "查询文本生成视频任务状态"
+      },
+      "image-to-video-generation-task-submission": {
+        "displayName": "提交图片生成视频任务",
+        "description": "根据图片提交视频生成任务"
+      },
+      "image-to-video-generation-task-query": {
+        "displayName": "查询图片生成视频任务",
+        "description": "查询图片生成视频任务状态"
+      },
+      "single-actor-avatar-task-submission": {
+        "displayName": "单人头像视频",
+        "description": "生成单人头像视频"
+      },
+      "multi-actor-avatar-task-submission": {
+        "displayName": "多人头像视频",
+        "description": "生成多人头像视频"
+      },
+      "lip-sync-task-submit": {
+        "displayName": "提交口型同步任务",
+        "description": "为视频人物添加口型同步"
+      },
+      "lip-sync-task-query": {
+        "displayName": "查询口型同步任务",
+        "description": "查询口型同步任务状态"
+      },
+      "segmented-camera-motion-task-submit": {
+        "displayName": "分段镜头运动",
+        "description": "生成分段镜头运动视频"
+      },
+      "omni-reference-task-submission": {
+        "displayName": "全能参考",
+        "description": "使用全能参考生成视频"
+      },
+      "reference-to-video-task-submission": {
+        "displayName": "参考生成视频",
+        "description": "根据参考生成视频"
+      },
+      "single-shot-video-extension-task-submission": {
+        "displayName": "单镜头视频扩展",
+        "description": "使用单镜头扩展视频"
+      },
+      "shot-switching-video-extension-task-submission": {
+        "displayName": "镜头切换视频扩展",
+        "description": "使用镜头切换扩展视频"
+      },
+      "video-restyling-task-submission": {
+        "displayName": "视频重风格化",
+        "description": "重新风格化现有视频"
+      }
+    },
+    "volcengine": {
+      "create-video-generation-task": {
+        "displayName": "创建视频生成任务",
+        "description": "创建视频生成任务"
+      },
+      "query-video-generation-task": {
+        "displayName": "查询视频生成任务",
+        "description": "查询视频生成任务状态"
+      },
+      "query-video-generation-task-list": {
+        "displayName": "查询视频生成任务列表",
+        "description": "查询视频生成任务列表"
+      },
+      "cancel-delete-video-generation-task": {
+        "displayName": "取消/删除视频生成任务",
+        "description": "取消或删除视频生成任务"
+      },
+      "create-3d-generation-task": {
+        "displayName": "创建3D生成任务",
+        "description": "创建3D生成任务"
+      },
+      "query-3d-generation-task": {
+        "displayName": "查询3D生成任务",
+        "description": "查询3D生成任务状态"
+      },
+      "query-3d-generation-task-list": {
+        "displayName": "查询3D生成任务列表",
+        "description": "查询3D生成任务列表"
+      },
+      "cancel-delete-3d-generation-task": {
+        "displayName": "取消/删除3D生成任务",
+        "description": "取消或删除3D生成任务"
+      },
+      "generate-image": {
+        "displayName": "生成图片",
+        "description": "根据文本生成图片"
+      }
+    }
+  },
+  "models": {
+    "ltx": {
+      "ltx-2-fast": {
+        "displayName": "LTX 2 快速版",
+        "description": "LTX 2 快速模型"
+      },
+      "ltx-2-pro": {
+        "displayName": "LTX 2 专业版",
+        "description": "LTX 2 专业模型"
+      },
+      "ltx-2-3-fast": {
+        "displayName": "LTX 2.3 快速版",
+        "description": "LTX 2.3 快速模型"
+      },
+      "ltx-2-3-pro": {
+        "displayName": "LTX 2.3 专业版",
+        "description": "LTX 2.3 专业模型"
+      }
+    },
+    "mureka": {
+      "auto": {
+        "displayName": "自动",
+        "description": "自动选择模型"
+      },
+      "mureka-7.5": {
+        "displayName": "Mureka 7.5",
+        "description": "Mureka 7.5 模型"
+      },
+      "mureka-7.6": {
+        "displayName": "Mureka 7.6",
+        "description": "Mureka 7.6 模型"
+      },
+      "mureka-o2": {
+        "displayName": "Mureka O2",
+        "description": "Mureka O2 模型"
+      },
+      "mureka-8": {
+        "displayName": "Mureka 8",
+        "description": "Mureka 8 模型"
+      },
+      "mureka-tts": {
+        "displayName": "Mureka 语音合成",
+        "description": "Mureka 文本转语音模型"
+      },
+      "mureka-vocal-cloning": {
+        "displayName": "Mureka 声音克隆",
+        "description": "Mureka 声音克隆模型"
+      }
+    },
+    "skyreels": {
+      "skyreels-v1": {
+        "displayName": "SkyReels V1",
+        "description": "SkyReels V1 模型"
+      },
+      "skyreels-v3": {
+        "displayName": "SkyReels V3",
+        "description": "SkyReels V3 模型"
+      },
+      "skyreels-v4": {
+        "displayName": "SkyReels V4",
+        "description": "SkyReels V4 模型"
+      },
+      "skyreels-avatar": {
+        "displayName": "SkyReels 头像",
+        "description": "SkyReels 头像模型"
+      }
+    },
+    "volcengine": {
+      "volcengine-video-v1": {
+        "displayName": "火山引擎视频 V1",
+        "description": "火山引擎视频生成模型"
+      },
+      "volcengine-3d-v1": {
+        "displayName": "火山引擎3D V1",
+        "description": "火山引擎3D生成模型"
+      },
+      "volcengine-image-v1": {
+        "displayName": "火山引擎图片 V1",
+        "description": "火山引擎图片生成模型"
+      }
+    }
+  }
+}

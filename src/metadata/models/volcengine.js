@@ -2,7 +2,7 @@
  * 火山引擎模型元数据定义
  */
 
-const { APITypes, MediaTypes, Providers } = require('../../constants')
+const { APITypes, MediaTypes, Providers, Series } = require('../../constants')
 const { ModelTags } = require('../../constants/tags')
 
 module.exports = {
@@ -11,6 +11,7 @@ module.exports = {
     displayName: '豆包 Seedream 5.0 Lite',
     description: '火山引擎轻量级图像生成模型，支持2K-3K分辨率',
     logo: '',
+    series: Series.SEEDREAM,
     type: APITypes.TEXT_TO_IMAGE,
     mediaType: MediaTypes.IMAGE,
     tags: [ModelTags.LITE, ModelTags.FAST, ModelTags.STABLE],
@@ -30,6 +31,7 @@ module.exports = {
     displayName: '豆包 Seedream 4.5',
     description: '火山引擎高质量图像生成模型，支持2K-4K分辨率',
     logo: '',
+    series: Series.SEEDREAM,
     type: APITypes.TEXT_TO_IMAGE,
     mediaType: MediaTypes.IMAGE,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE],
@@ -47,6 +49,7 @@ module.exports = {
     displayName: '豆包 Seedream 4.0',
     description: '火山引擎图像生成模型，支持1K-4K分辨率',
     logo: '',
+    series: Series.SEEDREAM,
     type: APITypes.TEXT_TO_IMAGE,
     mediaType: MediaTypes.IMAGE,
     tags: [ModelTags.STABLE],
@@ -64,6 +67,7 @@ module.exports = {
     displayName: '豆包 Seedream 3.0 T2I',
     description: '火山引擎文生图模型',
     logo: '',
+    series: Series.SEEDREAM,
     type: APITypes.TEXT_TO_IMAGE,
     mediaType: MediaTypes.IMAGE,
     tags: [ModelTags.STABLE],
@@ -80,6 +84,7 @@ module.exports = {
     displayName: '豆包 Seedance 2.0',
     description: '火山引擎最新视频生成模型，支持多模态参考',
     logo: '',
+    series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.PREMIUM, ModelTags.STABLE, ModelTags.RECOMMENDED],
@@ -101,6 +106,7 @@ module.exports = {
     displayName: '豆包 Seedance 2.0 Fast',
     description: '火山引擎快速视频生成模型',
     logo: '',
+    series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.FAST, ModelTags.STABLE],
@@ -121,6 +127,7 @@ module.exports = {
     displayName: '豆包 Seedance 1.5 Pro',
     description: '火山引擎专业版视频生成模型',
     logo: '',
+    series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE],
@@ -140,6 +147,7 @@ module.exports = {
     displayName: '豆包 Seedance 1.0 Pro',
     description: '火山引擎视频生成模型',
     logo: '',
+    series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.STABLE],
@@ -158,6 +166,7 @@ module.exports = {
     displayName: '豆包 Seedance 1.0 Pro Fast',
     description: '火山引擎快速视频生成模型',
     logo: '',
+    series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.FAST],
@@ -176,6 +185,7 @@ module.exports = {
     displayName: '豆包 Seedance 1.0 Lite',
     description: '火山引擎轻量级视频生成模型',
     logo: '',
+    series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.LITE, ModelTags.FAST],
@@ -195,6 +205,7 @@ module.exports = {
     displayName: '豆包 Seed3D 1.0',
     description: '火山引擎3D模型生成模型',
     logo: '',
+    series: Series.SEED3D,
     type: APITypes.IMAGE_TO_3D,
     mediaType: MediaTypes.AUDIO_3D,
     tags: [ModelTags.STABLE],

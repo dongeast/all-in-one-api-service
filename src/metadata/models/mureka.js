@@ -2,7 +2,7 @@
  * Mureka 模型元数据定义
  */
 
-const { APITypes, MediaTypes, Providers } = require('../../constants')
+const { APITypes, MediaTypes, Providers, Series } = require('../../constants')
 const { ModelTags } = require('../../constants/tags')
 
 module.exports = {
@@ -11,6 +11,7 @@ module.exports = {
     displayName: 'Mureka 8',
     description: 'Mureka最新音乐生成模型',
     logo: '',
+    series: Series.MUREKA,
     type: [APITypes.SONG_GENERATION, APITypes.INSTRUMENTAL_GENERATION],
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE, ModelTags.RECOMMENDED],
@@ -28,6 +29,7 @@ module.exports = {
     displayName: 'Mureka O2',
     description: 'Mureka音乐生成模型',
     logo: '',
+    series: Series.MUREKA,
     type: APITypes.SONG_GENERATION,
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
@@ -44,6 +46,7 @@ module.exports = {
     displayName: 'Mureka 7.6',
     description: 'Mureka音乐生成模型',
     logo: '',
+    series: Series.MUREKA,
     type: [APITypes.SONG_GENERATION, APITypes.INSTRUMENTAL_GENERATION],
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
@@ -60,6 +63,7 @@ module.exports = {
     displayName: 'Mureka 7.5',
     description: 'Mureka音乐生成模型',
     logo: '',
+    series: Series.MUREKA,
     type: [APITypes.SONG_GENERATION, APITypes.INSTRUMENTAL_GENERATION],
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
@@ -76,6 +80,7 @@ module.exports = {
     displayName: 'Mureka TTS',
     description: 'Mureka文本转语音模型',
     logo: '',
+    series: Series.MUREKA,
     type: APITypes.TEXT_TO_SPEECH,
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
@@ -92,6 +97,7 @@ module.exports = {
     displayName: 'Mureka Vocal Cloning',
     description: 'Mureka声音克隆模型',
     logo: '',
+    series: Series.MUREKA,
     type: APITypes.VOCAL_CLONING,
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],

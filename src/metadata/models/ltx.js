@@ -2,7 +2,7 @@
  * LTX 模型元数据定义
  */
 
-const { APITypes, MediaTypes, Providers } = require('../../constants')
+const { APITypes, MediaTypes, Providers, Series } = require('../../constants')
 const { ModelTags } = require('../../constants/tags')
 
 module.exports = {
@@ -11,6 +11,7 @@ module.exports = {
     displayName: 'LTX 2.3 Pro',
     description: 'LTX最新专业版视频生成模型，支持文本、图片、音频生成视频',
     logo: '',
+    series: Series.LTX,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO, APITypes.AUDIO_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.PREMIUM, ModelTags.STABLE, ModelTags.RECOMMENDED],
@@ -34,6 +35,7 @@ module.exports = {
     displayName: 'LTX 2.3 Fast',
     description: 'LTX最新快速版视频生成模型，适合快速预览',
     logo: '',
+    series: Series.LTX,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.FAST, ModelTags.STABLE],
@@ -54,6 +56,7 @@ module.exports = {
     displayName: 'LTX 2 Pro',
     description: 'LTX专业版视频生成模型，支持多种生成方式',
     logo: '',
+    series: Series.LTX,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO, APITypes.AUDIO_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE],
@@ -77,6 +80,7 @@ module.exports = {
     displayName: 'LTX 2 Fast',
     description: 'LTX快速版视频生成模型',
     logo: '',
+    series: Series.LTX,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.FAST],

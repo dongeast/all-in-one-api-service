@@ -1,0 +1,274 @@
+{
+  "apis": {
+    "ltx": {
+      "generate-video-from-text": {
+        "displayName": "Text to Video",
+        "description": "Generate video from text prompt"
+      },
+      "generate-video-from-image": {
+        "displayName": "Image to Video",
+        "description": "Generate video from image"
+      },
+      "generate-video-from-audio": {
+        "displayName": "Audio to Video",
+        "description": "Generate video from audio"
+      },
+      "extend-video-duration": {
+        "displayName": "Extend Video Duration",
+        "description": "Extend the duration of an existing video"
+      },
+      "retake-video-section": {
+        "displayName": "Retake Video Section",
+        "description": "Regenerate a section of the video"
+      }
+    },
+    "mureka": {
+      "generate-song": {
+        "displayName": "Generate Song",
+        "description": "Generate song from lyrics and style"
+      },
+      "extend-song": {
+        "displayName": "Extend Song",
+        "description": "Extend an existing song"
+      },
+      "query-song-task": {
+        "displayName": "Query Song Task",
+        "description": "Query song generation task status"
+      },
+      "generate-lyrics": {
+        "displayName": "Generate Lyrics",
+        "description": "Generate lyrics from theme"
+      },
+      "generate-instrumental": {
+        "displayName": "Generate Instrumental",
+        "description": "Generate instrumental from style"
+      },
+      "create-speech": {
+        "displayName": "Create Speech",
+        "description": "Convert text to speech"
+      },
+      "vocal-cloning": {
+        "displayName": "Vocal Cloning",
+        "description": "Clone voice characteristics"
+      },
+      "upload-file": {
+        "displayName": "Upload File",
+        "description": "Upload a file"
+      },
+      "create-upload": {
+        "displayName": "Create Upload",
+        "description": "Create an upload session"
+      },
+      "add-upload-part": {
+        "displayName": "Add Upload Part",
+        "description": "Add a part to upload session"
+      },
+      "complete-upload": {
+        "displayName": "Complete Upload",
+        "description": "Complete an upload session"
+      },
+      "describe-song": {
+        "displayName": "Describe Song",
+        "description": "Describe song characteristics"
+      },
+      "recognize-song": {
+        "displayName": "Recognize Song",
+        "description": "Recognize song from audio"
+      },
+      "stem-song": {
+        "displayName": "Stem Song",
+        "description": "Separate song into stems"
+      },
+      "extend-lyrics": {
+        "displayName": "Extend Lyrics",
+        "description": "Extend existing lyrics"
+      },
+      "query-instrumental-task": {
+        "displayName": "Query Instrumental Task",
+        "description": "Query instrumental generation task status"
+      },
+      "create-podcast": {
+        "displayName": "Create Podcast",
+        "description": "Create a podcast"
+      }
+    },
+    "skyreels": {
+      "text-to-video-generation-task-submission": {
+        "displayName": "Text to Video Generation",
+        "description": "Generate video from text"
+      },
+      "text-to-video-generation-task-query": {
+        "displayName": "Query Text to Video Task",
+        "description": "Query text to video task status"
+      },
+      "image-to-video-generation-task-submission": {
+        "displayName": "Image to Video Generation",
+        "description": "Generate video from image"
+      },
+      "image-to-video-generation-task-query": {
+        "displayName": "Query Image to Video Task",
+        "description": "Query image to video task status"
+      },
+      "single-actor-avatar-task-submission": {
+        "displayName": "Single Actor Avatar",
+        "description": "Generate single actor avatar video"
+      },
+      "multi-actor-avatar-task-submission": {
+        "displayName": "Multi Actor Avatar",
+        "description": "Generate multi actor avatar video"
+      },
+      "lip-sync-task-submit": {
+        "displayName": "Lip Sync",
+        "description": "Generate lip sync video"
+      },
+      "lip-sync-task-query": {
+        "displayName": "Query Lip Sync Task",
+        "description": "Query lip sync task status"
+      },
+      "segmented-camera-motion-task-submit": {
+        "displayName": "Segmented Camera Motion",
+        "description": "Generate segmented camera motion video"
+      },
+      "omni-reference-task-submission": {
+        "displayName": "Omni Reference",
+        "description": "Generate video with omni reference"
+      },
+      "reference-to-video-task-submission": {
+        "displayName": "Reference to Video",
+        "description": "Generate video from reference"
+      },
+      "single-shot-video-extension-task-submission": {
+        "displayName": "Single Shot Video Extension",
+        "description": "Extend video with single shot"
+      },
+      "shot-switching-video-extension-task-submission": {
+        "displayName": "Shot Switching Video Extension",
+        "description": "Extend video with shot switching"
+      },
+      "video-restyling-task-submission": {
+        "displayName": "Video Restyling",
+        "description": "Restyle existing video"
+      }
+    },
+    "volcengine": {
+      "create-video-generation-task": {
+        "displayName": "Create Video Generation Task",
+        "description": "Create a video generation task"
+      },
+      "query-video-generation-task": {
+        "displayName": "Query Video Generation Task",
+        "description": "Query video generation task status"
+      },
+      "query-video-generation-task-list": {
+        "displayName": "Query Video Generation Task List",
+        "description": "Query list of video generation tasks"
+      },
+      "cancel-delete-video-generation-task": {
+        "displayName": "Cancel/Delete Video Generation Task",
+        "description": "Cancel or delete a video generation task"
+      },
+      "create-3d-generation-task": {
+        "displayName": "Create 3D Generation Task",
+        "description": "Create a 3D generation task"
+      },
+      "query-3d-generation-task": {
+        "displayName": "Query 3D Generation Task",
+        "description": "Query 3D generation task status"
+      },
+      "query-3d-generation-task-list": {
+        "displayName": "Query 3D Generation Task List",
+        "description": "Query list of 3D generation tasks"
+      },
+      "cancel-delete-3d-generation-task": {
+        "displayName": "Cancel/Delete 3D Generation Task",
+        "description": "Cancel or delete a 3D generation task"
+      },
+      "generate-image": {
+        "displayName": "Generate Image",
+        "description": "Generate image from text"
+      }
+    }
+  },
+  "models": {
+    "ltx": {
+      "ltx-2-fast": {
+        "displayName": "LTX 2 Fast",
+        "description": "LTX 2 Fast model"
+      },
+      "ltx-2-pro": {
+        "displayName": "LTX 2 Pro",
+        "description": "LTX 2 Pro model"
+      },
+      "ltx-2-3-fast": {
+        "displayName": "LTX 2.3 Fast",
+        "description": "LTX 2.3 Fast model"
+      },
+      "ltx-2-3-pro": {
+        "displayName": "LTX 2.3 Pro",
+        "description": "LTX 2.3 Pro model"
+      }
+    },
+    "mureka": {
+      "auto": {
+        "displayName": "Auto",
+        "description": "Auto select model"
+      },
+      "mureka-7.5": {
+        "displayName": "Mureka 7.5",
+        "description": "Mureka 7.5 model"
+      },
+      "mureka-7.6": {
+        "displayName": "Mureka 7.6",
+        "description": "Mureka 7.6 model"
+      },
+      "mureka-o2": {
+        "displayName": "Mureka O2",
+        "description": "Mureka O2 model"
+      },
+      "mureka-8": {
+        "displayName": "Mureka 8",
+        "description": "Mureka 8 model"
+      },
+      "mureka-tts": {
+        "displayName": "Mureka TTS",
+        "description": "Mureka text-to-speech model"
+      },
+      "mureka-vocal-cloning": {
+        "displayName": "Mureka Vocal Cloning",
+        "description": "Mureka vocal cloning model"
+      }
+    },
+    "skyreels": {
+      "skyreels-v1": {
+        "displayName": "SkyReels V1",
+        "description": "SkyReels V1 model"
+      },
+      "skyreels-v3": {
+        "displayName": "SkyReels V3",
+        "description": "SkyReels V3 model"
+      },
+      "skyreels-v4": {
+        "displayName": "SkyReels V4",
+        "description": "SkyReels V4 model"
+      },
+      "skyreels-avatar": {
+        "displayName": "SkyReels Avatar",
+        "description": "SkyReels avatar model"
+      }
+    },
+    "volcengine": {
+      "volcengine-video-v1": {
+        "displayName": "Volcengine Video V1",
+        "description": "Volcengine video generation model"
+      },
+      "volcengine-3d-v1": {
+        "displayName": "Volcengine 3D V1",
+        "description": "Volcengine 3D generation model"
+      },
+      "volcengine-image-v1": {
+        "displayName": "Volcengine Image V1",
+        "description": "Volcengine image generation model"
+      }
+    }
+  }
+}
