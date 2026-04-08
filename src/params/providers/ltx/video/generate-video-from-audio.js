@@ -44,6 +44,28 @@ module.exports = {
     }
   },
 
+  validation: {
+    conditionalRequired: [
+      {
+        condition: (params) => !params.image_uri,
+        requiredParams: ['prompt'],
+        message: '当未提供image_uri时，prompt参数为必填项'
+      },
+      {
+        condition: (params) => !params.prompt,
+        requiredParams: ['image_uri'],
+        message: '当未提供prompt时，image_uri参数为必填项'
+      }
+    ],
+    mutuallyExclusive: [
+      {
+        params: ['image_uri', 'prompt'],
+        mode: 'at_least_one',
+        message: 'image_uri和prompt参数至少需要提供一个'
+      }
+    ]
+  },
+
   output: {
     video: ltxCommon.output.video,
     contentType: ltxCommon.output.contentType,
