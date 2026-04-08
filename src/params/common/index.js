@@ -7,11 +7,14 @@ const imageCommon = require('./image-common')
 const videoCommon = require('./video-common')
 const textCommon = require('./text-common')
 const audioCommon = require('./audio-common')
+const { ParamType, ElementType } = require('./param-types')
 
 module.exports = {
   baseSchemas,
   image: imageCommon,
   video: videoCommon,
   text: textCommon,
-  audio: audioCommon
+  audio: audioCommon,
+  ParamType,
+  ElementType
 }

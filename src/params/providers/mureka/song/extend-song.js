@@ -3,18 +3,21 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../common')
 
 module.exports = {
   input: {
     song_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: 'Song ID for extending',
       mutuallyExclusiveWith: ['upload_audio_id']
     },
 
     upload_audio_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: 'Upload ID of the song to be extended',
       mutuallyExclusiveWith: ['song_id']
@@ -22,12 +25,14 @@ module.exports = {
 
     lyrics: {
       ...murekaCommon.input.lyrics,
+      elementType: ElementType.TEXTAREA,
       description: 'The lyrics to be extended',
       required: true
     },
 
     extend_at: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.SLIDER,
       required: true,
       description: 'Extending start time (milliseconds)',
       min: 8000,
