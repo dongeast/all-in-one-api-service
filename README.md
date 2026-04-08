@@ -7,7 +7,7 @@
 | 特性            | 说明                                                     |
 | ------------- | ------------------------------------------------------ |
 | 🚀 **零配置使用**  | 全局配置一次，所有项目自动加载                                        |
-| 🔄 **多服务商支持** | OpenAI、Stability、Replicate、Gemini、Anthropic、Midjourney、LTX、SkyReels |
+| 🔄 **多服务商支持** | OpenAI、Stability、Replicate、Gemini、Anthropic、Midjourney、LTX、SkyReels、Mureka、Volcengine |
 | 📐 **三层架构**   | Service层、API层、Param层分离设计                               |
 | ✅ **参数验证**    | 自动验证输入参数类型、范围、必填项                                      |
 | 📤 **结果标准化**  | 统一的输出结果格式，支持路径提取                                       |
@@ -535,6 +535,100 @@ const result2 = await whisperAPI.execute({
 })
 
 console.log(result2.data.transcript)
+```
+
+### 音乐生成 (Mureka)
+
+```javascript
+const { Services, APIs } = require('all-in-one-api-service')
+
+// 创建Mureka服务
+const mureka = new Services.Mureka()
+
+// 生成歌词
+const lyricsAPI = new APIs.Mureka.Lyrics.GenerateLyrics(mureka)
+const lyricsResult = await lyricsAPI.execute({
+  prompt: 'A song about summer love',
+  style: 'pop'
+})
+console.log(lyricsResult.data.lyrics)
+
+// 生成歌曲
+const songAPI = new APIs.Mureka.Song.GenerateSong(mureka)
+const songResult = await songAPI.execute({
+  lyrics: lyricsResult.data.lyrics,
+  style: 'pop',
+  duration: 180
+})
+console.log(songResult.data.audioUrl)
+
+// 人声克隆
+const vocalAPI = new APIs.Mureka.Vocal.VocalCloning(mureka)
+const vocalResult = await vocalAPI.execute({
+  audioFile: '/path/to/voice.mp3',
+  lyrics: 'Custom lyrics here'
+})
+console.log(vocalResult.data.audioUrl)
+
+// 生成伴奏
+const instrumentalAPI = new APIs.Mureka.Instrumental.GenerateInstrumental(mureka)
+const instrumentalResult = await instrumentalAPI.execute({
+  prompt: 'Upbeat electronic dance music',
+  duration: 120
+})
+console.log(instrumentalResult.data.audioUrl)
+
+// 文本转语音
+const speechAPI = new APIs.Mureka.TTS.CreateSpeech(mureka)
+const speechResult = await speechAPI.execute({
+  text: 'Hello, welcome to our service',
+  voice: 'default'
+})
+console.log(speechResult.data.audioUrl)
+```
+
+### 图像与3D生成 (Volcengine)
+
+```javascript
+const { Services, APIs } = require('all-in-one-api-service')
+
+// 创建火山引擎服务
+const volcengine = new Services.Volcengine()
+
+// 图像生成
+const imageAPI = new APIs.Volcengine.Image.GenerateImage(volcengine)
+const imageResult = await imageAPI.execute({
+  model: 'doubao-seedream-5.0-lite',
+  prompt: 'A beautiful sunset over mountains',
+  size: '2048x2048'
+})
+console.log(imageResult.data.imageUrl)
+
+// 视频生成
+const videoAPI = new APIs.Volcengine.Video.CreateVideoGenerationTask(volcengine)
+const videoResult = await videoAPI.execute({
+  model: 'doubao-seedream-5.0-lite',
+  prompt: 'A cat playing in a garden',
+  duration: 5
+})
+console.log(videoResult.data.taskId)
+
+// 查询视频任务
+const queryAPI = new APIs.Volcengine.Video.QueryVideoGenerationTask(volcengine)
+const queryResult = await queryAPI.execute({
+  taskId: videoResult.data.taskId
+})
+console.log(queryResult.data.status)
+console.log(queryResult.data.videoUrl)
+
+// 3D生成
+const threeDAPI = new APIs.Volcengine.ThreeD.Create3DGenerationTask(volcengine)
+const threeDResult = await threeDAPI.execute({
+  model: 'doubao-3d-v1',
+  prompt: 'A modern chair design',
+  format: 'obj'
+})
+console.log(threeDResult.data.taskId)
 ```
 
 ### 流式响应
@@ -1673,16 +1767,18 @@ console.log(renderForm(inputInfo))
 
 ## 📋 支持的服务商
 
-| 服务商               | 图像                                     | 文本                           | 视频           | 音频               | 流式支持 |
-| ----------------- | -------------------------------------- | ---------------------------- | ------------ | ---------------- | -------- |
-| **OpenAI**        | DALL-E 2, DALL-E 3                     | GPT-3.5, GPT-4, GPT-4 Turbo  | Sora         | TTS-1, Whisper-1 | ✅ GPT-4 Stream |
-| **Stability AI**  | Stable Diffusion XL, Stable Image Core | -                            | -            | -                | 🚧 计划中 |
-| **Replicate**     | Flux                                   | -                            | Stable Video | -                | 🚧 计划中 |
-| **Google Gemini** | Imagen                                 | Gemini Pro, Gemini Ultra     | -            | -                | 🚧 计划中 |
-| **Anthropic**     | -                                      | Claude 3 Opus, Sonnet, Haiku | -            | -                | 🚧 计划中 |
-| **Midjourney**    | Midjourney V6                          | -                            | -            | -                | 🚧 计划中 |
-| **LTX**           | -                                      | -                            | 文本生成视频, 图像生成视频, 音频生成视频, 视频扩展, 视频重拍 | - | 🚧 计划中 |
-| **SkyReels**      | -                                      | -                            | 文本生成视频, 图像生成视频, 视频风格重绘, 口型同步, 多角色头像 | - | 🚧 计划中 |
+| 服务商               | 图像                                     | 文本                           | 视频           | 音频               | 音乐               | 3D       | 流式支持 |
+| ----------------- | -------------------------------------- | ---------------------------- | ------------ | ---------------- | ---------------- | -------- | -------- |
+| **OpenAI**        | DALL-E 2, DALL-E 3                     | GPT-3.5, GPT-4, GPT-4 Turbo  | Sora         | TTS-1, Whisper-1 | -                | -        | ✅ GPT-4 Stream |
+| **Stability AI**  | Stable Diffusion XL, Stable Image Core | -                            | -            | -                | -                | -        | 🚧 计划中 |
+| **Replicate**     | Flux                                   | -                            | Stable Video | -                | -                | -        | 🚧 计划中 |
+| **Google Gemini** | Imagen                                 | Gemini Pro, Gemini Ultra     | -            | -                | -                | -        | 🚧 计划中 |
+| **Anthropic**     | -                                      | Claude 3 Opus, Sonnet, Haiku | -            | -                | -                | -        | 🚧 计划中 |
+| **Midjourney**    | Midjourney V6                          | -                            | -            | -                | -                | -        | 🚧 计划中 |
+| **LTX**           | -                                      | -                            | 文本生成视频, 图像生成视频, 音频生成视频, 视频扩展, 视频重拍 | - | - | - | 🚧 计划中 |
+| **SkyReels**      | -                                      | -                            | 文本生成视频, 图像生成视频, 视频风格重绘, 口型同步, 多角色头像 | - | - | - | 🚧 计划中 |
+| **Mureka**        | -                                      | -                            | -            | -                | 歌曲生成, 歌词生成, 人声克隆, 伴奏生成, TTS, 播客 | - | 🚧 计划中 |
+| **Volcengine**    | 豆包 Seedream 系列                        | -                            | 视频生成        | -                | -                | 3D生成    | 🚧 计划中 |
 
 ## ⚙️ 配置
 
@@ -1721,6 +1817,18 @@ AI_SERVICE_ANTHROPIC_API_KEY=sk-ant-xxx
 # Midjourney
 AI_SERVICE_MIDJOURNEY_API_KEY=xxx
 
+# LTX
+AI_SERVICE_LTX_API_KEY=xxx
+
+# SkyReels
+AI_SERVICE_SKYREELS_API_KEY=xxx
+
+# Mureka
+AI_SERVICE_MUREKA_API_KEY=xxx
+
+# Volcengine (火山引擎)
+AI_SERVICE_VOLCENGINE_API_KEY=xxx
+
 # 日志配置
 AI_SERVICE_LOG_LEVEL=info
 AI_SERVICE_LOG_FORMAT=json
@@ -1737,7 +1845,11 @@ all-in-one-api-service/
 │   │   ├── replicate/  # Replicate 服务商
 │   │   ├── gemini/     # Google Gemini 服务商
 │   │   ├── anthropic/  # Anthropic 服务商
-│   │   └── midjourney/ # Midjourney 服务商
+│   │   ├── midjourney/ # Midjourney 服务商
+│   │   ├── ltx/        # LTX 服务商
+│   │   ├── skyreels/   # SkyReels 服务商
+│   │   ├── mureka/     # Mureka 服务商
+│   │   └── volcengine/ # 火山引擎 服务商
 │   ├── services/       # Service层 - 服务提供商管理
 │   ├── params/         # Param层 - 参数定义与处理
 │   ├── config/         # 配置管理模块
@@ -1934,6 +2046,28 @@ npm run lint
 
 ## 📝 更新日志
 
+### v1.3.0
+
+- 🎵 新增 Mureka 音乐生成服务商
+  - 支持歌曲生成、歌曲扩展、歌曲识别、歌曲描述、音轨分离
+  - 支持歌词生成、歌词扩展
+  - 支持人声克隆
+  - 支持伴奏生成
+  - 支持文本转语音、播客生成
+  - 支持文件上传功能
+- 🎨 新增 Volcengine (火山引擎) 服务商
+  - 支持图像生成 (豆包 Seedream 系列)
+  - 支持视频生成及任务查询
+  - 支持3D模型生成
+- 🔒 增强参数互斥功能
+  - 支持参数互斥验证
+  - 自动检测冲突参数
+  - 提供友好的错误提示
+- 🎯 强化动态约束
+  - 改进模型约束验证器
+  - 优化参数配置管理
+  - 增强参数依赖关系处理
+
 ### v1.2.0
 
 - ✨ 新增模型自定义参数支持
@@ -1995,6 +2129,10 @@ npm run lint
 - [流式响应设计文档](.trae/documents/stream-response-design.md) - 完整的设计方案
 - [使用示例](examples/) - 各种使用场景的示例代码
 - [API文档](docs/API.md) - 详细的API文档
+- [Mureka官方文档](api-document/official-mureka.md) - Mureka API官方文档
+- [Volcengine官方文档](api-document/official-volcengine.md) - 火山引擎API官方文档
+- [LTX官方文档](api-document/official-ltx.md) - LTX API官方文档
+- [SkyReels官方文档](api-document/official-skyreels.md) - SkyReels API官方文档
 
 ## 🤝 贡献
 

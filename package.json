@@ -54,7 +54,13 @@
     "replicate",
     "gemini",
     "anthropic",
-    "midjourney"
+    "midjourney",
+    "ltx",
+    "skyreels",
+    "mureka",
+    "volcengine",
+    "music-generation",
+    "3d-generation"
   ],
   "author": "",
   "license": "MIT",
