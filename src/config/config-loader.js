@@ -7,14 +7,7 @@ const fs = require('fs')
 const path = require('path')
 const { parseEnv, loadEnvFile } = require('../utils/env-parser')
 
-// 直接导入预设配置，避免动态 require
 const presetConfigs = {
-  openai: require('./presets/openai'),
-  stability: require('./presets/stability'),
-  replicate: require('./presets/replicate'),
-  gemini: require('./presets/gemini'),
-  anthropic: require('./presets/anthropic'),
-  midjourney: require('./presets/midjourney'),
   skyreels: require('./presets/skyreels'),
   ltx: require('./presets/ltx'),
   volcengine: require('./presets/volcengine'),
@@ -84,7 +77,7 @@ class ConfigLoader {
     try {
       return {
         version: '1.0',
-        defaultProvider: 'openai',
+        defaultProvider: 'ltx',
         providers: presetConfigs,
         logging: {
           level: 'info',

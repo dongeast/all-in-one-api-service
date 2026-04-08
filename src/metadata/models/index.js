@@ -1,15 +1,15 @@
 /**
- * 服务商参数模式入口
+ * 模型元数据入口
  */
 
-const skyreels = require('./skyreels')
 const ltx = require('./ltx')
 const volcengine = require('./volcengine')
+const skyreels = require('./skyreels')
 const mureka = require('./mureka')
 
 module.exports = {
-  skyreels,
   ltx,
   volcengine,
+  skyreels,
   mureka
 }
