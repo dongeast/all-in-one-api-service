@@ -45,12 +45,12 @@
       "timeout": 300000
     },
     "volcengine": {
-      "apiKey": "",
+      "apiKey": "xxxxx",
       "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
       "timeout": 120000
     },
     "mureka": {
-      "apiKey": "",
+      "apiKey": "xxxxx",
       "baseURL": "https://api.mureka.ai/v1",
       "timeout": 120000
     }
