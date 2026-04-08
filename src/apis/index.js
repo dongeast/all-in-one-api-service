@@ -13,6 +13,7 @@ const Midjourney = require('./midjourney')
 const Skyreels = require('./skyreels')
 const LTX = require('./ltx')
 const Volcengine = require('./volcengine')
+const Mureka = require('./mureka')
 
 module.exports = {
   BaseAPI,
@@ -24,5 +25,6 @@ module.exports = {
   Midjourney,
   Skyreels,
   LTX,
-  Volcengine
+  Volcengine,
+  Mureka
 }

@@ -29,7 +29,7 @@ class LTXService extends BaseService {
 
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
-      const providerConfig = configManager.getProviderConfig('ltx')
+      const providerConfig = await configManager.getProviderConfig('ltx')
       
       this.config = BaseService.mergeConfig(providerConfig, this.config)
     }

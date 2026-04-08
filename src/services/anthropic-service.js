@@ -29,7 +29,7 @@ class AnthropicService extends BaseService {
 
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
-      const providerConfig = configManager.getProviderConfig('anthropic')
+      const providerConfig = await configManager.getProviderConfig('anthropic')
       this.config = BaseService.mergeConfig(providerConfig, this.config)
     }
 

@@ -11,6 +11,7 @@ const midjourney = require('./midjourney')
 const skyreels = require('./skyreels')
 const ltx = require('./ltx')
 const volcengine = require('./volcengine')
+const mureka = require('./mureka')
 
 module.exports = {
   version: '1.0',
@@ -24,7 +25,8 @@ module.exports = {
     midjourney,
     skyreels,
     ltx,
-    volcengine
+    volcengine,
+    mureka
   },
   logging: {
     level: 'info',

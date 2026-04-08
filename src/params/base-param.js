@@ -24,6 +24,7 @@ class BaseParam {
     }
     this.modelCapabilities = schema.modelCapabilities || null
     this.compositeConstraints = schema.compositeConstraints || null
+    this.mutuallyExclusive = schema.mutuallyExclusive || null
   }
 
   /**
@@ -34,7 +35,8 @@ class BaseParam {
   validate(params) {
     const validationResult = validateParams(params, this.schema, {
       modelCapabilities: this.modelCapabilities,
-      compositeConstraints: this.compositeConstraints
+      compositeConstraints: this.compositeConstraints,
+      mutuallyExclusive: this.mutuallyExclusive
     })
     if (!validationResult.valid) {
       return validationResult
@@ -78,6 +80,9 @@ class BaseParam {
     }
     if (this.compositeConstraints) {
       schema.compositeConstraints = deepClone(this.compositeConstraints)
+    }
+    if (this.mutuallyExclusive) {
+      schema.mutuallyExclusive = deepClone(this.mutuallyExclusive)
     }
     return schema
   }
@@ -142,7 +147,8 @@ class BaseParam {
         min: schema.min,
         max: schema.max,
         minLength: schema.minLength,
-        maxLength: schema.maxLength
+        maxLength: schema.maxLength,
+        mutuallyExclusiveWith: schema.mutuallyExclusiveWith
       })
     }
     return info

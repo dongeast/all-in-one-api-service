@@ -29,7 +29,7 @@ class GeminiService extends BaseService {
 
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
-      const providerConfig = configManager.getProviderConfig('gemini')
+      const providerConfig = await configManager.getProviderConfig('gemini')
       this.config = BaseService.mergeConfig(providerConfig, this.config)
     }
 

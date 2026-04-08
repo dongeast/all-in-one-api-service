@@ -29,7 +29,7 @@ class MidjourneyService extends BaseService {
 
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
-      const providerConfig = configManager.getProviderConfig('midjourney')
+      const providerConfig = await configManager.getProviderConfig('midjourney')
       this.config = BaseService.mergeConfig(providerConfig, this.config)
     }
 

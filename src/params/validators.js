@@ -195,6 +195,38 @@ function validateObject(value, schema) {
 }
 
 /**
+ * 验证文件类型
+ * @param {any} value - 值
+ * @param {object} schema - 参数模式
+ * @returns {ValidationResult} 验证结果
+ */
+function validateFile(value, schema) {
+  const errors = []
+
+  if (!value) {
+    errors.push('File is required')
+    return new ValidationResult(false, errors)
+  }
+
+  if (schema.constraints) {
+    const { maxSize, formats } = schema.constraints
+
+    if (maxSize && value.length && value.length > maxSize) {
+      errors.push(`File size must be at most ${maxSize} bytes`)
+    }
+
+    if (formats && value.name) {
+      const ext = value.name.split('.').pop().toLowerCase()
+      if (!formats.includes(ext)) {
+        errors.push(`File format must be one of: ${formats.join(', ')}`)
+      }
+    }
+  }
+
+  return new ValidationResult(errors.length === 0, errors)
+}
+
+/**
  * 验证参数值
  * @param {any} value - 值
  * @param {object} schema - 参数模式
@@ -215,7 +247,8 @@ function validate(value, schema) {
     boolean: validateBoolean,
     enum: validateEnum,
     array: validateArray,
-    object: validateObject
+    object: validateObject,
+    file: validateFile
   }
 
   const validator = validators[schema.type]
@@ -233,6 +266,8 @@ function validate(value, schema) {
  * @param {object} options - 验证选项（可选）
  * @param {object} options.modelCapabilities - 模型能力定义
  * @param {Array} options.compositeConstraints - 复合约束定义
+ * @param {Array<Array<string>>} options.mutuallyExclusive - 互斥参数组列表
+ * @param {object} options.conditionalRequired - 条件必填定义
  * @returns {ValidationResult} 验证结果
  */
 function validateParams(params, schema, options = {}) {
@@ -280,6 +315,20 @@ function validateParams(params, schema, options = {}) {
     }
   }
 
+  if (options.mutuallyExclusive) {
+    const mutexResult = validateMutuallyExclusive(params, options.mutuallyExclusive)
+    if (!mutexResult.valid) {
+      errors.push(...mutexResult.errors)
+    }
+  }
+
+  if (options.conditionalRequired) {
+    const condResult = validateConditionalRequired(params, options.conditionalRequired)
+    if (!condResult.valid) {
+      errors.push(...condResult.errors)
+    }
+  }
+
   if (schema.customValidator) {
     const customResult = schema.customValidator(params)
     if (!customResult.valid) {
@@ -318,6 +367,63 @@ function checkDependencies(params, schema) {
   return new ValidationResult(errors.length === 0, errors)
 }
 
+/**
+ * 验证互斥参数
+ * @param {object} params - 参数对象
+ * @param {Array<Array<string>>} mutuallyExclusiveGroups - 互斥参数组列表
+ * @returns {ValidationResult} 验证结果
+ */
+function validateMutuallyExclusive(params, mutuallyExclusiveGroups = []) {
+  const errors = []
+
+  for (const group of mutuallyExclusiveGroups) {
+    const provided = group.filter(name => params[name] !== undefined && params[name] !== null)
+    
+    if (provided.length > 1) {
+      errors.push(
+        `Parameters ${provided.map(p => `"${p}"`).join(', ')} are mutually exclusive. Only one of them can be provided.`
+      )
+    }
+  }
+
+  return new ValidationResult(errors.length === 0, errors)
+}
+
+/**
+ * 验证条件必填参数
+ * @param {object} params - 参数对象
+ * @param {object} conditionalRequired - 条件必填定义
+ * @returns {ValidationResult} 验证结果
+ */
+function validateConditionalRequired(params, conditionalRequired = {}) {
+  const errors = []
+
+  for (const [paramName, conditions] of Object.entries(conditionalRequired)) {
+    if (params[paramName] === undefined || params[paramName] === null) {
+      for (const condition of conditions) {
+        const { when, hasValue } = condition
+        const paramValue = params[when]
+        
+        if (hasValue !== undefined) {
+          if (Array.isArray(hasValue)) {
+            if (hasValue.includes(paramValue)) {
+              errors.push(`Parameter "${paramName}" is required when "${when}" is one of: ${hasValue.join(', ')}`)
+            }
+          } else {
+            if (paramValue === hasValue) {
+              errors.push(`Parameter "${paramName}" is required when "${when}" is "${hasValue}"`)
+            }
+          }
+        } else if (paramValue !== undefined && paramValue !== null) {
+          errors.push(`Parameter "${paramName}" is required when "${when}" is provided`)
+        }
+      }
+    }
+  }
+
+  return new ValidationResult(errors.length === 0, errors)
+}
+
 module.exports = {
   ValidationResult,
   validate,
@@ -328,5 +434,7 @@ module.exports = {
   validateArray,
   validateObject,
   validateParams,
-  checkDependencies
+  checkDependencies,
+  validateMutuallyExclusive,
+  validateConditionalRequired
 }

@@ -60,10 +60,10 @@ class ConfigManager {
    * @param {string} provider - 服务商名称
    * @returns {object} 服务商配置
    */
-  getProviderConfig(provider) {
+  async getProviderConfig(provider) {
     if (!this.config) {
-      this.logger.warn('Config not loaded, call load() first')
-      return {}
+      this.logger.debug('Config not loaded, loading now...')
+      await this.load()
     }
 
     return ConfigMerger.extractProviderConfig(this.config, provider)

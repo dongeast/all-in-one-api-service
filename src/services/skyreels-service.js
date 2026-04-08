@@ -29,7 +29,7 @@ class SkyreelsService extends BaseService {
 
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
-      const providerConfig = configManager.getProviderConfig('skyreels')
+      const providerConfig = await configManager.getProviderConfig('skyreels')
       
       // 使用基类的 mergeConfig 方法合并配置（过滤掉 undefined 值）
       this.config = BaseService.mergeConfig(providerConfig, this.config)

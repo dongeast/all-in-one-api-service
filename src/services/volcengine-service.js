@@ -29,7 +29,7 @@ class VolcengineService extends BaseService {
 
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
-      const providerConfig = configManager.getProviderConfig('volcengine')
+      const providerConfig = await configManager.getProviderConfig('volcengine')
       
       this.config = BaseService.mergeConfig(providerConfig, this.config)
     }

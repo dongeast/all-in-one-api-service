@@ -29,7 +29,7 @@ class StabilityService extends BaseService {
 
     if (!this.config.apiKey && !this.config.skipConfigLoad) {
       const configManager = getConfigManager()
-      const providerConfig = configManager.getProviderConfig('stability')
+      const providerConfig = await configManager.getProviderConfig('stability')
       this.config = BaseService.mergeConfig(providerConfig, this.config)
     }
 

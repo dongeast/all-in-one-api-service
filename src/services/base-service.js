@@ -230,6 +230,122 @@ class BaseService {
   }
 
   /**
+   * 上传文件(multipart/form-data)
+   * @param {string} endpoint - API端点
+   * @param {FormData|object} formData - 表单数据
+   * @param {object} options - 请求选项
+   * @returns {Promise<any>} 响应结果
+   */
+  async uploadFile(endpoint, formData, options = {}) {
+    await this.initialize()
+
+    const url = this.buildURL(endpoint)
+    const headers = this.getHeaders()
+    
+    delete headers['Content-Type']
+
+    this.logger.debug(`Uploading file to ${this.providerName} API`, {
+      endpoint
+    })
+
+    const executeRequest = async () => {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(
+        () => controller.abort(),
+        options.timeout || this.config.timeout
+      )
+
+      try {
+        const fetch = getFetch()
+        const response = await fetch(url, {
+          method: 'POST',
+          headers,
+          body: formData,
+          signal: controller.signal
+        })
+
+        clearTimeout(timeoutId)
+
+        if (!response.ok) {
+          const errorData = await this.parseErrorResponse(response)
+          throw this.createError(response.status, errorData)
+        }
+
+        return await this.parseResponse(response)
+      } catch (error) {
+        clearTimeout(timeoutId)
+        throw error
+      }
+    }
+
+    return retry(executeRequest, {
+      maxRetries: options.retryCount || this.config.retryCount,
+      delay: options.retryDelay || this.config.retryDelay,
+      shouldRetry: (error) => this.shouldRetry(error)
+    })
+  }
+
+  /**
+   * 提交异步任务
+   * @param {string} endpoint - API端点
+   * @param {object} params - 请求参数
+   * @param {object} options - 请求选项
+   * @returns {Promise<object>} 任务提交结果
+   */
+  async submitTask(endpoint, params = {}, options = {}) {
+    return await this.call(endpoint, params, options)
+  }
+
+  /**
+   * 查询任务状态
+   * @param {string} endpoint - API端点(可包含{task_id}占位符)
+   * @param {string} taskId - 任务ID
+   * @param {object} options - 请求选项
+   * @returns {Promise<object>} 任务状态
+   */
+  async queryTask(endpoint, taskId, options = {}) {
+    const finalEndpoint = endpoint.replace('{task_id}', taskId)
+    return await this.call(finalEndpoint, {}, { method: 'GET', ...options })
+  }
+
+  /**
+   * 等待任务完成
+   * @param {string} endpoint - 查询端点(可包含{task_id}占位符)
+   * @param {string} taskId - 任务ID
+   * @param {object} options - 等待选项
+   * @returns {Promise<object>} 任务结果
+   */
+  async waitForTask(endpoint, taskId, options = {}) {
+    const {
+      interval = 2000,
+      maxAttempts = 300,
+      successStatus = 'succeeded',
+      failedStatus = ['failed', 'timeouted', 'cancelled']
+    } = options
+
+    for (let i = 0; i < maxAttempts; i++) {
+      const task = await this.queryTask(endpoint, taskId)
+
+      if (task.status === successStatus) {
+        return task
+      }
+
+      if (failedStatus.includes(task.status)) {
+        const error = new Error(task.failed_reason || task.msg || 'Task failed')
+        error.code = 'TASK_FAILED'
+        error.details = task
+        throw error
+      }
+
+      await new Promise(resolve => setTimeout(resolve, interval))
+    }
+
+    const error = new Error('Task timeout')
+    error.code = 'TASK_TIMEOUT'
+    throw error
+  }
+
+  /**
    * 构建完整URL
    * @param {string} endpoint - API端点
    * @returns {string} 完整URL

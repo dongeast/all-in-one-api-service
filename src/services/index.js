@@ -12,6 +12,7 @@ const MidjourneyService = require('./midjourney-service')
 const SkyreelsService = require('./skyreels-service')
 const LTXService = require('./ltx-service')
 const VolcengineService = require('./volcengine-service')
+const MurekaService = require('./mureka-service')
 const CustomService = require('./custom-service')
 
 module.exports = {
@@ -25,5 +26,6 @@ module.exports = {
   Skyreels: SkyreelsService,
   LTX: LTXService,
   Volcengine: VolcengineService,
+  Mureka: MurekaService,
   Custom: CustomService
 }
