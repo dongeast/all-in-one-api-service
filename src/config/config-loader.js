@@ -68,14 +68,10 @@ class ConfigLoader {
    */
   loadPresets() {
     try {
-      const presetsPath = path.join(__dirname, 'presets', 'index.js')
-      if (fs.existsSync(presetsPath)) {
-        return require(presetsPath)
-      }
+      return require('./presets')
     } catch (error) {
       return null
     }
-    return null
   }
 
   /**
