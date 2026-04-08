@@ -47,6 +47,13 @@
       "timeout": 300000,
       "retryCount": 3,
       "retryDelay": 2000
+    },
+    "volcengine": {
+      "apiKey": "YOUR_VOLCENGINE_API_KEY",
+      "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
+      "timeout": 120000,
+      "retryCount": 3,
+      "retryDelay": 2000
     }
   },
   "logging": {

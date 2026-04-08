@@ -3,19 +3,28 @@
  * 统一管理参数配置和依赖关系
  */
 
+const ConstraintEngine = require('./constraint-engine')
+
 /**
  * 参数配置管理器类
  */
 class ParamConfigManager {
   /**
+   * 创建参数配置管理器实例
+   */
+  constructor() {
+    this.constraintEngine = new ConstraintEngine()
+  }
+  /**
    * 获取参数配置
    * @param {object} schema - 参数模式
    * @param {object} context - 当前上下文
    * @param {object} modelCapabilities - 模型能力定义（可选）
+   * @param {Array} compositeConstraints - 复合约束定义（可选）
    * @returns {object} 参数配置
    */
-  getParamConfig(schema, context = {}, modelCapabilities = null) {
-    const parameters = this.buildParameters(schema, context, modelCapabilities)
+  getParamConfig(schema, context = {}, modelCapabilities = null, compositeConstraints = null) {
+    const parameters = this.buildParameters(schema, context, modelCapabilities, compositeConstraints)
     const state = this.analyzeState(parameters, context)
     
     return {
@@ -24,7 +33,9 @@ class ParamConfigManager {
       parameters,
       state,
       hasModelCapabilities: !!modelCapabilities,
-      modelCapabilities
+      modelCapabilities,
+      hasCompositeConstraints: !!compositeConstraints,
+      compositeConstraints
     }
   }
 
@@ -33,9 +44,10 @@ class ParamConfigManager {
    * @param {object} schema - 参数模式
    * @param {object} context - 当前上下文
    * @param {object} modelCapabilities - 模型能力定义
+   * @param {Array} compositeConstraints - 复合约束定义
    * @returns {Array} 参数列表
    */
-  buildParameters(schema, context, modelCapabilities) {
+  buildParameters(schema, context, modelCapabilities, compositeConstraints) {
     const params = []
     
     if (!schema || !schema.input) {
@@ -49,39 +61,27 @@ class ParamConfigManager {
         required: fieldSchema.required || false,
         description: fieldSchema.description || '',
         default: fieldSchema.default,
-        dependencies: this.getDependencies(name, schema, modelCapabilities),
+        dependencies: this.getDependencies(name, schema, modelCapabilities, compositeConstraints),
         affects: this.getAffectedParams(name, schema),
         visible: true,
-        enabled: this.isEnabled(name, context, schema, modelCapabilities),
-        constraintSource: this.getConstraintSource(name, schema, modelCapabilities)
+        enabled: this.isEnabled(name, context, schema, modelCapabilities, compositeConstraints),
+        constraintSource: this.getConstraintSource(name, schema, modelCapabilities, compositeConstraints)
       }
       
-      // 检查所有依赖是否满足
-      const allDependenciesMet = this.areDependenciesMet(name, context, schema, modelCapabilities)
+      const allDependenciesMet = this.areDependenciesMet(name, context, schema, modelCapabilities, compositeConstraints)
       
       if (!allDependenciesMet) {
-        // 如果依赖未满足，不设置约束值
         param.options = undefined
         param.min = undefined
         param.max = undefined
         param.step = undefined
-      } else if (modelCapabilities && context.model) {
-        // 依赖满足且有模型约束，尝试获取动态值
-        const dynamicOptions = this.getDynamicOptions(name, context, modelCapabilities)
-        const dynamicMin = this.getDynamicMin(name, context, modelCapabilities)
-        const dynamicMax = this.getDynamicMax(name, context, modelCapabilities)
-        const dynamicStep = this.getDynamicStep(name, context, modelCapabilities)
-        
-        // 只有在动态值存在时才设置，否则使用 schema 的值
-        param.options = dynamicOptions !== null ? dynamicOptions : fieldSchema.options
-        param.min = dynamicMin !== null ? dynamicMin : fieldSchema.min
-        param.max = dynamicMax !== null ? dynamicMax : fieldSchema.max
-        param.step = dynamicStep !== null ? dynamicStep : (fieldSchema.step || 1)
       } else {
-        // 依赖满足但没有模型约束，使用 schema 的值
-        param.options = fieldSchema.options
-        param.min = fieldSchema.min
-        param.max = fieldSchema.max
+        const dynamicOptions = this.getDynamicOptions(name, context, modelCapabilities, compositeConstraints)
+        const dynamicRange = this.getDynamicRange(name, context, compositeConstraints)
+        
+        param.options = dynamicOptions !== null ? dynamicOptions : fieldSchema.options
+        param.min = dynamicRange ? dynamicRange.min : (fieldSchema.min)
+        param.max = dynamicRange ? dynamicRange.max : (fieldSchema.max)
         param.step = fieldSchema.step || 1
       }
       
@@ -128,9 +128,10 @@ class ParamConfigManager {
    * @param {string} paramName - 参数名
    * @param {object} schema - 参数模式
    * @param {object} modelCapabilities - 模型能力定义
+   * @param {Array} compositeConstraints - 复合约束定义
    * @returns {Array} 依赖列表
    */
-  getDependencies(paramName, schema, modelCapabilities) {
+  getDependencies(paramName, schema, modelCapabilities, compositeConstraints) {
     const deps = []
     const fieldSchema = schema.input[paramName]
     
@@ -150,6 +151,18 @@ class ParamConfigManager {
         if (!deps.includes('model')) deps.push('model')
         if (!deps.includes('resolution')) deps.push('resolution')
         if (!deps.includes('fps')) deps.push('fps')
+      }
+    }
+    
+    if (compositeConstraints && Array.isArray(compositeConstraints)) {
+      for (const constraint of compositeConstraints) {
+        if (constraint.params && constraint.params.includes(paramName)) {
+          for (const p of constraint.params) {
+            if (p !== paramName && !deps.includes(p)) {
+              deps.push(p)
+            }
+          }
+        }
       }
     }
     
@@ -197,9 +210,10 @@ class ParamConfigManager {
    * @param {object} context - 当前上下文
    * @param {object} schema - 参数模式
    * @param {object} modelCapabilities - 模型能力定义
+   * @param {Array} compositeConstraints - 复合约束定义
    * @returns {boolean} 是否启用
    */
-  isEnabled(paramName, context, schema, modelCapabilities) {
+  isEnabled(paramName, context, schema, modelCapabilities, compositeConstraints) {
     const fieldSchema = schema.input[paramName]
     
     if (fieldSchema && fieldSchema.dependsOn) {
@@ -230,20 +244,28 @@ class ParamConfigManager {
    * @param {string} paramName - 参数名
    * @param {object} schema - 参数模式
    * @param {object} modelCapabilities - 模型能力定义
+   * @param {Array} compositeConstraints - 复合约束定义
    * @returns {string|null} 约束来源
    */
-  getConstraintSource(paramName, schema, modelCapabilities) {
-    if (!modelCapabilities || !this.hasModelConstraints(paramName)) {
-      return null
+  getConstraintSource(paramName, schema, modelCapabilities, compositeConstraints) {
+    const sources = []
+    
+    if (modelCapabilities && this.hasModelConstraints(paramName)) {
+      if (paramName === 'resolution') {
+        sources.push('model')
+      } else if (paramName === 'fps') {
+        sources.push('model', 'resolution')
+      } else if (paramName === 'duration') {
+        sources.push('model', 'resolution', 'fps')
+      }
     }
     
-    const sources = []
-    if (paramName === 'resolution') {
-      sources.push('model')
-    } else if (paramName === 'fps') {
-      sources.push('model', 'resolution')
-    } else if (paramName === 'duration') {
-      sources.push('model', 'resolution', 'fps')
+    if (compositeConstraints && Array.isArray(compositeConstraints)) {
+      for (const constraint of compositeConstraints) {
+        if (constraint.params && constraint.params.includes(paramName)) {
+          sources.push(`composite:${constraint.name}`)
+        }
+      }
     }
     
     return sources.length > 0 ? sources.join(',') : null
@@ -264,10 +286,11 @@ class ParamConfigManager {
    * @param {object} context - 当前上下文
    * @param {object} schema - 参数模式
    * @param {object} modelCapabilities - 模型能力定义
+   * @param {Array} compositeConstraints - 复合约束定义
    * @returns {boolean} 是否满足所有依赖
    */
-  areDependenciesMet(paramName, context, schema, modelCapabilities) {
-    const dependencies = this.getDependencies(paramName, schema, modelCapabilities)
+  areDependenciesMet(paramName, context, schema, modelCapabilities, compositeConstraints) {
+    const dependencies = this.getDependencies(paramName, schema, modelCapabilities, compositeConstraints)
     
     for (const dep of dependencies) {
       if (context[dep] === undefined || context[dep] === null) {
@@ -283,10 +306,24 @@ class ParamConfigManager {
    * @param {string} paramName - 参数名
    * @param {object} context - 当前上下文
    * @param {object} modelCapabilities - 模型能力定义
+   * @param {Array} compositeConstraints - 复合约束定义
    * @returns {Array|null} 动态选项
    */
-  getDynamicOptions(paramName, context, modelCapabilities) {
-    if (!context.model || !modelCapabilities[context.model]) {
+  getDynamicOptions(paramName, context, modelCapabilities, compositeConstraints) {
+    if (compositeConstraints && compositeConstraints.length > 0) {
+      const constraintOptions = this.constraintEngine.generateOptions(
+        paramName,
+        compositeConstraints,
+        context,
+        { step: 64, maxValues: 50 }
+      )
+      
+      if (constraintOptions && constraintOptions.length > 0) {
+        return constraintOptions
+      }
+    }
+    
+    if (!context.model || !modelCapabilities || !modelCapabilities[context.model]) {
       return null
     }
     
@@ -294,9 +331,11 @@ class ParamConfigManager {
     
     if (paramName === 'resolution') {
       const resolutions = []
-      for (const [resName, resData] of Object.entries(modelCaps.resolutions)) {
-        if (resData.landscape) resolutions.push(resData.landscape)
-        if (resData.portrait) resolutions.push(resData.portrait)
+      if (modelCaps.resolutions) {
+        for (const [resName, resData] of Object.entries(modelCaps.resolutions)) {
+          if (resData.landscape) resolutions.push(resData.landscape)
+          if (resData.portrait) resolutions.push(resData.portrait)
+        }
       }
       return [...new Set(resolutions)]
     }
@@ -309,6 +348,26 @@ class ParamConfigManager {
     }
     
     return null
+  }
+
+  /**
+   * 获取动态范围
+   * @param {string} paramName - 参数名
+   * @param {object} context - 当前上下文
+   * @param {Array} compositeConstraints - 复合约束定义
+   * @returns {object|null} 动态范围 {min, max}
+   */
+  getDynamicRange(paramName, context, compositeConstraints) {
+    if (!compositeConstraints || compositeConstraints.length === 0) {
+      return null
+    }
+    
+    return this.constraintEngine.generateOptions(
+      paramName,
+      compositeConstraints,
+      context,
+      { format: 'range' }
+    )
   }
 
   /**

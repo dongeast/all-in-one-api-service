@@ -5,20 +5,62 @@
 
 const ENV_PREFIX = 'AI_SERVICE_'
 
+const KNOWN_PROVIDERS = [
+  'openai', 'anthropic', 'google', 'azure', 'aws',
+  'volcengine', 'baidu', 'alibaba', 'tencent', 'huawei',
+  'moonshot', 'zhipu', 'deepseek', 'minimax', 'baichuan',
+  'stability', 'midjourney', 'runway', 'pika',
+  'ltx', 'skyreels', 'replicate', 'gemini', 'custom'
+]
+
+const PROVIDER_KEY_MAPPINGS = {
+  'api_key': 'apiKey',
+  'api_token': 'apiToken',
+  'base_url': 'baseURL',
+  'api_base': 'apiBase',
+  'api_version': 'apiVersion',
+  'access_key': 'accessKey',
+  'secret_key': 'secretKey',
+  'region': 'region',
+  'timeout': 'timeout',
+  'max_retries': 'maxRetries'
+}
+
 /**
  * 解析环境变量为配置对象
  * @param {string} prefix - 环境变量前缀
  * @returns {object} 解析后的配置对象
  */
 function parseEnv(prefix = ENV_PREFIX) {
-  const config = {}
+  const config = { providers: {} }
   const env = process.env
 
   Object.keys(env).forEach(key => {
     if (key.startsWith(prefix)) {
       const configPath = key.slice(prefix.length).toLowerCase()
       const value = parseValue(env[key])
-      setNestedValue(config, configPath, value)
+      
+      const parts = configPath.split('_')
+      const possibleProvider = parts[0]
+      
+      if (KNOWN_PROVIDERS.includes(possibleProvider)) {
+        const providerName = possibleProvider
+        const remainingParts = parts.slice(1)
+        
+        if (remainingParts.length === 0) {
+          return
+        }
+        
+        const configKey = remainingParts.join('_')
+        const mappedKey = PROVIDER_KEY_MAPPINGS[configKey] || configKey
+        
+        if (!config.providers[providerName]) {
+          config.providers[providerName] = {}
+        }
+        config.providers[providerName][mappedKey] = value
+      } else {
+        setNestedValue(config, configPath, value)
+      }
     }
   })
 

@@ -43,6 +43,11 @@
       "apiKey": "xxxxx",
       "baseURL": "https://api.ltx.video",
       "timeout": 300000
+    },
+    "volcengine": {
+      "apiKey": "",
+      "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
+      "timeout": 120000
     }
   },
   "logging": {

@@ -4,6 +4,7 @@
  */
 
 const { ModelConstraintValidator } = require('./model-constraint-validator')
+const ConstraintEngine = require('./constraint-engine')
 
 /**
  * 验证结果类
@@ -231,6 +232,7 @@ function validate(value, schema) {
  * @param {object} schema - 参数模式定义
  * @param {object} options - 验证选项（可选）
  * @param {object} options.modelCapabilities - 模型能力定义
+ * @param {Array} options.compositeConstraints - 复合约束定义
  * @returns {ValidationResult} 验证结果
  */
 function validateParams(params, schema, options = {}) {
@@ -267,6 +269,14 @@ function validateParams(params, schema, options = {}) {
     )
     if (!constraintResult.valid) {
       errors.push(...constraintResult.errors)
+    }
+  }
+
+  if (options.compositeConstraints) {
+    const engine = new ConstraintEngine()
+    const compositeResult = engine.validateAll(params, options.compositeConstraints)
+    if (!compositeResult.valid) {
+      errors.push(...compositeResult.errors)
     }
   }
 

@@ -23,6 +23,7 @@ class BaseParam {
       output: schema.output || {}
     }
     this.modelCapabilities = schema.modelCapabilities || null
+    this.compositeConstraints = schema.compositeConstraints || null
   }
 
   /**
@@ -32,7 +33,8 @@ class BaseParam {
    */
   validate(params) {
     const validationResult = validateParams(params, this.schema, {
-      modelCapabilities: this.modelCapabilities
+      modelCapabilities: this.modelCapabilities,
+      compositeConstraints: this.compositeConstraints
     })
     if (!validationResult.valid) {
       return validationResult
@@ -70,7 +72,22 @@ class BaseParam {
    * @returns {object} 参数模式
    */
   getSchema() {
-    return deepClone(this.schema)
+    const schema = deepClone(this.schema)
+    if (this.modelCapabilities) {
+      schema.modelCapabilities = deepClone(this.modelCapabilities)
+    }
+    if (this.compositeConstraints) {
+      schema.compositeConstraints = deepClone(this.compositeConstraints)
+    }
+    return schema
+  }
+
+  /**
+   * 获取复合约束定义
+   * @returns {Array|null} 复合约束定义
+   */
+  getCompositeConstraints() {
+    return this.compositeConstraints ? deepClone(this.compositeConstraints) : null
   }
 
   /**
@@ -230,7 +247,13 @@ class BaseParam {
    * @returns {object} 新的模式
    */
   static override(baseSchema, overrideConfig) {
-    return deepMerge(deepClone(baseSchema), overrideConfig)
+    const result = deepMerge(deepClone(baseSchema), overrideConfig)
+    
+    if (baseSchema.compositeConstraints && !overrideConfig.compositeConstraints) {
+      result.compositeConstraints = deepClone(baseSchema.compositeConstraints)
+    }
+    
+    return result
   }
 
   /**

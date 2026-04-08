@@ -10,6 +10,7 @@ const anthropic = require('./anthropic')
 const midjourney = require('./midjourney')
 const skyreels = require('./skyreels')
 const ltx = require('./ltx')
+const volcengine = require('./volcengine')
 
 module.exports = {
   version: '1.0',
@@ -22,7 +23,8 @@ module.exports = {
     anthropic,
     midjourney,
     skyreels,
-    ltx
+    ltx,
+    volcengine
   },
   logging: {
     level: 'info',

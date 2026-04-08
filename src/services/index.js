@@ -11,6 +11,7 @@ const AnthropicService = require('./anthropic-service')
 const MidjourneyService = require('./midjourney-service')
 const SkyreelsService = require('./skyreels-service')
 const LTXService = require('./ltx-service')
+const VolcengineService = require('./volcengine-service')
 const CustomService = require('./custom-service')
 
 module.exports = {
@@ -23,5 +24,6 @@ module.exports = {
   Midjourney: MidjourneyService,
   Skyreels: SkyreelsService,
   LTX: LTXService,
+  Volcengine: VolcengineService,
   Custom: CustomService
 }

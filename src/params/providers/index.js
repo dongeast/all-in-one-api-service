@@ -10,6 +10,7 @@ const anthropic = require('./anthropic')
 const midjourney = require('./midjourney')
 const skyreels = require('./skyreels')
 const ltx = require('./ltx')
+const volcengine = require('./volcengine')
 
 module.exports = {
   openai,
@@ -19,5 +20,6 @@ module.exports = {
   anthropic,
   midjourney,
   skyreels,
-  ltx
+  ltx,
+  volcengine
 }

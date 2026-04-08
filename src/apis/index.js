@@ -12,6 +12,7 @@ const Anthropic = require('./anthropic')
 const Midjourney = require('./midjourney')
 const Skyreels = require('./skyreels')
 const LTX = require('./ltx')
+const Volcengine = require('./volcengine')
 
 module.exports = {
   BaseAPI,
@@ -22,5 +23,6 @@ module.exports = {
   Anthropic,
   Midjourney,
   Skyreels,
-  LTX
+  LTX,
+  Volcengine
 }
