@@ -19,11 +19,9 @@ module.exports = {
   Common: common,
   Providers: providers,
   Schemas: {
-    OpenAI: providers.openai,
-    Stability: providers.stability,
-    Replicate: providers.replicate,
-    Gemini: providers.gemini,
-    Anthropic: providers.anthropic,
-    Midjourney: providers.midjourney
+    Skyreels: providers.skyreels,
+    LTX: providers.ltx,
+    Volcengine: providers.volcengine,
+    Mureka: providers.mureka
   }
 }

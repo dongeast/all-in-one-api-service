@@ -3,7 +3,7 @@
  */
 
 const murekaCommon = require('../mureka-common')
-const { ParamType, ElementType } = require('../../common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {

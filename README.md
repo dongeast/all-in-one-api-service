@@ -969,6 +969,81 @@ console.log(promptDetail)
 | `array` | 数组类型 | `itemSchema`, `minItems`, `maxItems` |
 | `object` | 对象类型 | `properties` |
 
+### 参数类型枚举 (ParamType & ElementType)
+
+本模块提供了参数类型和UI组件类型的枚举定义，方便外部项目使用。
+
+#### 引入方式
+
+```javascript
+const { ParamType, ElementType } = require('all-in-one-api-service')
+```
+
+#### ParamType - 值的数据类型
+
+用于定义参数值的数据类型：
+
+| 枚举值 | 说明 |
+|--------|------|
+| `ParamType.STRING` | 字符串类型 |
+| `ParamType.NUMBER` | 数字类型 |
+| `ParamType.BOOLEAN` | 布尔类型 |
+| `ParamType.ENUM` | 枚举类型 |
+| `ParamType.ARRAY` | 数组类型 |
+| `ParamType.OBJECT` | 对象类型 |
+| `ParamType.FILE` | 文件类型 |
+
+#### ElementType - UI组件类型
+
+用于定义参数对应的UI组件类型：
+
+| 枚举值 | 说明 |
+|--------|------|
+| `ElementType.INPUT` | 输入框 |
+| `ElementType.TEXTAREA` | 文本域 |
+| `ElementType.SELECT` | 下拉选择 |
+| `ElementType.CHECKBOX` | 复选框 |
+| `ElementType.RADIO` | 单选框 |
+| `ElementType.SLIDER` | 滑块 |
+| `ElementType.UPLOAD` | 上传组件 |
+| `ElementType.COLOR_PICKER` | 颜色选择器 |
+| `ElementType.DATE_PICKER` | 日期选择器 |
+| `ElementType.SWITCH` | 开关 |
+
+#### 使用示例
+
+```javascript
+const { ParamType, ElementType } = require('all-in-one-api-service')
+
+// 定义参数
+const paramDefinition = {
+  type: ParamType.STRING,
+  elementType: ElementType.INPUT,
+  required: true,
+  description: '用户名',
+  minLength: 1,
+  maxLength: 50
+}
+
+// 定义带滑块的数字参数
+const numberParam = {
+  type: ParamType.NUMBER,
+  elementType: ElementType.SLIDER,
+  min: 0,
+  max: 100,
+  step: 1,
+  default: 50
+}
+
+// 定义枚举参数
+const enumParam = {
+  type: ParamType.ENUM,
+  elementType: ElementType.SELECT,
+  options: ['option1', 'option2', 'option3'],
+  default: 'option1'
+}
+```
+
 ### 动态表单生成示例
 
 #### React表单生成
