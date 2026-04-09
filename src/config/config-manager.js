@@ -79,7 +79,7 @@ class ConfigManager {
       return {}
     }
 
-    const { providers, ...globalConfig } = this.config
+    const { providers: _providers, ...globalConfig } = this.config
     return globalConfig
   }
 
@@ -158,12 +158,12 @@ class ConfigManager {
     }
 
     switch (format) {
-      case 'json':
-        return ConfigMerger.exportJSON(this.config)
-      case 'env':
-        return ConfigMerger.exportEnv(this.config, this.options.envPrefix)
-      default:
-        return ConfigMerger.exportJSON(this.config)
+    case 'json':
+      return ConfigMerger.exportJSON(this.config)
+    case 'env':
+      return ConfigMerger.exportEnv(this.config, this.options.envPrefix)
+    default:
+      return ConfigMerger.exportJSON(this.config)
     }
   }
 

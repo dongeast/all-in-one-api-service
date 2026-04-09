@@ -2,8 +2,14 @@
  * 注册中心入口
  */
 
+const BaseRegistry = require('./base-registry')
 const modelRegistry = require('./model-registry')
 const apiRegistry = require('./api-registry')
+const functionRegistry = require('../functions/function-registry')
+
+const { ModelRegistry } = modelRegistry
+const { APIRegistry } = apiRegistry
+const { FunctionRegistry } = functionRegistry
 
 const ltxModels = require('../metadata/models/ltx')
 const volcengineModels = require('../metadata/models/volcengine')
@@ -26,6 +32,11 @@ apiRegistry.registerAll(skyreelsAPIs)
 apiRegistry.registerAll(murekaAPIs)
 
 module.exports = {
+  BaseRegistry,
+  APIRegistry,
+  ModelRegistry,
+  FunctionRegistry,
   modelRegistry,
-  apiRegistry
+  apiRegistry,
+  functionRegistry
 }

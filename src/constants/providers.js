@@ -27,32 +27,32 @@ const ProviderPriority = {
 const ProviderMeta = {
   [Providers.LTX]: {
     name: 'ltx',
-    displayName: 'LTX',
-    description: 'LTX 视频生成平台',
+    displayName: 'LTX Studio',
+    description: 'LTX Studio',
     region: 'global',
     website: 'https://ltx.video',
     supportedTypes: ['video']
   },
   [Providers.VOLCENGINE]: {
     name: 'volcengine',
-    displayName: '火山引擎',
-    description: '字节跳动火山引擎 AI 服务',
+    displayName: 'Bytedance Seed AI',
+    description: 'Bytedance Seed AI',
     region: 'china',
     website: 'https://www.volcengine.com',
     supportedTypes: ['image', 'video', '3d']
   },
   [Providers.SKYREELS]: {
     name: 'skyreels',
-    displayName: 'Skyreels',
-    description: 'Skyreels 视频生成平台',
+    displayName: 'Skyreels AI',
+    description: 'Skyreels AI',
     region: 'global',
     website: 'https://skyreels.ai',
     supportedTypes: ['video', 'avatar']
   },
   [Providers.MUREKA]: {
     name: 'mureka',
-    displayName: 'Mureka',
-    description: 'Mureka 音乐生成平台',
+    displayName: 'Mureka AI',
+    description: 'Mureka AI',
     region: 'global',
     website: 'https://mureka.ai',
     supportedTypes: ['audio', 'music']

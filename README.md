@@ -1,2675 +1,2278 @@
-# AI接口统一处理模块
+# All-in-One API Service
 
-一个统一的 AI 接口处理模块，支持多个服务商，实现零配置使用、统一接口调用、灵活参数配置。
+统一的 AI 接口处理模块，提供多平台 AI 服务的统一封装和管理。
 
-## ✨ 核心特性
+## 目录
 
-| 特性            | 说明                                                     |
-| ------------- | ------------------------------------------------------ |
-| 🚀 **零配置使用**  | 全局配置一次，所有项目自动加载                                        |
-| 🔄 **多服务商支持** | OpenAI、Stability、Replicate、Gemini、Anthropic、Midjourney、LTX、SkyReels、Mureka、Volcengine |
-| 📐 **三层架构**   | Service层、API层、Param层分离设计                               |
-| ✅ **参数验证**    | 自动验证输入参数类型、范围、必填项                                      |
-| 📤 **结果标准化**  | 统一的输出结果格式，支持路径提取                                       |
-| 🔧 **参数抽象**   | 支持增量重写、继承、组合等操作                                        |
-| 📝 **动态表单**   | 提供获取入参/出参结构的接口，便于生成表单                                  |
-| 📦 **按需导入**   | 支持 CommonJS、ES Module、Tree Shaking                     |
-| 🌊 **流式响应**   | 支持SSE流式响应，实时输出AI生成内容                                   |
-| 🎯 **模型约束**   | 支持模型能力定义，动态参数约束和依赖关系管理                                  |
-| 🔗 **参数联动**   | 参数间智能联动，根据上下文动态更新可选值和约束范围                               |
+- [项目架构](#项目架构)
+- [安装与配置](#安装与配置)
+- [快速开始](#快速开始)
+- [核心功能](#核心功能)
+- [测试用例](#测试用例)
+- [API 文档](#api-文档)
 
-## 📦 安装
+## 项目架构
+
+本项目采用分层架构设计，各层次职责清晰，便于扩展和维护。
+
+### 架构层次说明
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Application Layer                     │
+│                   (应用层/入口层)                         │
+│  - 统一对外暴露的 API 接口                                │
+│  - FunctionManager: 统一的功能管理器                      │
+│  - MetadataManager: 元数据管理器                         │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│                    Function Layer                        │
+│                     (功能层)                             │
+│  - BaseFunction: 功能基类                                │
+│  - FunctionRegistry: 功能注册中心                        │
+│  - APIMapping: API 映射关系管理                          │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│                      API Layer                           │
+│                    (接口定义层)                           │
+│  - APIDefinition: API 定义基类                           │
+│  - 参数验证、转换、提取                                   │
+│  - 输入输出结构定义                                       │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│                    Service Layer                         │
+│                     (服务层)                             │
+│  - BaseService: 服务基类                                 │
+│  - Provider 具体实现 (LTX, Volcengine, Skyreels, Mureka)│
+│  - HTTP 请求封装、认证、重试机制                          │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│                     Param Layer                          │
+│                    (参数层)                              │
+│  - BaseParam: 参数基类                                   │
+│  - Validators: 参数验证器                                │
+│  - Transformers: 参数转换器                              │
+│  - Extractors: 输出提取器                                │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│                   Infrastructure                         │
+│                    (基础设施层)                           │
+│  - Config: 配置管理                                      │
+│  - Registry: 注册中心 (Model, API)                       │
+│  - Constants: 常量定义                                   │
+│  - Utils: 工具函数                                       │
+│  - Locales: 国际化支持                                   │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 各层次主要职责
+
+#### 1. 应用层 (Application Layer)
+
+**文件**: `src/index.js`
+
+**职责**:
+
+- 作为整个框架的统一入口
+- 导出所有公共 API 和模块
+- 提供便捷的快捷方法
+
+**核心组件**:
+
+- `FunctionManager`: 统一的功能管理器，整合 Function 和 QueryService 的功能
+- `MetadataManager`: 元数据管理器，提供 Function、API、Model 的查询和翻译功能
+
+#### 2. 功能层 (Function Layer)
+
+**文件**: `src/functions/`
+
+**职责**:
+
+- 定义和管理 AI 功能单元
+- 提供功能注册和查询机制
+- 管理 Function 与 API 的映射关系
+
+**核心组件**:
+
+- `BaseFunction`: 功能基类，封装执行逻辑
+- `FunctionRegistry`: 功能注册中心，管理所有 Function 元数据
+- `apiMapping`: API 映射关系管理
+
+#### 3. 接口定义层 (API Layer)
+
+**文件**: `src/apis/`
+
+**职责**:
+
+- 定义 API 的基本信息和参数结构
+- 提供参数验证、转换、提取功能
+- 管理输入输出数据结构
+
+**核心组件**:
+
+- `APIDefinition`: API 定义基类，纯数据定义层，不包含执行逻辑
+
+#### 4. 服务层 (Service Layer)
+
+**文件**: `src/services/`
+
+**职责**:
+
+- 封装不同 Provider 的 HTTP 请求逻辑
+- 处理认证、重试、错误处理
+- 提供统一的调用接口
+
+**核心组件**:
+
+- `BaseService`: 服务基类，提供通用功能
+- `LTXService`: LTX 平台服务
+- `VolcengineService`: 火山引擎服务
+- `SkyreelsService`: Skyreels 服务
+- `MurekaService`: Mureka 服务
+
+#### 5. 参数层 (Param Layer)
+
+**文件**: `src/params/`
+
+**职责**:
+
+- 定义参数验证规则
+- 实现参数转换逻辑
+- 提供输出提取功能
+- 支持参数模板和复用
+
+**核心组件**:
+
+- `BaseParam`: 参数基类
+- `validators`: 参数验证器
+- `transformers`: 参数转换器
+- `extractors`: 输出提取器
+- `templates`: 参数模板
+
+#### 6. 基础设施层 (Infrastructure Layer)
+
+**文件**: `src/config/`, `src/registry/`, `src/constants/`, `src/utils/`, `src/locales/`
+
+**职责**:
+
+- 配置管理: 加载和管理配置文件
+- 注册中心: 管理 Model 和 API 的注册和查询
+- 常量定义: 定义 API 类型、媒体类型、Provider 等常量
+- 工具函数: 提供通用工具方法
+- 国际化: 支持多语言翻译
+
+## 安装与配置
+
+### 通过 GitHub 私有库安装
+
+#### 方法一: 使用 npm 安装
+
+1. **配置 .npmrc 文件**
+
+在项目根目录创建或编辑 `.npmrc` 文件:
+
+```bash
+# 使用 GitHub Packages
+@your-org:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
+
+# 或者使用 Git URL
+all-in-one-api-service=git+https://github.com/your-org/all-in-one-api-service.git
+```
+
+1. **获取 GitHub Token**
+
+访问 GitHub Settings → Developer settings → Personal access tokens → Generate new token (classic)
+
+需要的权限:
+
+- `read:packages`: 读取包
+- `repo`: 访问私有仓库
+
+1. **安装依赖**
 
 ```bash
 npm install all-in-one-api-service
+# 或
+npm install @your-org/all-in-one-api-service
 ```
 
-或使用 yarn:
+#### 方法二: 使用 package.json 直接引用
 
-```bash
-yarn add all-in-one-api-service
-```
-
-## 🧪 测试
-
-### 📁 测试目录结构
-
-```
-tests/
-├── run-tests.js           # 测试运行器
-├── README.md              # 测试详细文档
-│
-├── 示例代码/
-│   ├── basic-usage.js         # 基础使用示例
-│   ├── config-management.js   # 配置管理示例
-│   ├── custom-param.js        # 自定义参数示例
-│   ├── dynamic-form.js        # 动态表单示例
-│   ├── multi-provider.js      # 多服务商示例
-│   └── stream-usage.js        # 流式响应示例
-│
-└── 功能测试/
-    ├── stream-basic.js        # 流式响应基础测试
-    ├── stream-error.js        # 流式响应错误处理测试
-    ├── stream-validation.js   # 流式响应参数验证测试
-    ├── stream-complete.js     # 流式响应完整收集测试
-    └── stream-handler.js      # StreamHandler测试
-```
-
-### 🚀 快速开始
-
-#### 1. 查看所有可用的测试
-
-```bash
-npm run test:list
-```
-
-#### 2. 运行所有测试
-
-```bash
-# 运行所有功能测试
-npm test
-
-# 运行所有示例
-npm run test:examples
-
-# 运行所有测试和示例
-npm run test:all
-```
-
-### 🎯 单个测试执行
-
-#### 方法一：使用测试运行器（推荐）
-
-```bash
-# 运行基础使用示例
-node tests/run-tests.js basic-usage
-
-# 运行流式响应基础测试
-node tests/run-tests.js stream-basic
-
-# 运行配置管理示例
-node tests/run-tests.js config-management
-
-# 运行StreamHandler测试
-node tests/run-tests.js stream-handler
-```
-
-#### 方法二：直接运行测试文件
-
-```bash
-# 运行基础使用示例
-node tests/basic-usage.js
-
-# 运行流式响应基础测试
-node tests/stream-basic.js
-
-# 运行配置管理示例
-node tests/config-management.js
-```
-
-#### 方法三：使用npm脚本
-
-```bash
-# 运行流式响应测试
-npm run test:stream
-
-# 列出所有测试
-npm run test:list
-```
-
-### 📋 可用的测试案例
-
-#### 示例代码
-
-| 测试名 | 文件 | 说明 | 需要API Key |
-|--------|------|------|-------------|
-| `basic-usage` | basic-usage.js | 演示如何使用OpenAI DALL-E 3生成图像 | ✅ |
-| `config-management` | config-management.js | 演示如何管理配置文件和环境变量 | ❌ |
-| `custom-param` | custom-param.js | 演示如何自定义参数模式 | ✅ |
-| `dynamic-form` | dynamic-form.js | 演示如何根据参数定义生成动态表单 | ❌ |
-| `multi-provider` | multi-provider.js | 演示如何使用多个AI服务商 | ✅ |
-| `stream-usage` | stream-usage.js | 演示如何使用流式响应功能 | ✅ |
-
-#### 功能测试
-
-| 测试名 | 文件 | 说明 | 需要API Key |
-|--------|------|------|-------------|
-| `stream-basic` | stream-basic.js | 测试基础流式响应功能 | ✅ |
-| `stream-error` | stream-error.js | 测试流式响应错误处理 | ❌ |
-| `stream-validation` | stream-validation.js | 测试流式响应参数验证 | ❌ |
-| `stream-complete` | stream-complete.js | 测试收集完整流式响应 | ✅ |
-| `stream-handler` | stream-handler.js | 测试SSE解析功能 | ❌ |
-
-### 🔑 设置API Key
-
-部分测试需要 OpenAI API Key。请通过以下方式设置：
-
-**Windows PowerShell:**
-```powershell
-$env:OPENAI_API_KEY="sk-your-openai-api-key"
-```
-
-**Windows CMD:**
-```cmd
-set OPENAI_API_KEY=sk-your-openai-api-key
-```
-
-**Linux/macOS:**
-```bash
-export OPENAI_API_KEY=sk-your-openai-api-key
-```
-
-**使用 .env 文件:**
-
-在项目根目录创建 `.env` 文件：
-```env
-OPENAI_API_KEY=sk-your-openai-api-key
-```
-
-### 📊 测试输出示例
-
-#### 单个测试输出
-
-```
-╔════════════════════════════════════════════════════════════╗
-║  运行测试: 流式响应基础测试                                 ║
-╚════════════════════════════════════════════════════════════╝
-
-📝 描述: 测试基础流式响应功能
-📁 文件: tests/stream-basic.js
-🔑 需要API Key: 是
-
-开始执行...
-
-=== 测试: 基础流式响应 ===
-
-开始流式输出:
-
-JavaScript是一种高级的、解释型的编程语言...
-
-✅ 流式输出完成
-   完成原因: stop
-   数据块数量: 15
-   总字符数: 120
-✅ 测试通过
-
-✅ 测试执行完成
-```
-
-#### 批量测试输出
-
-```
-╔════════════════════════════════════════════════════════════╗
-║                    测试结果汇总                            ║
-╚════════════════════════════════════════════════════════════╝
-
-总计: 5 个测试
-✅ 通过: 5
-❌ 失败: 0
-```
-
-### 🛠️ 高级用法
-
-#### 在代码中运行测试
-
-```javascript
-const { runTest, runTests } = require('./tests/run-tests')
-
-// 运行单个测试
-runTest('stream-basic')
-
-// 运行多个测试
-runTests(['stream-basic', 'stream-error', 'stream-handler'])
-```
-
-#### 创建自定义测试
-
-参考现有测试文件创建新的测试：
-
-```javascript
-/**
- * 自定义测试
- */
-const { Services, APIs } = require('../index')
-
-async function myTest() {
-  console.log('=== 我的测试 ===\n')
-  
-  // 测试代码
-  
-  console.log('✅ 测试通过\n')
-}
-
-if (require.main === module) {
-  myTest().catch(console.error)
-}
-
-module.exports = { myTest }
-```
-
-然后在 `tests/run-tests.js` 中添加测试配置：
-
-```javascript
-const TEST_CASES = {
-  // ... 其他测试
-  'my-test': {
-    name: '我的测试',
-    file: 'my-test.js',
-    description: '自定义测试描述',
-    requiresApiKey: false,
-    category: 'tests'
-  }
-}
-```
-
-### ❓ 常见问题
-
-**Q: 测试运行失败怎么办？**
-
-A: 检查以下几点：
-1. 是否正确设置了 `OPENAI_API_KEY`
-2. Node.js 版本是否符合要求 (>=16.0.0)
-3. 是否安装了所有依赖 (`npm install`)
-
-**Q: 如何跳过需要API Key的测试？**
-
-A: 只运行不需要API Key的测试：
-
-```bash
-node tests/run-tests.js stream-error
-node tests/run-tests.js stream-validation
-node tests/run-tests.js stream-handler
-node tests/run-tests.js config-management
-node tests/run-tests.js dynamic-form
-```
-
-**Q: 如何查看详细的测试输出？**
-
-A: 直接运行测试文件可以看到更详细的输出：
-
-```bash
-node tests/stream-basic.js
-```
-
-### 📝 测试最佳实践
-
-1. **环境隔离**: 使用 `.env` 文件管理测试环境
-2. **API Key安全**: 不要将真实的API Key提交到代码仓库
-3. **测试覆盖**: 确保测试覆盖所有关键功能
-4. **错误处理**: 测试各种错误场景
-5. **性能测试**: 可以添加性能相关的测试
-
-详细说明请查看 [测试文档](tests/README.md)。
-
-## 🚀 快速开始
-
-### 方式一：零配置使用（推荐）
-
-**1. 创建全局配置**
-
-```powershell
-# Windows PowerShell
-mkdir -p $env:USERPROFILE\.ai-service
-
-@"
-{
-  "version": "1.0",
-  "providers": {
-    "openai": {
-      "apiKey": "sk-your-openai-api-key"
-    }
-  }
-}
-"@ | Out-File -FilePath "$env:USERPROFILE\.ai-service\config.local.json" -Encoding utf8
-```
-
-```bash
-# Linux/macOS
-mkdir -p ~/.ai-service
-
-cat > ~/.ai-service/config.local.json << 'EOF'
-{
-  "version": "1.0",
-  "providers": {
-    "openai": {
-      "apiKey": "sk-your-openai-api-key"
-    }
-  }
-}
-EOF
-```
-
-**2. 直接使用**
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// 无需传入配置，自动从全局配置加载
-const openai = new Services.OpenAI()
-const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-
-const result = await dalleAPI.execute({
-  prompt: 'A beautiful sunset over the ocean'
-})
-
-console.log(result.data.imageUrl)
-```
-
-### 方式二：环境变量配置
-
-创建 `.env` 文件：
-
-```env
-AI_SERVICE_OPENAI_API_KEY=sk-your-openai-api-key
-AI_SERVICE_STABILITY_API_KEY=sk-your-stability-api-key
-AI_SERVICE_REPLICATE_API_TOKEN=r8-your-replicate-token
-```
-
-### 方式三：代码传入配置
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-const openai = new Services.OpenAI({
-  apiKey: 'sk-your-openai-api-key'
-})
-
-const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-```
-
-## 📖 使用示例
-
-### 图像生成
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// OpenAI DALL-E 3
-const openai = new Services.OpenAI()
-const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-
-const result = await dalleAPI.execute({
-  prompt: 'A beautiful sunset over the ocean',
-  size: '1024x1024',
-  quality: 'hd'
-})
-
-console.log(result.data.imageUrl)
-console.log(result.data.revisedPrompt)
-
-// Stability AI
-const stability = new Services.Stability()
-const sdAPI = new APIs.Stability.Image.StableDiffusionXL(stability)
-
-const result2 = await sdAPI.execute({
-  prompt: 'A cyberpunk city',
-  width: 1024,
-  height: 1024,
-  steps: 30
-})
-
-console.log(result2.data.artifacts)
-```
-
-### 文本生成
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// OpenAI GPT-4
-const openai = new Services.OpenAI()
-const gptAPI = new APIs.OpenAI.Text.GPT4(openai)
-
-const result = await gptAPI.execute({
-  prompt: 'Explain quantum computing in simple terms',
-  maxTokens: 500,
-  temperature: 0.7
-})
-
-console.log(result.data.text)
-console.log(result.data.usage)
-
-// Anthropic Claude
-const anthropic = new Services.Anthropic()
-const claudeAPI = new APIs.Anthropic.Text.Claude3Sonnet(anthropic)
-
-const result2 = await claudeAPI.execute({
-  prompt: 'What is the meaning of life?',
-  maxTokens: 1000
-})
-
-console.log(result2.data.text)
-```
-
-### 流式响应
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// OpenAI GPT-4 流式输出
-const openai = new Services.OpenAI()
-const gpt4Stream = new APIs.OpenAI.Text.GPT4Stream(openai)
-
-// 流式输出文本
-for await (const chunk of gpt4Stream.executeStream({
-  messages: [
-    { role: 'user', content: '请介绍一下人工智能的发展历程' }
-  ],
-  maxTokens: 500
-})) {
-  if (!chunk.success) {
-    console.error('错误:', chunk.error)
-    break
-  }
-
-  if (chunk.data.content) {
-    process.stdout.write(chunk.data.content)
-  }
-
-  if (chunk.data.done) {
-    console.log('\n\n[流式输出完成]')
-  }
-}
-
-// 收集完整响应
-const result = await gpt4Stream.chatComplete({
-  messages: [
-    { role: 'user', content: '什么是机器学习?' }
-  ]
-})
-
-if (result.success) {
-  console.log('完整响应:', result.data.content)
-  console.log('Token使用:', result.data.usage)
-}
-```
-
-### 视频生成
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// OpenAI Sora
-const openai = new Services.OpenAI()
-const soraAPI = new APIs.OpenAI.Video.Sora(openai)
-
-const result = await soraAPI.execute({
-  prompt: 'A cat playing piano',
-  duration: 5
-})
-
-console.log(result.data.videoUrl)
-
-// Replicate Stable Video
-const replicate = new Services.Replicate()
-const videoAPI = new APIs.Replicate.Video.StableVideo(replicate)
-
-const result2 = await videoAPI.execute({
-  prompt: 'A time-lapse of a flower blooming'
-})
-
-console.log(result2.data.videoUrl)
-```
-
-### 音频处理
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// 文本转语音
-const openai = new Services.OpenAI()
-const ttsAPI = new APIs.OpenAI.Audio.TTS1(openai)
-
-const result = await ttsAPI.execute({
-  prompt: 'Hello, this is a test.',
-  voice: 'alloy'
-})
-
-console.log(result.data.audioUrl)
-
-// 语音转文本
-const whisperAPI = new APIs.OpenAI.Audio.Whisper1(openai)
-
-const result2 = await whisperAPI.execute({
-  file: '/path/to/audio.mp3'
-})
-
-console.log(result2.data.transcript)
-```
-
-### 音乐生成 (Mureka)
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// 创建Mureka服务
-const mureka = new Services.Mureka()
-
-// 生成歌词
-const lyricsAPI = new APIs.Mureka.Lyrics.GenerateLyrics(mureka)
-const lyricsResult = await lyricsAPI.execute({
-  prompt: 'A song about summer love',
-  style: 'pop'
-})
-console.log(lyricsResult.data.lyrics)
-
-// 生成歌曲
-const songAPI = new APIs.Mureka.Song.GenerateSong(mureka)
-const songResult = await songAPI.execute({
-  lyrics: lyricsResult.data.lyrics,
-  style: 'pop',
-  duration: 180
-})
-console.log(songResult.data.audioUrl)
-
-// 人声克隆
-const vocalAPI = new APIs.Mureka.Vocal.VocalCloning(mureka)
-const vocalResult = await vocalAPI.execute({
-  audioFile: '/path/to/voice.mp3',
-  lyrics: 'Custom lyrics here'
-})
-console.log(vocalResult.data.audioUrl)
-
-// 生成伴奏
-const instrumentalAPI = new APIs.Mureka.Instrumental.GenerateInstrumental(mureka)
-const instrumentalResult = await instrumentalAPI.execute({
-  prompt: 'Upbeat electronic dance music',
-  duration: 120
-})
-console.log(instrumentalResult.data.audioUrl)
-
-// 文本转语音
-const speechAPI = new APIs.Mureka.TTS.CreateSpeech(mureka)
-const speechResult = await speechAPI.execute({
-  text: 'Hello, welcome to our service',
-  voice: 'default'
-})
-console.log(speechResult.data.audioUrl)
-```
-
-### 图像与3D生成 (Volcengine)
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// 创建火山引擎服务
-const volcengine = new Services.Volcengine()
-
-// 图像生成
-const imageAPI = new APIs.Volcengine.Image.GenerateImage(volcengine)
-const imageResult = await imageAPI.execute({
-  model: 'doubao-seedream-5.0-lite',
-  prompt: 'A beautiful sunset over mountains',
-  size: '2048x2048'
-})
-console.log(imageResult.data.imageUrl)
-
-// 视频生成
-const videoAPI = new APIs.Volcengine.Video.CreateVideoGenerationTask(volcengine)
-const videoResult = await videoAPI.execute({
-  model: 'doubao-seedream-5.0-lite',
-  prompt: 'A cat playing in a garden',
-  duration: 5
-})
-console.log(videoResult.data.taskId)
-
-// 查询视频任务
-const queryAPI = new APIs.Volcengine.Video.QueryVideoGenerationTask(volcengine)
-const queryResult = await queryAPI.execute({
-  taskId: videoResult.data.taskId
-})
-console.log(queryResult.data.status)
-console.log(queryResult.data.videoUrl)
-
-// 3D生成
-const threeDAPI = new APIs.Volcengine.ThreeD.Create3DGenerationTask(volcengine)
-const threeDResult = await threeDAPI.execute({
-  model: 'doubao-3d-v1',
-  prompt: 'A modern chair design',
-  format: 'obj'
-})
-console.log(threeDResult.data.taskId)
-```
-
-### 流式响应
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// GPT-4 流式输出
-const openai = new Services.OpenAI()
-const gpt4Stream = new APIs.OpenAI.Text.GPT4Stream(openai)
-
-// 实时输出AI生成内容
-for await (const chunk of gpt4Stream.executeStream({
-  messages: [
-    { role: 'user', content: '请介绍一下人工智能的发展历程' }
-  ],
-  maxTokens: 500
-})) {
-  if (!chunk.success) {
-    console.error('错误:', chunk.error)
-    break
-  }
-
-  if (chunk.data.content) {
-    process.stdout.write(chunk.data.content)
-  }
-
-  if (chunk.data.done) {
-    console.log('\n\n[流式输出完成]')
-    console.log('完成原因:', chunk.data.finishReason)
-  }
-}
-
-// 收集完整响应
-const result = await gpt4Stream.chatComplete({
-  messages: [
-    { role: 'user', content: '什么是机器学习?' }
-  ]
-})
-
-if (result.success) {
-  console.log('完整响应:', result.data.content)
-  console.log('Token使用:', result.data.usage)
-}
-```
-
-#### Next.js API路由集成
-
-```javascript
-// app/api/chat/route.js
-import { NextRequest } from 'next/server'
-import { Services, APIs } from 'all-in-one-api-service'
-
-export async function POST(request: NextRequest) {
-  const { messages } = await request.json()
-
-  const openai = new Services.OpenAI()
-  const gpt4Stream = new APIs.OpenAI.Text.GPT4Stream(openai)
-
-  const encoder = new TextEncoder()
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        for await (const chunk of gpt4Stream.executeStream({ messages })) {
-          if (!chunk.success) {
-            controller.error(new Error(chunk.error.message))
-            return
-          }
-
-          const data = JSON.stringify({
-            content: chunk.data.content,
-            done: chunk.data.done
-          })
-          
-          controller.enqueue(encoder.encode(`data: ${data}\n\n`))
-        }
-        
-        controller.close()
-      } catch (error) {
-        controller.error(error)
-      }
-    }
-  })
-
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive'
-    }
-  })
-}
-```
-
-### 多服务商切换
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-// 统一接口，不同服务商
-const providers = {
-  openai: {
-    service: new Services.OpenAI(),
-    api: APIs.OpenAI.Image.DallE3
-  },
-  stability: {
-    service: new Services.Stability(),
-    api: APIs.Stability.Image.StableDiffusionXL
-  },
-  replicate: {
-    service: new Services.Replicate(),
-    api: APIs.Replicate.Image.Flux
-  }
-}
-
-async function generateImage(providerName, prompt) {
-  const { service, api } = providers[providerName]
-  const apiInstance = new api(service)
-  return await apiInstance.execute({ prompt })
-}
-
-// 使用不同服务商生成图像
-const result1 = await generateImage('openai', 'a cat')
-const result2 = await generateImage('stability', 'a dog')
-const result3 = await generateImage('replicate', 'a bird')
-```
-
-## 📐 架构设计
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        应用层 (Application)                  │
-│                    Next.js / 其他项目                        │
-│              ┌─────────────────────────────┐               │
-│              │  executeStream() 流式输出   │               │
-│              └─────────────────────────────┘               │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                        API层 (API Layer)                     │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │  Image API  │  │  Video API  │  │  Text API   │         │
-│  │  DALL-E 3   │  │    Sora     │  │   GPT-4     │         │
-│  │  Stable Diff│  │ Stable Video│  │ GPT-4 Stream│         │
-│  └─────────────┘  └─────────────┘  └─────────────┘         │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Service层 (Service Layer)               │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ OpenAI Svc  │  │Stability Svc│  │Replicate Svc│         │
-│  │  API Key    │  │  API Key    │  │  API Token  │         │
-│  │ callStream  │  │             │  │             │         │
-│  └─────────────┘  └─────────────┘  └─────────────┘         │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Param层 (Param Layer)                   │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │  Validators │  │Transformers │  │  Extractors │         │
-│  │   验证器    │  │   转换器    │  │   提取器    │         │
-│  └─────────────┘  └─────────────┘  └─────────────┘         │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    流式处理器 (StreamHandler)                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ SSE解析     │  │ 数据转换    │  │ 错误处理    │         │
-│  └─────────────┘  └─────────────┘  └─────────────┘         │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 层级职责
-
-| 层级           | 职责      | 关键功能                |
-| ------------ | ------- | ------------------- |
-| **Service层** | 服务提供商管理 | API密钥解析、认证处理、统一调用接口 |
-| **API层**     | 具体接口实现  | 按服务商组织、参数验证、响应标准化   |
-| **Param层**   | 参数定义与处理 | 参数验证、参数转换、结果提取、模式抽象 |
-
-## 📋 参数定义与UI生成
-
-### 快速获取参数定义
-
-当你在其他项目中通过npm引入本模块后，可以快速获取任意API的参数定义，用于生成UI表单。
-
-#### 1. 获取输入参数列表
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-const openai = new Services.OpenAI()
-const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-
-// 获取输入参数信息列表
-const inputInfo = dalleAPI.getInputInfo()
-console.log(inputInfo)
-```
-
-**返回示例：**
-
-```javascript
-[
-  {
-    name: 'prompt',
-    type: 'string',
-    required: true,
-    description: '图像生成提示词',
-    minLength: 1,
-    maxLength: 4000
-  },
-  {
-    name: 'size',
-    type: 'enum',
-    required: false,
-    default: '1024x1024',
-    description: '图像尺寸',
-    options: ['1024x1024', '1792x1024', '1024x1792']
-  },
-  {
-    name: 'quality',
-    type: 'enum',
-    required: false,
-    default: 'standard',
-    description: '图像质量',
-    options: ['standard', 'hd']
-  },
-  {
-    name: 'style',
-    type: 'enum',
-    required: false,
-    default: 'vivid',
-    description: '图像风格',
-    options: ['vivid', 'natural']
-  }
-]
-```
-
-#### 2. 获取输出结果定义
-
-```javascript
-// 获取输出结果信息列表
-const outputInfo = dalleAPI.getOutputInfo()
-console.log(outputInfo)
-```
-
-**返回示例：**
-
-```javascript
-[
-  {
-    name: 'imageUrl',
-    type: 'string',
-    description: '生成的图像URL',
-    required: true
-  },
-  {
-    name: 'revisedPrompt',
-    type: 'string',
-    description: 'OpenAI优化后的提示词'
-  }
-]
-```
-
-#### 3. 获取完整参数模式
-
-```javascript
-// 获取完整的参数模式定义
-const schema = dalleAPI.getParamSchema()
-console.log(JSON.stringify(schema, null, 2))
-```
-
-**返回示例：**
+在 `package.json` 中添加:
 
 ```json
 {
-  "input": {
-    "prompt": {
-      "type": "string",
-      "required": true,
-      "description": "图像生成提示词",
-      "minLength": 1,
-      "maxLength": 4000
-    },
-    "size": {
-      "type": "enum",
-      "options": ["1024x1024", "1792x1024", "1024x1792"],
-      "default": "1024x1024",
-      "description": "图像尺寸"
-    }
-  },
-  "output": {
-    "imageUrl": {
-      "type": "string",
-      "description": "生成的图像URL",
-      "path": "data[0].url",
-      "required": true
-    }
+  "dependencies": {
+    "all-in-one-api-service": "git+https://github.com/your-org/all-in-one-api-service.git#v1.0.0"
   }
 }
 ```
 
-#### 4. 获取单个参数详情
+或使用 SSH:
 
-```javascript
-// 获取特定参数的详细信息
-const promptDetail = dalleAPI.getParamDetail('prompt')
-console.log(promptDetail)
-```
-
-**返回示例：**
-
-```javascript
+```json
 {
-  name: 'prompt',
-  type: 'string',
-  required: true,
-  description: '图像生成提示词',
-  minLength: 1,
-  maxLength: 4000
-}
-```
-
-### 参数类型定义
-
-本模块支持以下参数类型：
-
-| 类型 | 说明 | 字段属性 |
-|------|------|----------|
-| `string` | 字符串类型 | `minLength`, `maxLength`, `pattern` |
-| `number` | 数字类型 | `min`, `max`, `integer` |
-| `boolean` | 布尔类型 | - |
-| `enum` | 枚举类型 | `options` (选项列表) |
-| `array` | 数组类型 | `itemSchema`, `minItems`, `maxItems` |
-| `object` | 对象类型 | `properties` |
-
-### 参数类型枚举 (ParamType & ElementType)
-
-本模块提供了参数类型和UI组件类型的枚举定义，方便外部项目使用。
-
-#### 引入方式
-
-```javascript
-const { ParamType, ElementType } = require('all-in-one-api-service')
-```
-
-#### ParamType - 值的数据类型
-
-用于定义参数值的数据类型：
-
-| 枚举值 | 说明 |
-|--------|------|
-| `ParamType.STRING` | 字符串类型 |
-| `ParamType.NUMBER` | 数字类型 |
-| `ParamType.BOOLEAN` | 布尔类型 |
-| `ParamType.ENUM` | 枚举类型 |
-| `ParamType.ARRAY` | 数组类型 |
-| `ParamType.OBJECT` | 对象类型 |
-| `ParamType.FILE` | 文件类型 |
-
-#### ElementType - UI组件类型
-
-用于定义参数对应的UI组件类型：
-
-| 枚举值 | 说明 |
-|--------|------|
-| `ElementType.INPUT` | 输入框 |
-| `ElementType.TEXTAREA` | 文本域 |
-| `ElementType.SELECT` | 下拉选择 |
-| `ElementType.CHECKBOX` | 复选框 |
-| `ElementType.RADIO` | 单选框 |
-| `ElementType.SLIDER` | 滑块 |
-| `ElementType.UPLOAD` | 上传组件 |
-| `ElementType.COLOR_PICKER` | 颜色选择器 |
-| `ElementType.DATE_PICKER` | 日期选择器 |
-| `ElementType.SWITCH` | 开关 |
-
-#### 使用示例
-
-```javascript
-const { ParamType, ElementType } = require('all-in-one-api-service')
-
-// 定义参数
-const paramDefinition = {
-  type: ParamType.STRING,
-  elementType: ElementType.INPUT,
-  required: true,
-  description: '用户名',
-  minLength: 1,
-  maxLength: 50
-}
-
-// 定义带滑块的数字参数
-const numberParam = {
-  type: ParamType.NUMBER,
-  elementType: ElementType.SLIDER,
-  min: 0,
-  max: 100,
-  step: 1,
-  default: 50
-}
-
-// 定义枚举参数
-const enumParam = {
-  type: ParamType.ENUM,
-  elementType: ElementType.SELECT,
-  options: ['option1', 'option2', 'option3'],
-  default: 'option1'
-}
-```
-
-### 动态表单生成示例
-
-#### React表单生成
-
-```javascript
-import React from 'react'
-import { Services, APIs } from 'all-in-one-api-service'
-
-function DynamicForm({ apiInstance, onSubmit }) {
-  const inputInfo = apiInstance.getInputInfo()
-
-  const renderField = (param) => {
-    const { name, type, required, description, options, min, max, minLength, maxLength } = param
-
-    switch (type) {
-      case 'string':
-        return (
-          <div key={name} className="form-group">
-            <label>
-              {name} {required && <span className="required">*</span>}
-            </label>
-            <input
-              type="text"
-              name={name}
-              required={required}
-              minLength={minLength}
-              maxLength={maxLength}
-              placeholder={description}
-            />
-            <small className="help-text">{description}</small>
-          </div>
-        )
-
-      case 'number':
-        return (
-          <div key={name} className="form-group">
-            <label>
-              {name} {required && <span className="required">*</span>}
-            </label>
-            <input
-              type="number"
-              name={name}
-              required={required}
-              min={min}
-              max={max}
-              placeholder={description}
-            />
-            <small className="help-text">{description}</small>
-          </div>
-        )
-
-      case 'enum':
-        return (
-          <div key={name} className="form-group">
-            <label>
-              {name} {required && <span className="required">*</span>}
-            </label>
-            <select name={name} required={required}>
-              {options.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-            <small className="help-text">{description}</small>
-          </div>
-        )
-
-      case 'boolean':
-        return (
-          <div key={name} className="form-group">
-            <label>
-              <input type="checkbox" name={name} />
-              {name}
-            </label>
-            <small className="help-text">{description}</small>
-          </div>
-        )
-
-      default:
-        return (
-          <div key={name} className="form-group">
-            <label>{name}</label>
-            <input type="text" name={name} />
-          </div>
-        )
-    }
-  }
-
-  return (
-    <form onSubmit={onSubmit}>
-      {inputInfo.map(renderField)}
-      <button type="submit">提交</button>
-    </form>
-  )
-}
-
-// 使用示例
-function App() {
-  const openai = new Services.OpenAI()
-  const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const formData = new FormData(e.target)
-    const params = Object.fromEntries(formData)
-    
-    const result = await dalleAPI.execute(params)
-    console.log(result)
-  }
-
-  return <DynamicForm apiInstance={dalleAPI} onSubmit={handleSubmit} />
-}
-```
-
-#### Vue表单生成
-
-```vue
-<template>
-  <form @submit.prevent="handleSubmit">
-    <div v-for="param in inputInfo" :key="param.name" class="form-group">
-      <!-- 字符串类型 -->
-      <template v-if="param.type === 'string'">
-        <label>
-          {{ param.name }}
-          <span v-if="param.required" class="required">*</span>
-        </label>
-        <input
-          v-model="formData[param.name]"
-          type="text"
-          :required="param.required"
-          :minlength="param.minLength"
-          :maxlength="param.maxLength"
-          :placeholder="param.description"
-        />
-      </template>
-
-      <!-- 数字类型 -->
-      <template v-else-if="param.type === 'number'">
-        <label>
-          {{ param.name }}
-          <span v-if="param.required" class="required">*</span>
-        </label>
-        <input
-          v-model.number="formData[param.name]"
-          type="number"
-          :required="param.required"
-          :min="param.min"
-          :max="param.max"
-          :placeholder="param.description"
-        />
-      </template>
-
-      <!-- 枚举类型 -->
-      <template v-else-if="param.type === 'enum'">
-        <label>
-          {{ param.name }}
-          <span v-if="param.required" class="required">*</span>
-        </label>
-        <select v-model="formData[param.name]" :required="param.required">
-          <option v-for="opt in param.options" :key="opt" :value="opt">
-            {{ opt }}
-          </option>
-        </select>
-      </template>
-
-      <!-- 布尔类型 -->
-      <template v-else-if="param.type === 'boolean'">
-        <label>
-          <input v-model="formData[param.name]" type="checkbox" />
-          {{ param.name }}
-        </label>
-      </template>
-
-      <small class="help-text">{{ param.description }}</small>
-    </div>
-
-    <button type="submit">提交</button>
-  </form>
-</template>
-
-<script>
-import { Services, APIs } from 'all-in-one-api-service'
-
-export default {
-  data() {
-    return {
-      inputInfo: [],
-      formData: {}
-    }
-  },
-  mounted() {
-    const openai = new Services.OpenAI()
-    const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-    
-    this.inputInfo = dalleAPI.getInputInfo()
-    
-    // 初始化默认值
-    this.inputInfo.forEach(param => {
-      if (param.default !== undefined) {
-        this.$set(this.formData, param.name, param.default)
-      }
-    })
-  },
-  methods: {
-    async handleSubmit() {
-      const result = await this.apiInstance.execute(this.formData)
-      console.log(result)
-    }
-  }
-}
-</script>
-```
-
-### 参数文档生成
-
-```javascript
-// 生成Markdown格式文档
-const markdownDocs = dalleAPI.generateDocs('markdown')
-console.log(markdownDocs)
-
-// 生成JSON格式文档
-const jsonDocs = dalleAPI.generateDocs('json')
-console.log(jsonDocs)
-
-// 生成HTML格式文档
-const htmlDocs = dalleAPI.generateDocs('html')
-console.log(htmlDocs)
-```
-
-**Markdown文档示例：**
-
-```markdown
-# DallE3
-
-Model: dall-e-3
-
-## Input Parameters
-
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| prompt | string | Yes | - | 图像生成提示词 |
-| size | enum | No | 1024x1024 | 图像尺寸 |
-| quality | enum | No | standard | 图像质量 |
-| style | enum | No | vivid | 图像风格 |
-
-## Output Fields
-
-| Name | Type | Description |
-|------|------|-------------|
-| imageUrl | string | 生成的图像URL |
-| revisedPrompt | string | OpenAI优化后的提示词 |
-```
-
-## 🎯 模型自定义参数支持
-
-### 概述
-
-框架新增了对模型自定义参数的支持，允许定义模型的能力约束，实现参数间的智能联动和动态约束。这对于视频生成等需要复杂参数组合的场景特别有用。
-
-### 核心功能
-
-#### 1. 模型能力定义
-
-定义每个模型支持的参数组合和约束：
-
-```javascript
-// src/params/providers/ltx/model-capabilities.js
-module.exports = {
-  'ltx-2-3-fast': {
-    aspectRatios: ['16:9', '9:16'],
-    resolutions: {
-      '1080p': {
-        landscape: '1920x1080',
-        portrait: '1080x1920',
-        fps: {
-          24: { duration: { min: 6, max: 20, step: 2 } },
-          25: { duration: { min: 6, max: 20, step: 2 } },
-          48: { duration: { min: 6, max: 10, step: 2 } },
-          50: { duration: { min: 6, max: 10, step: 2 } }
-        }
-      },
-      '1440p': {
-        landscape: '2560x1440',
-        portrait: '1440x2560',
-        fps: {
-          24: { duration: { min: 6, max: 10, step: 2 } },
-          25: { duration: { min: 6, max: 10, step: 2 } }
-        }
-      }
-    },
-    endpoints: ['text-to-video', 'image-to-video']
+  "dependencies": {
+    "all-in-one-api-service": "git+ssh://git@github.com:your-org/all-in-one-api-service.git#v1.0.0"
   }
 }
 ```
 
-#### 2. 参数依赖关系
+#### 方法三: 使用 pnpm 安装
 
-系统自动管理参数间的依赖关系：
+```bash
+# 配置 .npmrc
+pnpm config set @your-org:registry https://npm.pkg.github.com
+pnpm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN
 
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-const ltxService = new Services.LTX()
-const videoAPI = new APIs.LTX.Video.GenerateVideoFromText(ltxService)
-
-// 获取参数配置
-const config = videoAPI.getParamConfig({ model: 'ltx-2-3-fast' })
-
-console.log(config.parameters)
-// [
-//   {
-//     name: 'resolution',
-//     dependencies: ['model'],
-//     enabled: true,
-//     options: ['1920x1080', '1080x1920', '2560x1440', ...],
-//     constraintSource: 'model'
-//   },
-//   {
-//     name: 'fps',
-//     dependencies: ['model', 'resolution'],
-//     enabled: false, // 等待选择 resolution
-//     ...
-//   }
-// ]
+# 安装
+pnpm add all-in-one-api-service
 ```
 
-#### 3. 动态参数约束
+### 配置环境变量
 
-根据已选择的参数动态更新其他参数的约束：
+创建 `.env` 文件:
+
+```bash
+# LTX 配置
+LTX_API_KEY=your_ltx_api_key
+LTX_BASE_URL=https://api.ltx.video
+
+# Volcengine 配置
+VOLCENGINE_API_KEY=your_volcengine_api_key
+VOLCENGINE_BASE_URL=https://api.volcengine.com
+
+# Skyreels 配置
+SKYREELS_API_KEY=your_skyreels_api_key
+SKYREELS_BASE_URL=https://api.skyreels.ai
+
+# Mureka 配置
+MUREKA_API_KEY=your_mureka_api_key
+MUREKA_BASE_URL=https://api.mureka.ai
+
+# 日志配置
+LOG_LEVEL=info
+LOG_FORMAT=json
+```
+
+## 快速开始
+
+### 基础使用
 
 ```javascript
-// 初始状态
-const config0 = videoAPI.getParamConfig({})
-const resolutionParam = config0.parameters.find(p => p.name === 'resolution')
-console.log(resolutionParam.enabled) // false - 等待选择 model
+const AI = require('all-in-one-api-service')
 
-// 选择模型后
-const config1 = videoAPI.getParamConfig({ model: 'ltx-2-3-fast' })
-const resolutionParam1 = config1.parameters.find(p => p.name === 'resolution')
-console.log(resolutionParam1.enabled) // true
-console.log(resolutionParam1.options) // ['1920x1080', '1080x1920', ...]
+// 设置语言
+AI.setLanguage('zh')
 
-// 选择分辨率后
-const config2 = videoAPI.getParamConfig({ 
-  model: 'ltx-2-3-fast', 
-  resolution: '1080x1920' 
+// 获取所有 Function 列表
+const functions = AI.queryFunctions()
+console.log('可用功能:', functions.length)
+
+// 获取指定 Function 详情
+const funcDetail = AI.getFunctionDetail('generate-video-from-text')
+console.log('功能详情:', funcDetail)
+
+// 执行 Function
+const result = await AI.executeFunction('generate-video-from-text', {
+  prompt: '一只可爱的小猫在草地上奔跑',
+  model: 'ltx-video'
 })
-const fpsParam = config2.parameters.find(p => p.name === 'fps')
-console.log(fpsParam.options) // [24, 25, 48, 50]
-
-const durationParam = config2.parameters.find(p => p.name === 'duration')
-console.log(durationParam.enabled) // false - 等待选择 fps
-
-// 选择帧率后
-const config3 = videoAPI.getParamConfig({ 
-  model: 'ltx-2-3-fast', 
-  resolution: '1080x1920',
-  fps: 24
-})
-const durationParam3 = config3.parameters.find(p => p.name === 'duration')
-console.log(durationParam3.min) // 6
-console.log(durationParam3.max) // 20
-console.log(durationParam3.step) // 2
+console.log('执行结果:', result)
 ```
 
-### 使用示例
-
-#### 完整的视频生成流程
+### 使用 Service 层
 
 ```javascript
-const { Services, APIs } = require('all-in-one-api-service')
+const { Services } = require('all-in-one-api-service')
 
-async function generateVideo() {
-  const ltxService = new Services.LTX()
-  const videoAPI = new APIs.LTX.Video.GenerateVideoFromText(ltxService)
-  
-  // 步骤1: 获取初始参数配置
-  const initialConfig = videoAPI.getParamConfig({})
-  console.log('下一步应该选择:', initialConfig.state.nextParam) // 'model'
-  
-  // 步骤2: 选择模型
-  const model = 'ltx-2-3-fast'
-  const modelConfig = videoAPI.getParamConfig({ model })
-  console.log('可用分辨率:', modelConfig.parameters.find(p => p.name === 'resolution').options)
-  
-  // 步骤3: 选择分辨率
-  const resolution = '1080x1920'
-  const resolutionConfig = videoAPI.getParamConfig({ model, resolution })
-  console.log('可用帧率:', resolutionConfig.parameters.find(p => p.name === 'fps').options)
-  
-  // 步骤4: 选择帧率
-  const fps = 24
-  const fpsConfig = videoAPI.getParamConfig({ model, resolution, fps })
-  const durationParam = fpsConfig.parameters.find(p => p.name === 'duration')
-  console.log(`时长范围: ${durationParam.min}-${durationParam.max}秒，步长: ${durationParam.step}秒`)
-  
-  // 步骤5: 执行视频生成
-  const result = await videoAPI.execute({
-    prompt: 'A cat playing piano',
-    model,
-    resolution,
-    fps,
-    duration: 10
-  })
-  
-  console.log(result.data.videoUrl)
-}
-```
-
-#### 参数验证与建议
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-const ltxService = new Services.LTX()
-const videoAPI = new APIs.LTX.Video.GenerateVideoFromText(ltxService)
-
-// 验证参数组合
-const validationResult = videoAPI.validateParamsWithContext({
-  model: 'ltx-2-3-fast',
-  resolution: '1080x1920',
-  fps: 24,
-  duration: 30 // 超出范围
+// 创建 LTX 服务实例
+const ltxService = new Services.LTX({
+  apiKey: process.env.LTX_API_KEY,
+  baseURL: process.env.LTX_BASE_URL
 })
 
-if (!validationResult.valid) {
-  console.log('验证失败:', validationResult.errors)
-  // [{
-  //   message: '模型 "ltx-2-3-fast" 在分辨率 "1080x1920" 和 FPS "24" 下，时长 "30秒" 超出允许范围（6-20秒）',
-  //   suggestions: {
-  //     durationRange: { min: 6, max: 20 },
-  //     suggestedFPS: [24, 25] // 支持更长时长的帧率
-  //   }
-  // }]
-  
-  console.log('参数状态:', validationResult.state)
-  // {
-  //   complete: false,
-  //   missingParams: [],
-  //   providedParams: ['model', 'resolution', 'fps', 'duration'],
-  //   progress: 1
-  // }
-}
-```
-
-### 参数状态分析
-
-系统自动分析参数状态并提供智能提示：
-
-```javascript
-const config = videoAPI.getParamConfig({ model: 'ltx-2-3-fast' })
-
-console.log(config.state)
-// {
-//   complete: false,           // 是否所有必填参数都已提供
-//   missingParams: ['prompt'], // 缺少的必填参数
-//   providedParams: ['model'], // 已提供的参数
-//   enabledParams: ['prompt', 'resolution'], // 当前启用的参数
-//   nextParam: 'prompt',       // 建议下一个填写的参数
-//   progress: 0.5              // 完成进度 (0-1)
-// }
-```
-
-### 获取可用选项
-
-根据上下文获取参数的可用选项：
-
-```javascript
-// 获取特定模型的分辨率选项
-const options = videoAPI.getAvailableOptions('ltx-2-3-fast', {
-  aspectRatio: '16:9'
+// 调用 API
+const result = await ltxService.call('/generate', {
+  prompt: '生成视频',
+  model: 'ltx-video'
 })
-
-console.log(options)
-// {
-//   aspectRatios: ['16:9', '9:16'],
-//   resolutions: {
-//     '1080p': { value: '1920x1080', orientation: 'landscape' },
-//     '1440p': { value: '2560x1440', orientation: 'landscape' }
-//   },
-//   fps: [],
-//   duration: null
-// }
 ```
 
-### React 动态表单示例
+### 使用 FunctionManager
 
 ```javascript
-import React, { useState, useEffect } from 'react'
-import { Services, APIs } from 'all-in-one-api-service'
+const { functionManager } = require('all-in-one-api-service')
 
-function VideoGeneratorForm() {
-  const [videoAPI] = useState(() => {
-    const ltxService = new Services.LTX()
-    return new APIs.LTX.Video.GenerateVideoFromText(ltxService)
-  })
-  
-  const [config, setConfig] = useState(() => videoAPI.getParamConfig({}))
-  const [formData, setFormData] = useState({})
-  
-  useEffect(() => {
-    // 当表单数据变化时，更新参数配置
-    setConfig(videoAPI.getParamConfig(formData))
-  }, [formData, videoAPI])
-  
-  const handleChange = (paramName, value) => {
-    setFormData(prev => {
-      const newFormData = { ...prev, [paramName]: value }
-      
-      // 清除受影响参数的值
-      const param = config.parameters.find(p => p.name === paramName)
-      if (param && param.affects) {
-        param.affects.forEach(affectedParam => {
-          delete newFormData[affectedParam]
-        })
-      }
-      
-      return newFormData
-    })
-  }
-  
-  return (
-    <form>
-      {config.parameters.map(param => (
-        <div key={param.name}>
-          <label>
-            {param.name}
-            {param.required && <span>*</span>}
-          </label>
-          
-          {!param.enabled ? (
-            <div className="disabled">
-              等待选择: {param.dependencies.join(', ')}
-            </div>
-          ) : param.type === 'enum' ? (
-            <select
-              value={formData[param.name] || ''}
-              onChange={(e) => handleChange(param.name, e.target.value)}
-            >
-              <option value="">请选择</option>
-              {param.options && param.options.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-          ) : param.type === 'number' ? (
-            <input
-              type="number"
-              value={formData[param.name] || ''}
-              min={param.min}
-              max={param.max}
-              step={param.step}
-              onChange={(e) => handleChange(param.name, Number(e.target.value))}
-            />
-          ) : (
-            <input
-              type="text"
-              value={formData[param.name] || ''}
-              onChange={(e) => handleChange(param.name, e.target.value)}
-            />
-          )}
-          
-          <small>{param.description}</small>
-          {param.constraintSource && (
-            <small className="constraint">
-              约束来源: {param.constraintSource}
-            </small>
-          )}
-        </div>
-      ))}
-      
-      <div className="progress">
-        完成进度: {(config.state.progress * 100).toFixed(0)}%
-        {config.state.nextParam && (
-          <span> - 下一步: {config.state.nextParam}</span>
-        )}
-      </div>
-    </form>
-  )
-}
+// 查询 Functions
+const functions = functionManager.query({ type: 'text_to_video' })
+
+// 获取最佳 Function
+const bestFunc = functionManager.getBest('text_to_video', 'ltx-video')
+
+// 执行 Function
+const result = await functionManager.execute('generate-video-from-text', {
+  prompt: '测试视频生成'
+})
 ```
 
-### TypeScript类型定义
+## 导入示例
 
-本模块提供完整的TypeScript类型定义，方便在TypeScript项目中使用：
+本章节详细介绍如何在第三方项目中引入和使用本框架的所有导出功能。
 
-```typescript
-import { 
-  Services, 
-  APIs, 
-  ParamInfo, 
-  ParamSchema,
-  APIResult 
-} from 'all-in-one-api-service'
-
-const openai = new Services.OpenAI()
-const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-
-// 类型安全的参数信息
-const inputInfo: ParamInfo[] = dalleAPI.getInputInfo()
-
-// 类型安全的参数模式
-const schema: ParamSchema = dalleAPI.getParamSchema()
-
-// 类型安全的执行结果
-const result: APIResult<{ imageUrl: string; revisedPrompt: string }> = 
-  await dalleAPI.execute({ prompt: 'a cat' })
-```
-
-### 实际应用场景
-
-#### 1. 自动化API测试工具
+### 完整导入
 
 ```javascript
-// 根据参数定义自动生成测试用例
-function generateTestCases(apiInstance) {
-  const inputInfo = apiInstance.getInputInfo()
-  const testCases = []
+// CommonJS 方式
+const AIService = require('all-in-one-api-service')
 
-  // 生成边界测试用例
-  inputInfo.forEach(param => {
-    if (param.type === 'string') {
-      testCases.push({
-        name: `${param.name}_min_length`,
-        params: { [param.name]: 'a'.repeat(param.minLength) }
-      })
-      testCases.push({
-        name: `${param.name}_max_length`,
-        params: { [param.name]: 'a'.repeat(param.maxLength) }
-      })
-    }
-    
-    if (param.type === 'number') {
-      testCases.push({
-        name: `${param.name}_min_value`,
-        params: { [param.name]: param.min }
-      })
-      testCases.push({
-        name: `${param.name}_max_value`,
-        params: { [param.name]: param.max }
-      })
-    }
-  })
-
-  return testCases
-}
+// ES Module 方式
+import * as AIService from 'all-in-one-api-service'
 ```
 
-#### 2. API文档自动生成
+### 按需导入
 
-```javascript
-// 自动生成API文档网站
-function generateAPIDocumentation(apiInstance) {
-  const inputInfo = apiInstance.getInputInfo()
-  const outputInfo = apiInstance.getOutputInfo()
-
-  return {
-    title: apiInstance.apiName,
-    model: apiInstance.getModelName(),
-    inputs: inputInfo.map(param => ({
-      field: param.name,
-      type: param.type,
-      required: param.required,
-      defaultValue: param.default,
-      description: param.description,
-      constraints: {
-        min: param.min,
-        max: param.max,
-        minLength: param.minLength,
-        maxLength: param.maxLength,
-        options: param.options
-      }
-    })),
-    outputs: outputInfo.map(field => ({
-      field: field.name,
-      type: field.type,
-      description: field.description
-    }))
-  }
-}
-```
-
-#### 3. 参数验证UI提示
-
-```javascript
-// 实时参数验证
-function validateParamInRealTime(apiInstance, paramName, value) {
-  const paramDetail = apiInstance.getParamDetail(paramName)
-  const errors = []
-
-  if (paramDetail.required && !value) {
-    errors.push(`${paramName} 是必填项`)
-  }
-
-  if (paramDetail.type === 'string') {
-    if (paramDetail.minLength && value.length < paramDetail.minLength) {
-      errors.push(`${paramName} 长度不能少于 ${paramDetail.minLength}`)
-    }
-    if (paramDetail.maxLength && value.length > paramDetail.maxLength) {
-      errors.push(`${paramName} 长度不能超过 ${paramDetail.maxLength}`)
-    }
-  }
-
-  if (paramDetail.type === 'enum') {
-    if (!paramDetail.options.includes(value)) {
-      errors.push(`${paramName} 必须是以下值之一: ${paramDetail.options.join(', ')}`)
-    }
-  }
-
-  return errors
-}
-```
-
-## 🔍 查询服务与国际化
-
-本框架提供了强大的查询服务和国际化支持，方便外部项目快速查询 API、模型和服务商信息。
-
-### 引入方式
+#### 1. 导入命名空间
 
 ```javascript
 const {
-  QueryService,
-  Constants,
-  setLanguage,
-  getLanguage,
-  t
+  Services,      // 服务层
+  APIs,          // API 定义层
+  Params,        // 参数层
+  Config,        // 配置管理
+  Utils,         // 工具函数
+  Functions,     // 函数层
+  Constants,     // 常量定义
+  Registry       // 注册中心
 } = require('all-in-one-api-service')
 ```
 
-### 国际化 (i18n)
-
-#### 设置语言
+#### 2. 导入核心类
 
 ```javascript
-const { setLanguage, getLanguage } = require('all-in-one-api-service')
-
-// 设置为中文
-setLanguage('zh-CN')
-
-// 设置为英文
-setLanguage('en-US')
-
-// 获取当前语言
-const currentLang = getLanguage()
-console.log(currentLang) // 'zh-CN' 或 'en-US'
-```
-
-#### 翻译文本
-
-```javascript
-const { t, setLanguage } = require('all-in-one-api-service')
-
-// 设置语言
-setLanguage('zh-CN')
-
-// 翻译文本
-console.log(t('api.text_to_video')) // '文本生成视频'
-console.log(t('provider.ltx')) // 'LTX'
-console.log(t('model.ltx-2-fast')) // 'LTX 2 Fast'
-
-// 切换语言
-setLanguage('en-US')
-console.log(t('api.text_to_video')) // 'Text to Video'
-```
-
-#### 支持的语言
-
-| 语言代码 | 语言名称 |
-|---------|---------|
-| `zh-CN` | 简体中文 (默认) |
-| `en-US` | English |
-
-### QueryService 查询服务
-
-QueryService 提供了丰富的查询方法，用于查询 API、模型、服务商等元数据信息。
-
-#### 查询 API
-
-##### 按类型查询 API
-
-```javascript
-const { QueryService, Constants } = require('all-in-one-api-service')
-const { APITypes, Providers } = Constants
-
-// 查询所有 Text to Video API
-const allTextToVideoAPIs = QueryService.getAPIsByType(APITypes.TEXT_TO_VIDEO)
-
-// 查询指定服务商的 Text to Video API
-const ltxTextToVideoAPIs = QueryService.getAPIsByType(APITypes.TEXT_TO_VIDEO, {
-  provider: Providers.LTX
-})
-
-console.log(`共找到 ${allTextToVideoAPIs.length} 个 Text to Video API`)
-```
-
-##### 按服务商查询 API
-
-```javascript
-const { QueryService, Constants } = require('all-in-one-api-service')
-const { Providers } = Constants
-
-// 获取 LTX 服务商的所有 API
-const ltxAPIs = QueryService.getAPIsByProvider(Providers.LTX)
-
-console.log(`LTX 服务商共有 ${ltxAPIs.length} 个 API`)
-ltxAPIs.forEach(api => {
-  console.log(`- ${api.displayName}: ${api.description}`)
-})
-```
-
-##### 按模型查询 API
-
-```javascript
-const { QueryService } = require('all-in-one-api-service')
-
-// 查询支持指定模型的 API
-const apis = QueryService.getAPIsByModel('ltx-2-fast')
-
-console.log(`模型 "ltx-2-fast" 支持 ${apis.length} 个 API`)
-apis.forEach(api => {
-  console.log(`- ${api.displayName}`)
-})
-```
-
-##### 获取 API 详情
-
-```javascript
-const { QueryService } = require('all-in-one-api-service')
-
-// 获取 API 详细信息
-const apiDetail = QueryService.getAPIDetail('generate-video-from-text')
-
-if (apiDetail) {
-  console.log('API 名称:', apiDetail.name)
-  console.log('显示名称:', apiDetail.displayName)
-  console.log('描述:', apiDetail.description)
-  console.log('端点:', apiDetail.endpoint)
-  console.log('支持模型:', apiDetail.models?.join(', '))
-  console.log('提供商:', apiDetail.provider)
-  console.log('类型:', apiDetail.type)
-  console.log('标签:', apiDetail.tags?.join(', '))
-}
-```
-
-##### 检查 API 是否存在
-
-```javascript
-const { QueryService } = require('all-in-one-api-service')
-
-// 检查 API 是否存在
-const exists = QueryService.hasAPI('generate-video-from-text')
-console.log('API 存在:', exists) // true 或 false
-```
-
-##### 获取最佳 API
-
-```javascript
-const { QueryService, Constants } = require('all-in-one-api-service')
-const { APITypes, Providers } = Constants
-
-// 根据条件获取最佳 API（按优先级排序）
-const bestAPI = QueryService.getBestAPI(
-  APITypes.TEXT_TO_VIDEO,
-  'ltx-2-pro',
-  { provider: Providers.LTX }
-)
-
-if (bestAPI) {
-  console.log('最佳 API:', bestAPI.displayName)
-  console.log('优先级:', bestAPI.priority)
-}
-```
-
-##### 根据输入输出类型查找接口
-
-```javascript
-const { QueryService, Constants } = require('all-in-one-api-service')
-const { MediaTypes } = Constants
-
-// 查找输入为文本、输出为视频的 API
-const textToVideoAPIs = QueryService.findByInputOutput(
-  MediaTypes.TEXT,
-  MediaTypes.VIDEO
-)
-
-console.log(`找到 ${textToVideoAPIs.length} 个文本转视频 API`)
-textToVideoAPIs.forEach(api => {
-  console.log(`- ${api.displayName} (提供商: ${api.provider})`)
-})
-```
-
-#### 查询模型
-
-##### 获取所有模型
-
-```javascript
-const { QueryService } = require('all-in-one-api-service')
-
-// 获取所有模型列表
-const allModels = QueryService.getAllModels()
-
-console.log(`共有 ${allModels.length} 个模型`)
-allModels.forEach(model => {
-  console.log(`- ${model.displayName} (${model.name})`)
-  console.log(`  系列: ${model.series || 'N/A'}`)
-  console.log(`  提供商: ${model.provider}`)
-})
-```
-
-##### 获取模型详情
-
-```javascript
-const { QueryService } = require('all-in-one-api-service')
-
-// 获取模型详细信息
-const modelDetail = QueryService.getModelDetail('ltx-2-fast')
-
-if (modelDetail) {
-  console.log('模型名称:', modelDetail.name)
-  console.log('显示名称:', modelDetail.displayName)
-  console.log('描述:', modelDetail.description)
-  console.log('系列:', modelDetail.series)
-  console.log('提供商:', modelDetail.provider)
-  console.log('类型:', modelDetail.type)
-  console.log('媒体类型:', modelDetail.mediaType)
-  console.log('优先级:', modelDetail.priority)
-  console.log('标签:', modelDetail.tags?.join(', '))
-  console.log('能力:', modelDetail.capabilities)
-}
-```
-
-##### 按服务商获取模型
-
-```javascript
-const { QueryService, Constants } = require('all-in-one-api-service')
-const { Providers } = Constants
-
-// 获取指定服务商的所有模型
-const ltxModels = QueryService.getModelsByProvider(Providers.LTX)
-
-console.log(`LTX 服务商共有 ${ltxModels.length} 个模型`)
-```
-
-##### 按系列获取模型
-
-```javascript
-const { QueryService, Constants } = require('all-in-one-api-service')
-const { Series } = Constants
-
-// 获取指定系列的所有模型
-const seedanceModels = QueryService.getModelsBySeries(Series.SEEDANCE)
-
-console.log(`Seedance 系列共有 ${seedanceModels.length} 个模型`)
-```
-
-##### 按类型获取模型
-
-```javascript
-const { QueryService, Constants } = require('all-in-one-api-service')
-const { APITypes } = Constants
-
-// 获取支持指定类型的所有模型
-const textToVideoModels = QueryService.getModelsByType(APITypes.TEXT_TO_VIDEO)
-
-console.log(`支持 Text to Video 的模型共有 ${textToVideoModels.length} 个`)
-```
-
-#### 查询服务商
-
-##### 获取所有服务商
-
-```javascript
-const { QueryService } = require('all-in-one-api-service')
-
-// 获取所有服务商列表
-const providers = QueryService.getAllProviders()
-
-console.log(`共有 ${providers.length} 个服务商`)
-providers.forEach(provider => {
-  console.log(`- ${provider}`)
-})
-```
-
-#### 获取统计信息
-
-```javascript
-const { QueryService } = require('all-in-one-api-service')
-
-// 获取系统统计信息
-const stats = QueryService.getStats()
-
-console.log('总模型数:', stats.totalModels)
-console.log('总接口数:', stats.totalAPIs)
-console.log('服务商:', stats.providers.join(', '))
-console.log('支持的类型数:', stats.supportedTypes)
-console.log('支持的媒体类型数:', stats.supportedMediaTypes)
-```
-
-#### 获取支持的类型
-
-```javascript
-const { QueryService } = require('all-in-one-api-service')
-
-// 获取所有支持的 API 类型
-const types = QueryService.getSupportedTypes()
-console.log('支持的 API 类型:', types)
-
-// 获取所有支持的媒体类型
-const mediaTypes = QueryService.getSupportedMediaTypes()
-console.log('支持的媒体类型:', mediaTypes)
-```
-
-### 常量定义
-
-框架提供了丰富的常量定义，方便在代码中使用。
-
-```javascript
-const { Constants } = require('all-in-one-api-service')
-
 const {
-  APITypes,        // API 类型常量
-  MediaTypes,      // 媒体类型常量
-  Providers,       // 服务商常量
-  Series,          // 模型系列常量
-  SeriesMeta,      // 模型系列元数据
-  ProviderMeta,    // 服务商元数据
-  ProviderPriority // 服务商优先级
-} = Constants
+  BaseService,       // 服务基类
+  APIDefinition,     // API 定义基类
+  BaseParam,         // 参数基类
+  BaseFunction,      // 函数基类
+  CacheManager,      // 缓存管理器
+  CacheItem,         // 缓存项
+  ConfigManager,     // 配置管理器
+  FunctionManager    // 函数管理器
+} = require('all-in-one-api-service')
 ```
 
-#### API 类型 (APITypes)
+#### 3. 导入注册中心实例
 
 ```javascript
-const { APITypes } = Constants
+const {
+  apiRegistry,       // API 注册中心实例
+  modelRegistry,     // 模型注册中心实例
+  functionRegistry   // 函数注册中心实例
+} = require('all-in-one-api-service')
 
-console.log(APITypes.TEXT_TO_VIDEO)    // 'text_to_video'
-console.log(APITypes.IMAGE_TO_VIDEO)   // 'image_to_video'
-console.log(APITypes.AUDIO_TO_VIDEO)   // 'audio_to_video'
-console.log(APITypes.TEXT_TO_IMAGE)    // 'text_to_image'
-console.log(APITypes.TEXT_TO_SPEECH)   // 'text_to_speech'
-// ... 更多类型
+// 使用示例
+const allAPIs = apiRegistry.getAll()
+const allModels = modelRegistry.getAll()
+const allFunctions = functionRegistry.getAll()
+
+// 获取 API 参数 Schema
+const paramSchema = apiRegistry.getParamSchema('generate-video-from-text')
+const inputSchema = apiRegistry.getInputSchema('generate-video-from-text')
+const outputSchema = apiRegistry.getOutputSchema('generate-video-from-text')
+
+// 验证参数
+const validationResult = apiRegistry.validateParams('generate-video-from-text', {
+  prompt: '测试视频'
+})
 ```
 
-#### 媒体类型 (MediaTypes)
+#### 4. 导入管理器实例
 
 ```javascript
-const { MediaTypes } = Constants
+const {
+  metadataManager,   // 元数据管理器
+  functionManager,   // 函数管理器
+  cacheManager       // 缓存管理器
+} = require('all-in-one-api-service')
 
-console.log(MediaTypes.TEXT)   // 'text'
-console.log(MediaTypes.IMAGE)  // 'image'
-console.log(MediaTypes.VIDEO)  // 'video'
-console.log(MediaTypes.AUDIO)  // 'audio'
-console.log(MediaTypes.AUDIO_3D) // '3d'
+// 使用元数据管理器
+const func = metadataManager.getFunction('generate-video-from-text', 'zh')
+const api = metadataManager.getAPI('generate-video-from-text')
+const model = metadataManager.getModel('ltx-video')
+
+// 使用函数管理器
+const functions = functionManager.query({ type: 'text_to_video' })
+const bestFunc = functionManager.getBest('text_to_video', 'ltx-video')
+const stats = functionManager.getStats()
+
+// 使用缓存管理器
+cacheManager.set('namespace', 'key', { data: 'value' }, 3600000)
+const cached = cacheManager.get('namespace', 'key')
 ```
 
-#### 服务商 (Providers)
+#### 5. 导入工具函数
 
 ```javascript
-const { Providers } = Constants
+const {
+  setLanguage,       // 设置语言
+  getLanguage,       // 获取当前语言
+  t,                 // 翻译函数
+  generateId,        // 生成唯一 ID
+  deepMerge,         // 深度合并对象
+  deepClone,         // 深度克隆对象
+  createLogger,      // 创建日志器
+  sleep,             // 延迟函数
+  retry              // 重试函数
+} = require('all-in-one-api-service')
 
-console.log(Providers.LTX)        // 'ltx'
-console.log(Providers.SKYREELS)   // 'skyreels'
-console.log(Providers.MUREKA)     // 'mureka'
-console.log(Providers.VOLCENGINE) // 'volcengine'
-// ... 更多服务商
+// 使用示例
+setLanguage('zh')
+console.log('当前语言:', getLanguage())
+console.log('翻译:', t('common.success'))
+
+const id = generateId('req')
+console.log('生成的 ID:', id)
+
+const logger = createLogger({ level: 'DEBUG' })
+logger.info('这是一条日志')
+
+await sleep(1000)
 ```
 
-#### 模型系列 (Series)
+#### 6. 导入常量
 
 ```javascript
-const { Series, SeriesMeta } = Constants
+const {
+  APITypes,              // API 类型常量
+  MediaTypes,            // 媒体类型常量
+  Providers,             // Provider 常量
+  ProviderPriority,      // Provider 优先级
+  ProviderMeta,          // Provider 元数据
+  Series,                // Series 常量
+  SeriesMeta,            // Series 元数据
+  Languages,             // 语言常量
+  DEFAULT_LANGUAGE,      // 默认语言
+  getProviderPriority,   // 获取 Provider 优先级
+  sortByProviderPriority,// 按 Provider 优先级排序
+  normalizeLanguage      // 标准化语言代码
+} = require('all-in-one-api-service')
 
-console.log(Series.LTX)       // 'ltx'
-console.log(Series.SKYREELS)  // 'skyreels'
-console.log(Series.MUREKA)    // 'mureka'
-console.log(Series.SEEDANCE)  // 'seedance'
-console.log(Series.SEEDREAM)  // 'seedream'
-console.log(Series.SEED3D)    // 'seed3d'
+// 使用示例
+console.log('文本转视频类型:', APITypes.TEXT_TO_VIDEO)
+console.log('LTX Provider:', Providers.LTX)
+console.log('LTX 优先级:', getProviderPriority('ltx'))
+```
 
-// 获取系列元数据
-console.log(SeriesMeta[Series.SEEDANCE])
-// {
-//   name: 'seedance',
-//   displayName: 'Seedance',
-//   description: '火山引擎视频生成模型系列',
-//   provider: 'volcengine',
-//   mediaType: 'video'
-// }
+#### 7. 导入快捷查询函数
+
+```javascript
+const {
+  getFunction,          // 获取 Function 元数据
+  getFunctions,         // 获取 Function 列表
+  getFunctionByAPI,     // 根据 API 获取 Function
+  getAPI,               // 获取 API 元数据
+  getAPIs,              // 获取 API 列表
+  getModel,             // 获取 Model 元数据
+  getModels,            // 获取 Model 列表
+  getBestFunction,      // 获取最佳 Function
+  getBestAPI,           // 获取最佳 API
+  executeFunction,      // 执行 Function
+  queryFunctions,       // 查询 Functions
+  getFunctionDetail,    // 获取 Function 详情
+  getBestFunctionInstance // 获取最佳 Function 实例
+} = require('all-in-one-api-service')
+
+// 使用示例
+const func = getFunction('generate-video-from-text', 'zh')
+const apis = getAPIs({ type: 'text_to_video' })
+const models = getModels({ provider: 'ltx' })
+const bestFunc = getBestFunction('text_to_video', 'ltx-video')
+```
+
+#### 8. 导入服务类
+
+```javascript
+const { Services } = require('all-in-one-api-service')
+
+// 导入特定服务
+const { LTX, Volcengine, Skyreels, Mureka, Custom } = Services
+
+// 创建服务实例
+const ltxService = new LTX({
+  apiKey: process.env.LTX_API_KEY,
+  baseURL: process.env.LTX_BASE_URL
+})
+
+// 使用服务
+const result = await ltxService.call('/v1/text-to-video', {
+  prompt: '测试视频生成',
+  model: 'ltx-2-fast'
+})
+```
+
+#### 9. 导入参数模板
+
+```javascript
+const { Params } = require('all-in-one-api-service')
+
+// 使用参数模板
+const { Templates, Common } = Params
+
+console.log('文本提示词模板:', Templates.textPrompt)
+console.log('图像尺寸模板:', Templates.imageSize)
+console.log('通用图像参数:', Common.image)
+console.log('通用视频参数:', Common.video)
+```
+
+#### 10. 导入配置预设
+
+```javascript
+const { Config } = require('all-in-one-api-service')
+
+// 创建配置管理器
+const configManager = new Config.ConfigManager()
+
+// 加载配置
+const config = await configManager.load()
+
+// 获取 Provider 配置
+const ltxConfig = await configManager.getProviderConfig('ltx')
+
+// 设置配置
+configManager.set('providers.ltx.apiKey', 'your-api-key')
+```
+
+### TypeScript 支持
+
+本框架提供完整的 TypeScript 类型定义。
+
+```typescript
+import {
+  BaseService,
+  APIDefinition,
+  BaseParam,
+  BaseFunction,
+  CacheManager,
+  APIRegistry,
+  ModelRegistry,
+  FunctionRegistry,
+  ParamSchema,
+  ValidationResult,
+  APIResult,
+  FunctionMetadata,
+  APIMetadata,
+  ModelMetadata
+} from 'all-in-one-api-service'
+
+// 使用类型定义
+const paramSchema: Record<string, ParamSchema> = {
+  prompt: {
+    type: 'string',
+    required: true,
+    description: '文本提示词'
+  }
+}
+
+const result: ValidationResult = apiRegistry.validateParams('api-name', {})
+const apiResult: APIResult = await executeFunction('func-name', {})
 ```
 
 ### 完整使用示例
 
 ```javascript
-const {
-  QueryService,
-  Constants,
-  setLanguage,
-  t
-} = require('all-in-one-api-service')
+const AIService = require('all-in-one-api-service')
 
-// 设置中文
-setLanguage('zh-CN')
+async function completeExample() {
+  // 1. 设置语言
+  AIService.setLanguage('zh')
+  
+  // 2. 查询可用的视频生成模型
+  const models = AIService.getModels({ type: 'text_to_video' })
+  console.log('可用模型:', models.length)
+  
+  // 3. 选择第一个模型
+  const selectedModel = models[0]
+  
+  // 4. 获取最佳 Function
+  const bestFunc = AIService.getBestFunction('text_to_video', selectedModel.name)
+  console.log('最佳 Function:', bestFunc.name)
+  
+  // 5. 获取 Function 实例
+  const funcInstance = AIService.functionManager.get(bestFunc.name)
+  
+  // 6. 获取输入输出 Schema
+  const inputSchema = funcInstance.getInputSchema()
+  const outputSchema = funcInstance.getOutputSchema()
+  console.log('输入参数:', Object.keys(inputSchema))
+  console.log('输出参数:', Object.keys(outputSchema))
+  
+  // 7. 验证参数
+  const params = {
+    prompt: '一只可爱的小猫在草地上奔跑',
+    model: selectedModel.name
+  }
+  const validation = funcInstance.validateParams(params)
+  if (!validation.valid) {
+    console.error('参数验证失败:', validation.errors)
+    return
+  }
+  
+  // 8. 获取 API 调用信息
+  const callInfo = AIService.apiRegistry.getCallInfo(bestFunc.apis.request)
+  console.log('API 端点:', callInfo.endpoint)
+  console.log('HTTP 方法:', callInfo.method)
+  
+  // 9. 执行 Function (需要配置 API Key)
+  // const result = await AIService.executeFunction(bestFunc.name, params)
+  // console.log('执行结果:', result)
+  
+  // 10. 获取统计信息
+  const stats = AIService.functionRegistry.getStats()
+  console.log('统计信息:', stats)
+}
 
-const { APITypes, Providers, Series, MediaTypes } = Constants
+completeExample().catch(console.error)
+```
 
-// 示例1: 查询 LTX 服务商的 Text to Video API
-console.log('\n=== 查询 LTX Text to Video API ===')
-const ltxAPIs = QueryService.getAPIsByType(APITypes.TEXT_TO_VIDEO, {
-  provider: Providers.LTX
+## 框架集成使用说明
+
+本章节详细介绍如何在第三方项目中通过 npm 方式引入框架并使用各项功能。
+
+### 引入框架
+
+```javascript
+const AIService = require('all-in-one-api-service')
+```
+
+### 1. 获取 Function 信息列表
+
+#### 获取所有 Function 列表
+
+```javascript
+const functions = AIService.getFunctions()
+
+console.log('Function 总数:', functions.length)
+console.log('第一个 Function:', functions[0])
+```
+
+#### 根据类型筛选 Function
+
+```javascript
+const videoFunctions = AIService.getFunctions({ type: 'text_to_video' })
+
+videoFunctions.forEach(func => {
+  console.log(`Function: ${func.name}, Type: ${func.type}`)
 })
+```
+
+#### 根据 Provider 筛选 Function
+
+```javascript
+const ltxFunctions = AIService.getFunctions({ provider: 'ltx' })
+
+ltxFunctions.forEach(func => {
+  console.log(`Function: ${func.name}, Provider: ${func.provider}`)
+})
+```
+
+#### 多语言支持
+
+```javascript
+// 中文
+const functionsZh = AIService.getFunctions({}, 'zh')
+
+// 英文
+const functionsEn = AIService.getFunctions({}, 'en')
+```
+
+### 2. 获取 Provider 信息列表
+
+#### 获取所有 Provider 定义
+
+```javascript
+const { Providers, ProviderMeta } = AIService.Constants
+
+console.log('所有 Provider:', Object.keys(Providers))
+console.log('Provider 元数据:', ProviderMeta)
+```
+
+#### 查询特定 Provider
+
+```javascript
+const { Providers, ProviderMeta } = AIService.Constants
+
+// LTX Provider
+console.log('LTX Provider ID:', Providers.LTX)
+console.log('LTX 显示名称:', ProviderMeta.ltx.displayName)
+console.log('LTX 描述:', ProviderMeta.ltx.description)
+console.log('LTX 支持的类型:', ProviderMeta.ltx.supportedTypes)
+
+// 火山引擎 Provider
+console.log('火山引擎 Provider ID:', Providers.VOLCENGINE)
+console.log('火山引擎显示名称:', ProviderMeta.volcengine.displayName)
+```
+
+### 3. 获取 Model 信息列表
+
+#### 获取所有 Model 列表
+
+```javascript
+const models = AIService.getModels()
+
+console.log('Model 总数:', models.length)
+models.forEach(model => {
+  console.log(`Model: ${model.name}, Provider: ${model.provider}, Type: ${model.type}`)
+})
+```
+
+#### 根据类型筛选 Model
+
+```javascript
+const videoModels = AIService.getModels({ type: 'text_to_video' })
+
+videoModels.forEach(model => {
+  console.log(`视频生成 Model: ${model.name}`)
+})
+```
+
+#### 根据 Provider 筛选 Model
+
+```javascript
+const ltxModels = AIService.getModels({ provider: 'ltx' })
+
+ltxModels.forEach(model => {
+  console.log(`LTX Model: ${model.name}`)
+})
+```
+
+#### 多语言支持
+
+```javascript
+const modelsZh = AIService.getModels({}, 'zh')
+const modelsEn = AIService.getModels({}, 'en')
+```
+
+### 4. 获取 API 定义列表
+
+#### 获取所有 API 列表
+
+```javascript
+const apis = AIService.getAPIs()
+
+console.log('API 总数:', apis.length)
+apis.forEach(api => {
+  console.log(`API: ${api.name}, Endpoint: ${api.endpoint}`)
+})
+```
+
+#### 根据类型筛选 API
+
+```javascript
+const videoAPIs = AIService.getAPIs({ type: 'text_to_video' })
+
+videoAPIs.forEach(api => {
+  console.log(`视频生成 API: ${api.name}`)
+})
+```
+
+#### 根据 Provider 筛选 API
+
+```javascript
+const ltxAPIs = AIService.getAPIs({ provider: 'ltx' })
+
 ltxAPIs.forEach(api => {
-  console.log(`- ${api.displayName}: ${api.description}`)
+  console.log(`LTX API: ${api.name}`)
 })
+```
 
-// 示例2: 获取模型详情（包含系列信息）
-console.log('\n=== 模型详情 ===')
-const modelDetail = QueryService.getModelDetail('ltx-2-fast')
-console.log(`模型: ${modelDetail.displayName}`)
-console.log(`系列: ${modelDetail.series}`)
-console.log(`提供商: ${modelDetail.provider}`)
+### 5. 根据 ID 获取指定资源定义
 
-// 示例3: 按系列查询模型
-console.log('\n=== Seedance 系列模型 ===')
-const seedanceModels = QueryService.getModelsBySeries(Series.SEEDANCE)
-seedanceModels.forEach(model => {
-  console.log(`- ${model.displayName}`)
+#### 获取指定 Function 定义
+
+```javascript
+// 获取存在的 Function
+const func = AIService.getFunction('generate-video-from-text')
+
+if (func) {
+  console.log('Function 名称:', func.name)
+  console.log('Function 类型:', func.type)
+  console.log('Function Provider:', func.provider)
+} else {
+  console.log('Function 不存在')
+}
+
+// 支持多语言
+const funcZh = AIService.getFunction('generate-video-from-text', 'zh')
+const funcEn = AIService.getFunction('generate-video-from-text', 'en')
+```
+
+#### 获取指定 Model 定义
+
+```javascript
+const model = AIService.getModel('ltx-video')
+
+if (model) {
+  console.log('Model 名称:', model.name)
+  console.log('Model Provider:', model.provider)
+  console.log('Model 类型:', model.type)
+} else {
+  console.log('Model 不存在')
+}
+```
+
+#### 获取指定 API 定义
+
+```javascript
+const api = AIService.getAPI('generate-video-from-text')
+
+if (api) {
+  console.log('API 名称:', api.name)
+  console.log('API Provider:', api.provider)
+  console.log('API 类型:', api.type)
+  console.log('API Endpoint:', api.endpoint)
+} else {
+  console.log('API 不存在')
+}
+```
+
+### 6. 获取最佳 Function
+
+#### 根据场景类型和 Model 获取优先级最高的 Function
+
+```javascript
+// 获取 text_to_video 类型的最佳 Function
+const models = AIService.getModels({ type: 'text_to_video' })
+
+if (models.length > 0) {
+  const firstModel = models[0]
+  const bestFunction = AIService.getBestFunction('text_to_video', firstModel.name)
+  
+  if (bestFunction) {
+    console.log('最佳 Function:', bestFunction.name)
+    console.log('优先级:', bestFunction.priority)
+    console.log('支持的 Models:', bestFunction.models)
+  }
+}
+```
+
+#### 处理无匹配的情况
+
+```javascript
+const bestFunction = AIService.getBestFunction('non_existent_type', 'non_existent_model')
+
+if (bestFunction === null) {
+  console.log('没有找到匹配的 Function')
+}
+```
+
+### 7. Function 实例操作
+
+#### 获取 Function 实例
+
+```javascript
+const functions = AIService.getFunctions()
+const firstFunction = functions[0]
+
+// 获取 Function 实例
+const funcInstance = AIService.functionManager.get(firstFunction.name)
+
+if (funcInstance) {
+  console.log('Function 元数据:', funcInstance.metadata)
+}
+```
+
+#### 获取输入输出 Schema
+
+```javascript
+const funcInstance = AIService.functionManager.get('generate-video-from-text')
+
+if (funcInstance) {
+  const inputSchema = funcInstance.getInputSchema()
+  const outputSchema = funcInstance.getOutputSchema()
+  
+  console.log('输入 Schema:', inputSchema)
+  console.log('输出 Schema:', outputSchema)
+}
+```
+
+#### 获取参数配置
+
+```javascript
+const funcInstance = AIService.functionManager.get('generate-video-from-text')
+
+if (funcInstance) {
+  const paramConfig = funcInstance.getParamConfig({})
+  console.log('参数配置:', paramConfig)
+}
+```
+
+#### 验证参数
+
+```javascript
+const funcInstance = AIService.functionManager.get('generate-video-from-text')
+
+if (funcInstance) {
+  const validationResult = funcInstance.validateParams({
+    prompt: '测试视频生成'
+  })
+  
+  console.log('验证结果:', validationResult.valid)
+  console.log('错误信息:', validationResult.errors)
+}
+```
+
+### 8. 异步/同步 Function 识别
+
+#### 获取异步 Function
+
+```javascript
+const asyncFunctions = AIService.getFunctions({ asyncOnly: true })
+
+console.log('异步 Function 数量:', asyncFunctions.length)
+asyncFunctions.forEach(func => {
+  console.log(`异步 Function: ${func.name}, Type: ${func.type}`)
 })
-
-// 示例4: 根据输入输出查找接口
-console.log('\n=== 文本转视频接口 ===')
-const textToVideoAPIs = QueryService.findByInputOutput(
-  MediaTypes.TEXT,
-  MediaTypes.VIDEO
-)
-console.log(`共找到 ${textToVideoAPIs.length} 个接口`)
-
-// 示例5: 获取系统统计
-console.log('\n=== 系统统计 ===')
-const stats = QueryService.getStats()
-console.log(`总模型数: ${stats.totalModels}`)
-console.log(`总接口数: ${stats.totalAPIs}`)
-console.log(`服务商: ${stats.providers.join(', ')}`)
-
-// 示例6: 使用翻译
-console.log('\n=== 翻译示例 ===')
-console.log(t('api.text_to_video')) // 文本生成视频
-console.log(t('provider.ltx'))      // LTX
 ```
 
-### QueryService API 参考
-
-| 方法 | 参数 | 返回值 | 说明 |
-|-----|------|-------|------|
-| `getAPIsByType(type, options?)` | type: API类型, options: { provider? } | API[] | 按类型查询 API |
-| `getAPIsByProvider(provider)` | provider: 服务商名称 | API[] | 按服务商查询 API |
-| `getAPIsByModel(modelName)` | modelName: 模型名称 | API[] | 按模型查询 API |
-| `getAPIDetail(apiName)` | apiName: API名称 | API \| null | 获取 API 详情 |
-| `hasAPI(apiName)` | apiName: API名称 | boolean | 检查 API 是否存在 |
-| `getBestAPI(type, model?, options?)` | type: API类型, model: 模型名, options: { provider? } | API \| null | 获取最佳 API |
-| `findByInputOutput(inputType, outputType)` | inputType: 输入类型, outputType: 输出类型 | API[] | 根据输入输出查找接口 |
-| `getAllModels()` | - | Model[] | 获取所有模型 |
-| `getModelDetail(modelName)` | modelName: 模型名称 | Model \| null | 获取模型详情 |
-| `getModelsByProvider(provider)` | provider: 服务商名称 | Model[] | 按服务商获取模型 |
-| `getModelsBySeries(series)` | series: 系列名称 | Model[] | 按系列获取模型 |
-| `getModelsByType(type)` | type: API类型 | Model[] | 按类型获取模型 |
-| `getAllProviders()` | - | string[] | 获取所有服务商 |
-| `getStats()` | - | Stats | 获取统计信息 |
-| `getSupportedTypes()` | - | string[] | 获取支持的 API 类型 |
-| `getSupportedMediaTypes()` | - | string[] | 获取支持的媒体类型 |
-
-## 🔧 高级用法
-
-### 自定义参数模式
+#### 获取同步 Function
 
 ```javascript
-const { Services, APIs, Params } = require('all-in-one-api-service')
+const syncFunctions = AIService.getFunctions({ asyncOnly: false })
 
-// 自定义参数模式 - 只允许正方形尺寸
-const customSchema = Params.BaseParam.override(
-  Params.Schemas.OpenAI.image.dalleE3,
-  {
-    input: {
-      size: { options: ['1024x1024'] }
+console.log('同步 Function 数量:', syncFunctions.length)
+syncFunctions.forEach(func => {
+  console.log(`同步 Function: ${func.name}, Type: ${func.type}`)
+})
+```
+
+### 9. API 参数信息获取
+
+#### 获取 Function 关联的 API 列表
+
+```javascript
+const functions = AIService.getFunctions()
+const firstFunction = functions[0]
+
+const relatedAPIs = AIService.functionManager.getRelatedAPIs(firstFunction.name)
+
+if (relatedAPIs) {
+  console.log('关联的 API:', relatedAPIs)
+}
+```
+
+#### 获取 API 的输入输出参数定义
+
+```javascript
+const apis = AIService.getAPIs()
+const firstAPI = apis[0]
+
+const api = AIService.getAPI(firstAPI.name)
+
+if (api && api.paramSchema) {
+  console.log('输入参数定义:', api.paramSchema.input)
+  console.log('输出参数定义:', api.paramSchema.output)
+}
+```
+
+#### 通过 Registry 获取参数 Schema
+
+```javascript
+const { apiRegistry } = AIService.Registry
+const apis = apiRegistry.getAll()
+
+if (apis.length > 0) {
+  const firstAPI = apis[0]
+  const inputSchema = apiRegistry.getInputSchema(firstAPI.name)
+  const outputSchema = apiRegistry.getOutputSchema(firstAPI.name)
+  
+  console.log('输入 Schema:', inputSchema)
+  console.log('输出 Schema:', outputSchema)
+}
+```
+
+### 10. 动态参数调整
+
+#### 根据上下文动态调整参数
+
+```javascript
+const functions = AIService.getFunctions()
+const firstFunction = functions[0]
+
+const funcInstance = AIService.functionManager.get(firstFunction.name)
+
+if (funcInstance) {
+  const context = { model: 'ltx-video' }
+  const paramConfig = funcInstance.getParamConfig(context)
+  
+  console.log('动态参数配置:', paramConfig)
+}
+```
+
+### 11. 常量使用
+
+#### API 类型常量
+
+```javascript
+const { APITypes } = AIService.Constants
+
+console.log('文本转视频:', APITypes.TEXT_TO_VIDEO)        // 'text_to_video'
+console.log('文本转图像:', APITypes.TEXT_TO_IMAGE)        // 'text_to_image'
+console.log('文本转音频:', APITypes.TEXT_TO_AUDIO)        // 'text_to_audio'
+```
+
+#### 媒体类型常量
+
+```javascript
+const { MediaTypes } = AIService.Constants
+
+console.log('文本:', MediaTypes.TEXT)      // 'text'
+console.log('图像:', MediaTypes.IMAGE)     // 'image'
+console.log('视频:', MediaTypes.VIDEO)     // 'video'
+console.log('音频:', MediaTypes.AUDIO)     // 'audio'
+```
+
+#### Provider 优先级
+
+```javascript
+const { ProviderPriority, getProviderPriority } = AIService.Constants
+
+// 获取特定 Provider 的优先级
+const ltxPriority = getProviderPriority('ltx')
+console.log('LTX 优先级:', ltxPriority)
+
+// Provider 优先级排序
+const { sortByProviderPriority, getHighestPriorityProvider } = AIService.Constants
+
+const items = [
+  { provider: 'mureka' },
+  { provider: 'ltx' },
+  { provider: 'volcengine' }
+]
+
+const sorted = sortByProviderPriority(items)
+console.log('排序后的第一项:', sorted[0].provider)  // 'ltx'
+
+const highest = getHighestPriorityProvider(['mureka', 'ltx', 'volcengine'])
+console.log('最高优先级 Provider:', highest)  // 'ltx'
+```
+
+#### 语言常量
+
+```javascript
+const { Languages, DEFAULT_LANGUAGE } = AIService.Constants
+
+console.log('支持的语言:', Languages)
+console.log('默认语言:', DEFAULT_LANGUAGE)
+```
+
+#### Series 常量
+
+```javascript
+const { Series, SeriesMeta } = AIService.Constants
+
+console.log('所有 Series:', Series)
+console.log('Series 元数据:', SeriesMeta)
+```
+
+### 12. 框架基础功能
+
+#### 多语言设置
+
+```javascript
+// 设置为中文
+AIService.setLanguage('zh')
+console.log('当前语言:', AIService.getLanguage())  // 'zh'
+
+// 设置为英文
+AIService.setLanguage('en')
+console.log('当前语言:', AIService.getLanguage())  // 'en'
+```
+
+#### 获取统计信息
+
+```javascript
+const stats = AIService.functionManager.getStats()
+
+console.log('Model 总数:', stats.totalModels)
+console.log('API 总数:', stats.totalAPIs)
+console.log('Function 总数:', stats.totalFunctions)
+```
+
+#### 清除缓存
+
+```javascript
+AIService.functionManager.clearCache()
+console.log('缓存已清除')
+```
+
+#### 检查模块导出
+
+```javascript
+console.log('Services 模块:', AIService.Services)
+console.log('APIs 模块:', AIService.APIs)
+console.log('Params 模块:', AIService.Params)
+console.log('Config 模块:', AIService.Config)
+console.log('Utils 模块:', AIService.Utils)
+console.log('Functions 模块:', AIService.Functions)
+console.log('Constants 模块:', AIService.Constants)
+console.log('Registry 模块:', AIService.Registry)
+```
+
+### 13. 完整使用示例
+
+#### 示例 1: 视频生成流程
+
+```javascript
+const AIService = require('all-in-one-api-service')
+
+async function generateVideo() {
+  // 1. 设置语言
+  AIService.setLanguage('zh')
+  
+  // 2. 获取 text_to_video 类型的所有 Model
+  const models = AIService.getModels({ type: 'text_to_video' })
+  console.log('可用的视频生成 Model:', models.length)
+  
+  // 3. 选择第一个 Model
+  const selectedModel = models[0]
+  console.log('选择的 Model:', selectedModel.name)
+  
+  // 4. 获取最佳 Function
+  const bestFunction = AIService.getBestFunction('text_to_video', selectedModel.name)
+  console.log('最佳 Function:', bestFunction.name)
+  
+  // 5. 获取 Function 实例
+  const funcInstance = AIService.functionManager.get(bestFunction.name)
+  
+  // 6. 验证参数
+  const params = {
+    prompt: '一只可爱的小猫在草地上奔跑',
+    model: selectedModel.name
+  }
+  
+  const validation = funcInstance.validateParams(params)
+  if (!validation.valid) {
+    console.error('参数验证失败:', validation.errors)
+    return
+  }
+  
+  // 7. 获取输入输出 Schema
+  const inputSchema = funcInstance.getInputSchema()
+  const outputSchema = funcInstance.getOutputSchema()
+  console.log('输入 Schema:', inputSchema)
+  console.log('输出 Schema:', outputSchema)
+  
+  // 8. 执行 Function (如果需要实际调用)
+  // const result = await AIService.executeFunction(bestFunction.name, params)
+  // console.log('执行结果:', result)
+}
+
+generateVideo().catch(console.error)
+```
+
+#### 示例 2: Provider 信息查询
+
+```javascript
+const AIService = require('all-in-one-api-service')
+
+function queryProviderInfo() {
+  const { Providers, ProviderMeta, getProviderPriority } = AIService.Constants
+  
+  // 获取所有 Provider
+  const allProviders = Object.keys(Providers)
+  console.log('所有 Provider:', allProviders)
+  
+  // 查询每个 Provider 的详细信息
+  allProviders.forEach(providerKey => {
+    const providerId = Providers[providerKey]
+    const meta = ProviderMeta[providerId]
+    
+    if (meta) {
+      console.log(`\nProvider: ${meta.displayName}`)
+      console.log(`  ID: ${meta.name}`)
+      console.log(`  描述: ${meta.description}`)
+      console.log(`  支持的类型: ${meta.supportedTypes.join(', ')}`)
+      console.log(`  优先级: ${getProviderPriority(providerId)}`)
     }
-  }
-)
+  })
+}
 
-// 使用自定义参数
-const openai = new Services.OpenAI()
-const dalleAPI = new APIs.OpenAI.Image.DallE3(openai, customSchema.getSchema())
+queryProviderInfo()
 ```
 
-### 获取参数结构
+#### 示例 3: API 参数分析
 
 ```javascript
-const { Services, APIs } = require('all-in-one-api-service')
+const AIService = require('all-in-one-api-service')
 
-const openai = new Services.OpenAI()
-const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-
-// 获取输入参数信息
-const inputInfo = dalleAPI.getInputInfo()
-console.log(inputInfo)
-// [
-//   { name: 'prompt', type: 'string', required: true, description: '...' },
-//   { name: 'size', type: 'enum', options: [...], default: '1024x1024' },
-//   { name: 'quality', type: 'enum', options: ['standard', 'hd'] },
-//   { name: 'style', type: 'enum', options: ['vivid', 'natural'] }
-// ]
-
-// 获取输出结果信息
-const outputInfo = dalleAPI.getOutputInfo()
-console.log(outputInfo)
-// [
-//   { name: 'imageUrl', type: 'string', description: '生成的图像URL' },
-//   { name: 'revisedPrompt', type: 'string', description: '优化后的提示词' }
-// ]
-
-// 生成参数文档
-const docs = dalleAPI.generateDocs('markdown')
-console.log(docs)
-```
-
-### 动态表单生成
-
-```javascript
-const { Services, APIs } = require('all-in-one-api-service')
-
-const openai = new Services.OpenAI()
-const dalleAPI = new APIs.OpenAI.Image.DallE3(openai)
-const inputInfo = dalleAPI.getInputInfo()
-
-// 根据参数类型生成表单
-function renderForm(inputInfo) {
-  return inputInfo.map(param => {
-    switch (param.type) {
-      case 'string':
-        return `<input type="text" name="${param.name}" ${param.required ? 'required' : ''} />`
-      case 'enum':
-        return `<select name="${param.name}">
-          ${param.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-        </select>`
-      case 'number':
-        return `<input type="number" name="${param.name}" min="${param.min || ''}" max="${param.max || ''}" />`
-      case 'boolean':
-        return `<input type="checkbox" name="${param.name}" />`
-      default:
-        return `<input type="text" name="${param.name}" />`
+function analyzeAPIParams() {
+  // 获取所有 API
+  const apis = AIService.getAPIs()
+  
+  apis.forEach(api => {
+    console.log(`\nAPI: ${api.name}`)
+    console.log(`  Provider: ${api.provider}`)
+    console.log(`  Type: ${api.type}`)
+    console.log(`  Endpoint: ${api.endpoint}`)
+    
+    // 获取参数定义
+    if (api.paramSchema) {
+      console.log(`  输入参数:`, api.paramSchema.input)
+      console.log(`  输出参数:`, api.paramSchema.output)
     }
-  }).join('\n')
+  })
 }
 
-console.log(renderForm(inputInfo))
+analyzeAPIParams()
 ```
 
-## 📋 支持的服务商
+## 核心功能
 
-| 服务商               | 图像                                     | 文本                           | 视频           | 音频               | 音乐               | 3D       | 流式支持 |
-| ----------------- | -------------------------------------- | ---------------------------- | ------------ | ---------------- | ---------------- | -------- | -------- |
-| **OpenAI**        | DALL-E 2, DALL-E 3                     | GPT-3.5, GPT-4, GPT-4 Turbo  | Sora         | TTS-1, Whisper-1 | -                | -        | ✅ GPT-4 Stream |
-| **Stability AI**  | Stable Diffusion XL, Stable Image Core | -                            | -            | -                | -                | -        | 🚧 计划中 |
-| **Replicate**     | Flux                                   | -                            | Stable Video | -                | -                | -        | 🚧 计划中 |
-| **Google Gemini** | Imagen                                 | Gemini Pro, Gemini Ultra     | -            | -                | -                | -        | 🚧 计划中 |
-| **Anthropic**     | -                                      | Claude 3 Opus, Sonnet, Haiku | -            | -                | -                | -        | 🚧 计划中 |
-| **Midjourney**    | Midjourney V6                          | -                            | -            | -                | -                | -        | 🚧 计划中 |
-| **LTX**           | -                                      | -                            | 文本生成视频, 图像生成视频, 音频生成视频, 视频扩展, 视频重拍 | - | - | - | 🚧 计划中 |
-| **SkyReels**      | -                                      | -                            | 文本生成视频, 图像生成视频, 视频风格重绘, 口型同步, 多角色头像 | - | - | - | 🚧 计划中 |
-| **Mureka**        | -                                      | -                            | -            | -                | 歌曲生成, 歌词生成, 人声克隆, 伴奏生成, TTS, 播客 | - | 🚧 计划中 |
-| **Volcengine**    | 豆包 Seedream 系列                        | -                            | 视频生成        | -                | -                | 3D生成    | 🚧 计划中 |
+### 支持的 Provider
 
-## ⚙️ 配置
+| Provider   | 描述              | 支持类型             | 优先级 |
+| ---------- | --------------- | ---------------- | --- |
+| LTX        | LTX 视频生成平台      | video            | 100 |
+| Volcengine | 字节跳动火山引擎        | image, video, 3d | 90  |
+| Skyreels   | Skyreels 视频生成平台 | video, avatar    | 80  |
+| Mureka     | Mureka 音乐生成平台   | audio, music     | 70  |
 
-详细配置说明请查看 [配置指南](docs/CONFIGURATION.md)。
+### 支持的 API 类型
 
-### 流式响应
+- **图像生成**: `text_to_image`, `image_to_image`, `image_editing`, `image_upscaling`
+- **视频生成**: `text_to_video`, `image_to_video`, `audio_to_video`, `video_editing`, `video_extension`
+- **音频生成**: `text_to_audio`, `text_to_speech`, `speech_to_text`, `audio_generation`, `music_generation`, `song_generation`, `instrumental_generation`, `vocal_cloning`
+- **文本生成**: `text_generation`, `text_editing`
+- **3D 生成**: `image_to_3d`, `text_to_3d`
+- **其他**: `task_query`, `file_upload`, `avatar_generation`, `lip_sync`
 
-详细流式响应使用说明请查看 [流式响应指南](docs/STREAMING.md)。
+### 国际化支持
 
-### 配置优先级
-
-```
-代码传入 > 环境变量 > 项目本地配置 > 项目配置 > 全局本地配置 > 全局配置 > 预设配置
-```
-
-### 环境变量
-
-```env
-# OpenAI
-AI_SERVICE_OPENAI_API_KEY=sk-xxx
-AI_SERVICE_OPENAI_BASE_URL=https://api.openai.com/v1
-AI_SERVICE_OPENAI_TIMEOUT=30000
-
-# Stability AI
-AI_SERVICE_STABILITY_API_KEY=sk-xxx
-
-# Replicate
-AI_SERVICE_REPLICATE_API_TOKEN=r8-xxx
-
-# Google Gemini
-AI_SERVICE_GEMINI_API_KEY=xxx
-
-# Anthropic
-AI_SERVICE_ANTHROPIC_API_KEY=sk-ant-xxx
-
-# Midjourney
-AI_SERVICE_MIDJOURNEY_API_KEY=xxx
-
-# LTX
-AI_SERVICE_LTX_API_KEY=xxx
-
-# SkyReels
-AI_SERVICE_SKYREELS_API_KEY=xxx
-
-# Mureka
-AI_SERVICE_MUREKA_API_KEY=xxx
-
-# Volcengine (火山引擎)
-AI_SERVICE_VOLCENGINE_API_KEY=xxx
-
-# 日志配置
-AI_SERVICE_LOG_LEVEL=info
-AI_SERVICE_LOG_FORMAT=json
-```
-
-## 📁 项目结构
-
-```
-all-in-one-api-service/
-├── src/
-│   ├── apis/           # API层 - 各服务商API实现
-│   │   ├── openai/     # OpenAI 服务商
-│   │   ├── stability/  # Stability AI 服务商
-│   │   ├── replicate/  # Replicate 服务商
-│   │   ├── gemini/     # Google Gemini 服务商
-│   │   ├── anthropic/  # Anthropic 服务商
-│   │   ├── midjourney/ # Midjourney 服务商
-│   │   ├── ltx/        # LTX 服务商
-│   │   ├── skyreels/   # SkyReels 服务商
-│   │   ├── mureka/     # Mureka 服务商
-│   │   └── volcengine/ # 火山引擎 服务商
-│   ├── services/       # Service层 - 服务提供商管理
-│   ├── params/         # Param层 - 参数定义与处理
-│   ├── config/         # 配置管理模块
-│   └── utils/          # 工具函数
-├── examples/           # 使用示例
-├── docs/               # 文档
-├── index.js            # CommonJS入口
-├── index.esm.js        # ES Module入口
-└── index.d.ts          # TypeScript类型定义
-```
-
-## 📚 API 文档
-
-### APIResult
-
-```typescript
-interface APIResult<T = any> {
-  success: boolean
-  data?: T
-  error?: {
-    code: string
-    message: string
-    details?: any
-  }
-  metadata?: {
-    requestId: string
-    timestamp: number
-    duration: number
-    provider: string
-    model: string
-    usage?: {
-      promptTokens: number
-      completionTokens: number
-      totalTokens: number
-    }
-  }
-}
-```
-
-### StreamResult
-
-```typescript
-interface StreamResult<T = any> {
-  success: boolean
-  data?: T
-  error?: {
-    code: string
-    message: string
-    details?: any
-  }
-  metadata?: {
-    requestId: string
-    timestamp: number
-    provider: string
-    model?: string
-    chunkIndex?: number
-    isStream?: boolean
-  }
-}
-```
-
-### BaseAPI
-
-```typescript
-class BaseAPI<T = any> {
-  constructor(service: BaseService, paramSchema?: ParamSchema)
-  
-  // 标准执行
-  execute(params: Record<string, any>, options?: any): Promise<APIResult<T>>
-  
-  // 流式执行
-  executeStream(params: Record<string, any>, options?: any): AsyncGenerator<StreamResult<T>, void, unknown>
-  
-  validateParams(params: Record<string, any>): ValidationResult
-  
-  getParamSchema(): ParamSchema
-  getInputSchema(): InputSchema
-  getOutputSchema(): OutputSchema
-  
-  getInputInfo(): ParamInfo[]
-  getOutputInfo(): ParamInfo[]
-  
-  getParamDetail(paramName: string): ParamInfo | null
-  generateDocs(format: 'markdown' | 'json' | 'html'): string
-  
-  // 新增：模型参数支持
-  getParamConfig(context?: Record<string, any>): ParamConfig
-  validateParamsWithContext(params: Record<string, any>): ValidationWithContextResult
-  getModelParamOptions(model?: string): ModelCapabilities | null
-  getAvailableOptions(model: string, context?: Record<string, any>): AvailableOptions | null
-}
-
-// 新增类型定义
-interface ParamConfig {
-  apiName: string
-  modelName: string
-  parameters: ParameterInfo[]
-  state: ParamState
-  hasModelCapabilities: boolean
-  modelCapabilities?: ModelCapabilities
-}
-
-interface ParameterInfo {
-  name: string
-  type: string
-  required: boolean
-  description: string
-  default?: any
-  dependencies: string[]
-  affects: string[]
-  visible: boolean
-  enabled: boolean
-  constraintSource: string | null
-  options?: any[]
-  min?: number
-  max?: number
-  step?: number
-}
-
-interface ParamState {
-  complete: boolean
-  missingParams: string[]
-  providedParams: string[]
-  enabledParams: string[]
-  nextParam: string | null
-  progress: number
-}
-
-interface ValidationWithContextResult {
-  valid: boolean
-  errors: Array<{
-    message: string
-    suggestions: Record<string, any>
-  }>
-  state: ParamState
-}
-```
-
-### BaseParam
-
-```typescript
-class BaseParam {
-  constructor(schema: ParamSchema)
-  
-  validate(params: any): ValidationResult
-  transform(params: any): any
-  extractOutput(rawResponse: any): Record<string, any>
-  
-  override(newConfig: any): BaseParam
-  extend(newFields: any): BaseParam
-  omit(fields: { input?: string[], output?: string[] }): BaseParam
-  pick(fields: { input?: string[], output?: string[] }): BaseParam
-  
-  static override(baseSchema: any, overrideConfig: any): any
-  static extend(baseSchema: any, newFields: any): any
-  static omit(baseSchema: any, fields: any): any
-  static pick(baseSchema: any, fields: any): any
-  static compose(...schemas: any[]): any
-}
-```
-
-## 🔗 按需导入
+框架支持中文和英文两种语言:
 
 ```javascript
-// 导入全部
-const { Services, APIs, Params, Config, Utils } = require('all-in-one-api-service')
+// 设置为中文
+AI.setLanguage('zh')
 
-// 只导入Services层
-const { Services } = require('all-in-one-api-service/services')
+// 设置为英文
+AI.setLanguage('en')
 
-// 只导入特定服务商的API
-const { OpenAI } = require('all-in-one-api-service/apis/openai')
+// 获取当前语言
+const lang = AI.getLanguage()
 
-// 只导入特定API
-const DallE3 = require('all-in-one-api-service/apis/openai/image/dall-e-3')
-
-// ES Module方式
-import { Services, APIs } from 'all-in-one-api-service'
-import { DallE3 } from 'all-in-one-api-service/apis/openai/image'
+// 使用翻译函数
+const text = AI.t('functions.generate-video-from-text.displayName')
 ```
 
-## 🛠️ 开发
+## 测试用例
+
+测试用例文件位于 `tests/` 目录下，包含以下测试场景:
+
+### 1. 基础查询测试
+
+```javascript
+// tests/basic-queries.test.js
+
+const AI = require('all-in-one-api-service')
+
+describe('基础查询测试', () => {
+  test('获取 Function 信息列表', () => {
+    const functions = AI.queryFunctions()
+    expect(Array.isArray(functions)).toBe(true)
+    expect(functions.length).toBeGreaterThan(0)
+  })
+
+  test('获取 Provider 信息列表', () => {
+    const { Constants } = require('all-in-one-api-service')
+    const providers = Object.keys(Constants.ProviderMeta)
+    expect(providers).toContain('ltx')
+    expect(providers).toContain('volcengine')
+  })
+
+  test('获取 Model 信息列表', () => {
+    const models = AI.getModels()
+    expect(Array.isArray(models)).toBe(true)
+  })
+
+  test('获取 API 定义列表', () => {
+    const apis = AI.getAPIs()
+    expect(Array.isArray(apis)).toBe(true)
+  })
+})
+```
+
+### 2. 详情查询测试
+
+```javascript
+// tests/detail-queries.test.js
+
+const AI = require('all-in-one-api-service')
+
+describe('详情查询测试', () => {
+  test('根据 ID 获取指定 Function 定义', () => {
+    const func = AI.getFunction('generate-video-from-text')
+    expect(func).toBeDefined()
+    expect(func.name).toBe('generate-video-from-text')
+  })
+
+  test('根据 ID 获取指定 Provider 定义', () => {
+    const { Constants } = require('all-in-one-api-service')
+    const provider = Constants.ProviderMeta.ltx
+    expect(provider).toBeDefined()
+    expect(provider.name).toBe('ltx')
+  })
+
+  test('根据 ID 获取指定 Model 定义', () => {
+    const model = AI.getModel('ltx-video')
+    expect(model).toBeDefined()
+    expect(model.name).toBe('ltx-video')
+  })
+
+  test('根据 ID 获取指定 API 定义', () => {
+    const api = AI.getAPI('generate-video-from-text')
+    expect(api).toBeDefined()
+  })
+})
+```
+
+### 3. 高级查询测试
+
+```javascript
+// tests/advanced-queries.test.js
+
+const AI = require('all-in-one-api-service')
+
+describe('高级查询测试', () => {
+  test('根据场景类型获取 Model Series 列表', () => {
+    const models = AI.getModels({ type: 'text_to_video' })
+    expect(Array.isArray(models)).toBe(true)
+    models.forEach(model => {
+      expect(model.type).toBe('text_to_video')
+    })
+  })
+
+  test('根据场景类型和 Model Series 获取优先级最高的 Function', () => {
+    const bestFunc = AI.getBestFunction('text_to_video', 'ltx-video')
+    expect(bestFunc).toBeDefined()
+    expect(bestFunc.type).toBe('text_to_video')
+  })
+})
+```
+
+### 4. API 调用测试
+
+```javascript
+// tests/api-calls.test.js
+
+const AI = require('all-in-one-api-service')
+
+describe('API 调用测试', () => {
+  test('根据 Function 获取请求接口定义', () => {
+    const func = AI.getFunction('generate-video-from-text')
+    expect(func.api).toBeDefined()
+  })
+
+  test('根据 Function 获取异步调用方法', async () => {
+    const result = await AI.executeFunction('generate-video-from-text', {
+      prompt: '测试视频',
+      model: 'ltx-video'
+    })
+    expect(result).toBeDefined()
+  })
+
+  test('异步任务状态查询', async () => {
+    // 先创建任务
+    const createResult = await AI.executeFunction('generate-video-from-text', {
+      prompt: '测试视频'
+    })
+    
+    // 查询任务状态
+    const queryResult = await AI.executeFunction('query-video-task', {
+      taskId: createResult.taskId
+    })
+    expect(queryResult).toBeDefined()
+  })
+})
+```
+
+### 5. 参数管理测试
+
+```javascript
+// tests/params.test.js
+
+const AI = require('all-in-one-api-service')
+
+describe('参数管理测试', () => {
+  test('根据 Function 获取 API 列表', () => {
+    const func = AI.getFunction('generate-video-from-text')
+    const apis = AI.getRelatedAPIs('generate-video-from-text')
+    expect(apis).toBeDefined()
+  })
+
+  test('获取 API 入参出参信息', () => {
+    const api = AI.getAPI('generate-video-from-text')
+    const inputInfo = api.getInputInfo()
+    const outputInfo = api.getOutputInfo()
+    expect(Array.isArray(inputInfo)).toBe(true)
+    expect(Array.isArray(outputInfo)).toBe(true)
+  })
+
+  test('动态获取参数信息列表', () => {
+    const api = AI.getAPI('generate-video-from-text')
+    const paramConfig = api.getParamConfig({
+      model: 'ltx-video',
+      currentParams: { prompt: '测试' }
+    })
+    expect(paramConfig).toBeDefined()
+  })
+})
+```
+
+### 6. 常量查询测试
+
+```javascript
+// tests/constants.test.js
+
+const { Constants } = require('all-in-one-api-service')
+
+describe('常量查询测试', () => {
+  test('获取框架中的常量列表', () => {
+    expect(Constants.APITypes).toBeDefined()
+    expect(Constants.MediaTypes).toBeDefined()
+    expect(Constants.Providers).toBeDefined()
+    expect(Constants.Languages).toBeDefined()
+  })
+
+  test('API 类型常量', () => {
+    expect(Constants.APITypes.TEXT_TO_VIDEO).toBe('text_to_video')
+    expect(Constants.APITypes.IMAGE_TO_VIDEO).toBe('image_to_video')
+  })
+
+  test('Provider 常量', () => {
+    expect(Constants.Providers.LTX).toBe('ltx')
+    expect(Constants.ProviderPriority.ltx).toBe(100)
+  })
+})
+```
+
+## API 文档
+
+### 主要 API
+
+#### FunctionManager
+
+```javascript
+const { functionManager } = require('all-in-one-api-service')
+
+// 查询 Functions
+functionManager.query(options, language)
+
+// 获取 Function 详情
+functionManager.getDetail(name, language)
+
+// 获取最佳 Function
+functionManager.getBest(type, model, options, language)
+
+// 执行 Function
+functionManager.execute(name, params, options)
+
+// 获取统计信息
+functionManager.getStats()
+```
+
+#### MetadataManager
+
+```javascript
+const { metadataManager } = require('all-in-one-api-service')
+
+// 获取 Function 元数据
+metadataManager.getFunction(name, language)
+
+// 获取 API 元数据
+metadataManager.getAPI(name, language)
+
+// 获取 Model 元数据
+metadataManager.getModel(name, language)
+
+// 批量获取
+metadataManager.getFunctions(options, language)
+metadataManager.getAPIs(options, language)
+metadataManager.getModels(options, language)
+```
+
+#### 快捷方法
+
+```javascript
+const AI = require('all-in-one-api-service')
+
+// Function 相关
+AI.getFunction(name, language)
+AI.getFunctions(options, language)
+AI.getBestFunction(type, model, options, language)
+
+// API 相关
+AI.getAPI(name, language)
+AI.getAPIs(options, language)
+
+// Model 相关
+AI.getModel(name, language)
+AI.getModels(options, language)
+
+// 执行
+AI.executeFunction(name, params, options)
+```
+
+### 查询选项
+
+```javascript
+// Function 查询选项
+{
+  type: 'text_to_video',      // API 类型
+  provider: 'ltx',            // Provider 名称
+  category: 'video',          // 分类
+  model: 'ltx-video',         // 模型名称
+  asyncOnly: true             // 仅异步 Function
+}
+
+// API 查询选项
+{
+  type: 'text_to_video',      // API 类型
+  provider: 'ltx',            // Provider 名称
+  tags: ['video'],            // 标签
+  model: 'ltx-video'          // 模型名称
+}
+
+// Model 查询选项
+{
+  type: 'text_to_video',      // API 类型
+  provider: 'ltx',            // Provider 名称
+  tags: ['video']             // 标签
+}
+```
+
+## 开发指南
+
+### 本地开发
 
 ```bash
+# 克隆仓库
+git clone https://github.com/your-org/all-in-one-api-service.git
+
 # 安装依赖
 npm install
 
-# 运行配置向导
-npm run setup
+# 运行测试
+npm test
 
 # 代码检查
 npm run lint
+
+# 类型检查
+npm run typecheck
+
+# 构建
+npm run build
 ```
 
-## 📝 更新日志
+### 发布流程
 
-### v1.3.0
+```bash
+# 更新版本
+npm version patch/minor/major
 
-- 🎵 新增 Mureka 音乐生成服务商
-  - 支持歌曲生成、歌曲扩展、歌曲识别、歌曲描述、音轨分离
-  - 支持歌词生成、歌词扩展
-  - 支持人声克隆
-  - 支持伴奏生成
-  - 支持文本转语音、播客生成
-  - 支持文件上传功能
-- 🎨 新增 Volcengine (火山引擎) 服务商
-  - 支持图像生成 (豆包 Seedream 系列)
-  - 支持视频生成及任务查询
-  - 支持3D模型生成
-- 🔒 增强参数互斥功能
-  - 支持参数互斥验证
-  - 自动检测冲突参数
-  - 提供友好的错误提示
-- 🎯 强化动态约束
-  - 改进模型约束验证器
-  - 优化参数配置管理
-  - 增强参数依赖关系处理
+# 构建
+npm run build
 
-### v1.2.0
+# 发布到 npm
+npm publish
 
-- ✨ 新增模型自定义参数支持
-  - 新增 `ModelConstraintValidator` 模型约束验证器
-  - 新增 `ParamConfigManager` 参数配置管理器
-  - 支持 `modelCapabilities` 模型能力定义
-  - 实现参数依赖关系管理
-  - 实现动态参数约束和联动
-  - 新增 `getParamConfig()` 获取参数配置
-  - 新增 `validateParamsWithContext()` 验证参数并返回建议
-  - 新增 `getModelParamOptions()` 获取模型参数选项
-  - 新增 `getAvailableOptions()` 获取可用参数选项
-- 🎬 新增 LTX 视频生成服务商
-  - 支持文本生成视频
-  - 支持图像生成视频
-  - 支持音频生成视频
-  - 支持视频时长扩展
-  - 支持视频片段重拍
-- 🎭 新增 SkyReels 视频服务商
-  - 支持文本生成视频
-  - 支持图像生成视频
-  - 支持视频风格重绘
-  - 支持口型同步
-  - 支持多角色头像生成
-- 📝 完善参数状态分析
-  - 自动识别缺少的参数
-  - 自动提示下一步应该选择什么
-  - 自动计算完成进度
-  - 参数验证失败时提供修正建议
+# 发布到 GitHub Packages
+npm publish --registry=https://npm.pkg.github.com
+```
 
-### v1.1.0
+### 基于 API 文档的开发流程
 
-- ✨ 新增流式响应功能
-  - 支持SSE(Server-Sent Events)协议
-  - 添加 `executeStream()` 方法用于流式API调用
-  - 新增 `StreamHandler` 流式处理器
-  - 实现 GPT-4 流式API (`GPT4Stream`)
-  - 支持 Next.js API路由集成
-  - 完善的错误处理和进度跟踪
-  - 详细的文档和使用示例
+本章节详细介绍如何根据 `api-document` 目录下的官方 API 文档,完成框架代码的开发工作。
 
-### v1.0.0
+#### 开发流程概览
 
-- 初始版本发布
-- 支持 OpenAI、Stability AI、Replicate、Gemini、Anthropic、Midjourney
-- 实现三层架构设计
-- 支持零配置使用
-- 支持参数验证和结果标准化
-- 支持动态表单生成
+```
+API 文档分析 → 参数定义 → API 元数据 → Function 元数据 → Model 元数据 → 国际化 → 测试验证
+```
 
-## 📄 许可证
+#### 步骤 1: 分析 API 文档
 
-[MIT](LICENSE)
+首先,阅读 `api-document/official-{provider}.md` 文件,提取以下关键信息:
 
-## 📚 相关资源
+**示例: LTX 文本生成视频 API**
 
-- [配置指南](docs/CONFIGURATION.md) - 详细的配置说明
-- [流式响应指南](docs/STREAMING.md) - 流式响应功能使用说明
-- [流式响应设计文档](.trae/documents/stream-response-design.md) - 完整的设计方案
-- [使用示例](examples/) - 各种使用场景的示例代码
-- [API文档](docs/API.md) - 详细的API文档
-- [Mureka官方文档](api-document/official-mureka.md) - Mureka API官方文档
-- [Volcengine官方文档](api-document/official-volcengine.md) - 火山引擎API官方文档
-- [LTX官方文档](api-document/official-ltx.md) - LTX API官方文档
-- [SkyReels官方文档](api-document/official-skyreels.md) - SkyReels API官方文档
+从文档中提取:
 
-## 🤝 贡献
+- **API ID**: `generate_video_from_text_task`
+- **Endpoint**: `/v1/text-to-video`
+- **Method**: `POST`
+- **类型**: 同步/异步 (LTX 所有接口为同步)
+- **支持的模型**: `ltx-2-fast`, `ltx-2-pro`, `ltx-2-3-fast`, `ltx-2-3-pro`
+- **请求参数**: prompt, model, duration, resolution, fps, generate\_audio, camera\_motion
+- **响应参数**: 视频文件 (二进制) 或错误信息
 
-欢迎提交 Issue 和 Pull Request！
+#### 步骤 2: 创建参数定义文件
 
-## 📮 联系方式
+在 `src/params/providers/{provider}/{category}/` 目录下创建参数定义文件。
 
-如有问题或建议，请提交 Issue。
+**文件路径**: `src/params/providers/ltx/video/generate-video-from-text.js`
+
+```javascript
+/**
+ * Generate Video from Text 参数定义
+ */
+
+const ltxCommon = require('../ltx-common')
+
+module.exports = {
+  input: {
+    prompt: ltxCommon.input.prompt,
+
+    model: {
+      ...ltxCommon.input.model,
+      required: true,
+      description: '使用的模型(支持:ltx-2-fast, ltx-2-pro, ltx-2-3-fast, ltx-2-3-pro)'
+    },
+
+    duration: {
+      ...ltxCommon.input.duration,
+      required: true,
+      description: '视频时长(秒),根据模型不同有不同的可用时长选项'
+    },
+
+    resolution: {
+      ...ltxCommon.input.resolution,
+      required: true,
+      description: '输出视频分辨率(如:1920x1080, 1080x1920, 2560x1440, 3840x2160)'
+    },
+
+    fps: {
+      ...ltxCommon.input.fps,
+      description: '帧率,根据模型和分辨率不同有不同的可用帧率'
+    },
+
+    generate_audio: {
+      ...ltxCommon.input.generate_audio,
+      description: '是否为视频生成音频,true时包含AI生成的音频,false时仅生成无声视频'
+    },
+
+    camera_motion: {
+      ...ltxCommon.input.camera_motion,
+      description: '对生成的视频应用镜头运动效果'
+    }
+  },
+
+  output: {
+    video: ltxCommon.output.video,
+    contentType: ltxCommon.output.contentType,
+    error: ltxCommon.output.error
+  }
+}
+```
+
+**参数定义规范**:
+
+1. **复用通用参数**: 使用 `ltxCommon` 或其他通用参数定义
+2. **明确必填项**: 设置 `required: true`
+3. **提供描述**: 每个参数都要有清晰的 `description`
+4. **定义输出结构**: 明确 `output` 的结构
+
+#### 步骤 3: 创建 API 元数据定义
+
+在 `src/metadata/apis/{provider}.js` 中添加 API 定义。
+
+**文件路径**: `src/metadata/apis/ltx.js`
+
+```javascript
+module.exports = {
+  'generate-video-from-text': {
+    name: 'generate-video-from-text',
+    provider: 'ltx',
+    category: 'video',
+    endpoint: '/v1/text-to-video',
+    method: 'POST',
+    type: 'sync',  // 同步或异步
+    paramSchema: require('../../params/providers/ltx/video/generate-video-from-text'),
+    models: ['ltx-2-fast', 'ltx-2-pro', 'ltx-2-3-fast', 'ltx-2-3-pro'],
+    tags: ['video', 'generation', 'text-to-video'],
+    priority: 100
+  },
+  
+  // 其他 API 定义...
+}
+```
+
+**API 元数据字段说明**:
+
+| 字段          | 类型     | 说明        | 示例                         |
+| ----------- | ------ | --------- | -------------------------- |
+| name        | string | API 唯一标识符 | 'generate-video-from-text' |
+| provider    | string | 服务提供商     | 'ltx', 'volcengine'        |
+| category    | string | API 分类    | 'video', 'image', 'audio'  |
+| endpoint    | string | API 端点路径  | '/v1/text-to-video'        |
+| method      | string | HTTP 方法   | 'POST', 'GET', 'DELETE'    |
+| type        | string | 调用类型      | 'sync'(同步), 'async'(异步)    |
+| paramSchema | object | 参数定义引用    | require('...')             |
+| models      | array  | 支持的模型列表   | \['ltx-2-fast', ...]       |
+| tags        | array  | 标签列表      | \['video', 'generation']   |
+| priority    | number | 优先级(越大越高) | 100                        |
+
+#### 步骤 4: 创建 Function 元数据定义
+
+在 `src/metadata/functions/{provider}.js` 中添加 Function 定义。
+
+**文件路径**: `src/metadata/functions/ltx.js`
+
+```javascript
+module.exports = {
+  'generate-video-from-text': {
+    name: 'generate-video-from-text',
+    type: 'sync',
+    provider: 'ltx',
+    category: 'video',
+    
+    apis: {
+      request: 'generate-video-from-text'  // 引用 API 名称
+    },
+    
+    models: ['ltx-2-fast', 'ltx-2-pro', 'ltx-2-3-fast', 'ltx-2-3-pro'],
+    tags: ['video', 'generation', 'text-to-video'],
+    priority: 100
+  },
+  
+  // 其他 Function 定义...
+}
+```
+
+**异步 Function 示例** (如火山引擎):
+
+```javascript
+'create-video-generation-task': {
+  name: 'create-video-generation-task',
+  type: 'async',
+  provider: 'volcengine',
+  category: 'video',
+  
+  apis: {
+    request: 'create-video-generation-task',  // 创建任务
+    query: 'query-video-generation-task'      // 查询任务状态
+  },
+  
+  models: ['doubao-seedance-2-0', ...],
+  tags: ['video', 'generation'],
+  priority: 90
+}
+```
+
+**Function 元数据字段说明**:
+
+| 字段           | 类型     | 说明             | 示例                         |
+| ------------ | ------ | -------------- | -------------------------- |
+| name         | string | Function 唯一标识符 | 'generate-video-from-text' |
+| type         | string | 调用类型           | 'sync', 'async'            |
+| provider     | string | 服务提供商          | 'ltx'                      |
+| category     | string | 分类             | 'video'                    |
+| apis         | object | 关联的 API        | { request: 'api-name' }    |
+| apis.request | string | 请求 API 名称      | 'generate-video-from-text' |
+| apis.query   | string | 查询 API 名称(异步)  | 'query-video-task'         |
+| models       | array  | 支持的模型          | \['ltx-2-fast', ...]       |
+| tags         | array  | 标签             | \['video', 'generation']   |
+| priority     | number | 优先级            | 100                        |
+
+#### 步骤 5: 创建 Model 元数据定义
+
+在 `src/metadata/models/{provider}.js` 中添加 Model 定义。
+
+**文件路径**: `src/metadata/models/ltx.js`
+
+```javascript
+module.exports = {
+  'ltx-2-fast': {
+    name: 'ltx-2-fast',
+    provider: 'ltx',
+    type: 'text_to_video',  // API 类型
+    category: 'video',
+    displayName: 'LTX 2 Fast',
+    description: 'LTX 2 快速模型,优化速度和成本',
+    capabilities: {
+      maxDuration: 20,
+      resolutions: ['1920x1080', '2560x1440', '3840x2160'],
+      fps: [25, 50]
+    },
+    tags: ['video', 'fast', 'cost-effective']
+  },
+  
+  'ltx-2-pro': {
+    name: 'ltx-2-pro',
+    provider: 'ltx',
+    type: 'text_to_video',
+    category: 'video',
+    displayName: 'LTX 2 Pro',
+    description: 'LTX 2 专业模型,更高保真度',
+    capabilities: {
+      maxDuration: 10,
+      resolutions: ['1920x1080', '2560x1440', '3840x2160'],
+      fps: [25, 50]
+    },
+    tags: ['video', 'pro', 'high-quality']
+  },
+  
+  // 其他 Model 定义...
+}
+```
+
+**Model 元数据字段说明**:
+
+| 字段           | 类型     | 说明          | 示例                  |
+| ------------ | ------ | ----------- | ------------------- |
+| name         | string | Model 唯一标识符 | 'ltx-2-fast'        |
+| provider     | string | 服务提供商       | 'ltx'               |
+| type         | string | API 类型      | 'text\_to\_video'   |
+| category     | string | 分类          | 'video'             |
+| displayName  | string | 显示名称        | 'LTX 2 Fast'        |
+| description  | string | 描述          | '快速模型...'           |
+| capabilities | object | 能力配置        | { maxDuration: 20 } |
+| tags         | array  | 标签          | \['video', 'fast']  |
+
+#### 步骤 6: 添加国际化翻译
+
+在 `src/locales/{language}/` 目录下添加翻译。
+
+**中文翻译**: `src/locales/zh/metadata.json`
+
+```json
+{
+  "models": {
+    "ltx-2-fast": {
+      "displayName": "LTX 2 快速版",
+      "description": "LTX 2 快速模型,优化速度和成本,适合快速原型和迭代"
+    },
+    "ltx-2-pro": {
+      "displayName": "LTX 2 专业版",
+      "description": "LTX 2 专业模型,更高保真度和视觉细节"
+    }
+  },
+  
+  "functions": {
+    "generate-video-from-text": {
+      "displayName": "文本生成视频",
+      "description": "根据文本描述生成视频内容"
+    }
+  },
+  
+  "apis": {
+    "generate-video-from-text": {
+      "displayName": "文本生成视频 API",
+      "description": "调用 LTX 文本生成视频接口"
+    }
+  }
+}
+```
+
+**英文翻译**: `src/locales/en/metadata.json`
+
+```json
+{
+  "models": {
+    "ltx-2-fast": {
+      "displayName": "LTX 2 Fast",
+      "description": "LTX 2 fast model, optimized for speed and cost"
+    },
+    "ltx-2-pro": {
+      "displayName": "LTX 2 Pro",
+      "description": "LTX 2 pro model, higher fidelity and visual detail"
+    }
+  },
+  
+  "functions": {
+    "generate-video-from-text": {
+      "displayName": "Generate Video from Text",
+      "description": "Generate video content from text description"
+    }
+  },
+  
+  "apis": {
+    "generate-video-from-text": {
+      "displayName": "Generate Video from Text API",
+      "description": "Call LTX text-to-video API"
+    }
+  }
+}
+```
+
+**参数翻译**: `src/locales/zh/params.json`
+
+```json
+{
+  "prompt": {
+    "displayName": "提示词",
+    "description": "描述期望视频内容的文本提示"
+  },
+  
+  "model": {
+    "displayName": "模型",
+    "description": "用于生成的模型"
+  },
+  
+  "duration": {
+    "displayName": "时长",
+    "description": "视频时长(秒)"
+  },
+  
+  "resolution": {
+    "displayName": "分辨率",
+    "description": "输出视频分辨率"
+  }
+}
+```
+
+#### 步骤 7: 编写测试用例
+
+在 `tests/` 目录下创建测试文件。
+
+**文件路径**: `tests/ltx-video-generation.test.js`
+
+```javascript
+const AIService = require('../index')
+
+describe('LTX 视频生成测试', () => {
+  describe('文本生成视频', () => {
+    test('应该获取 generate-video-from-text API', () => {
+      const api = AIService.getAPI('generate-video-from-text')
+      
+      expect(api).toBeDefined()
+      expect(api.provider).toBe('ltx')
+      expect(api.endpoint).toBe('/v1/text-to-video')
+      expect(api.method).toBe('POST')
+      expect(api.type).toBe('sync')
+    })
+    
+    test('应该获取 generate-video-from-text Function', () => {
+      const func = AIService.getFunction('generate-video-from-text')
+      
+      expect(func).toBeDefined()
+      expect(func.type).toBe('sync')
+      expect(func.models).toContain('ltx-2-fast')
+    })
+    
+    test('应该验证参数', () => {
+      const funcInstance = AIService.functionManager.get('generate-video-from-text')
+      
+      const validation = funcInstance.validateParams({
+        prompt: '测试视频',
+        model: 'ltx-2-fast',
+        duration: 8,
+        resolution: '1920x1080'
+      })
+      
+      expect(validation.valid).toBe(true)
+    })
+    
+    test('应该支持中文翻译', () => {
+      const func = AIService.getFunction('generate-video-from-text', 'zh')
+      
+      expect(func.displayName).toBe('文本生成视频')
+    })
+    
+    test('应该支持英文翻译', () => {
+      const func = AIService.getFunction('generate-video-from-text', 'en')
+      
+      expect(func.displayName).toBe('Generate Video from Text')
+    })
+  })
+})
+```
+
+#### 步骤 8: 运行测试验证
+
+```bash
+# 运行所有测试
+npm test
+
+# 运行特定测试文件
+npm test tests/ltx-video-generation.test.js
+
+# 运行测试并生成覆盖率报告
+npm test -- --coverage
+```
+
+#### 完整开发示例: 添加新的 Provider
+
+以下是一个完整的示例,展示如何添加一个新的 Provider (以 Skyreels 为例):
+
+**1. 创建目录结构**
+
+```
+src/
+├── params/providers/skyreels/
+│   ├── video/
+│   │   ├── text-to-video-generation-task-submit.js
+│   │   ├── text-to-video-generation-task-query.js
+│   │   └── index.js
+│   ├── skyreels-common.js
+│   └── index.js
+├── metadata/
+│   ├── apis/skyreels.js
+│   ├── functions/skyreels.js
+│   └── models/skyreels.js
+└── locales/
+    ├── zh/
+    └── en/
+```
+
+**2. 定义通用参数**
+
+`src/params/providers/skyreels/skyreels-common.js`:
+
+```javascript
+module.exports = {
+  input: {
+    prompt: {
+      type: 'string',
+      required: true,
+      description: '文本提示词'
+    },
+    
+    model: {
+      type: 'string',
+      required: true,
+      description: '模型名称'
+    }
+  },
+  
+  output: {
+    taskId: {
+      type: 'string',
+      description: '任务ID'
+    },
+    
+    status: {
+      type: 'string',
+      description: '任务状态'
+    }
+  }
+}
+```
+
+**3. 定义 API 参数**
+
+`src/params/providers/skyreels/video/text-to-video-generation-task-submit.js`:
+
+```javascript
+const skyreelsCommon = require('../skyreels-common')
+
+module.exports = {
+  input: {
+    prompt: skyreelsCommon.input.prompt,
+    model: skyreelsCommon.input.model,
+    
+    duration: {
+      type: 'number',
+      required: false,
+      description: '视频时长(秒)'
+    }
+  },
+  
+  output: {
+    taskId: skyreelsCommon.output.taskId
+  }
+}
+```
+
+**4. 定义 API 元数据**
+
+`src/metadata/apis/skyreels.js`:
+
+```javascript
+module.exports = {
+  'text-to-video-generation-task-submit': {
+    name: 'text-to-video-generation-task-submit',
+    provider: 'skyreels',
+    category: 'video',
+    endpoint: '/v1/video/text-to-video/submit',
+    method: 'POST',
+    type: 'async',
+    paramSchema: require('../../params/providers/skyreels/video/text-to-video-generation-task-submit'),
+    models: ['skyreels-v1'],
+    tags: ['video', 'generation', 'text-to-video'],
+    priority: 80
+  },
+  
+  'text-to-video-generation-task-query': {
+    name: 'text-to-video-generation-task-query',
+    provider: 'skyreels',
+    category: 'video',
+    endpoint: '/v1/video/text-to-video/query',
+    method: 'GET',
+    type: 'async',
+    paramSchema: require('../../params/providers/skyreels/video/text-to-video-generation-task-query'),
+    models: ['skyreels-v1'],
+    tags: ['video', 'query'],
+    priority: 80
+  }
+}
+```
+
+**5. 定义 Function 元数据**
+
+`src/metadata/functions/skyreels.js`:
+
+```javascript
+module.exports = {
+  'text-to-video-generation': {
+    name: 'text-to-video-generation',
+    type: 'async',
+    provider: 'skyreels',
+    category: 'video',
+    
+    apis: {
+      request: 'text-to-video-generation-task-submit',
+      query: 'text-to-video-generation-task-query'
+    },
+    
+    models: ['skyreels-v1'],
+    tags: ['video', 'generation', 'text-to-video'],
+    priority: 80
+  }
+}
+```
+
+**6. 定义 Model 元数据**
+
+`src/metadata/models/skyreels.js`:
+
+```javascript
+module.exports = {
+  'skyreels-v1': {
+    name: 'skyreels-v1',
+    provider: 'skyreels',
+    type: 'text_to_video',
+    category: 'video',
+    displayName: 'Skyreels V1',
+    description: 'Skyreels 视频生成模型',
+    capabilities: {
+      maxDuration: 10,
+      resolutions: ['1280x720', '1920x1080']
+    },
+    tags: ['video', 'generation']
+  }
+}
+```
+
+**7. 添加翻译**
+
+`src/locales/zh/metadata.json`:
+
+```json
+{
+  "models": {
+    "skyreels-v1": {
+      "displayName": "Skyreels V1",
+      "description": "Skyreels 视频生成模型"
+    }
+  },
+  
+  "functions": {
+    "text-to-video-generation": {
+      "displayName": "文本生成视频",
+      "description": "根据文本描述生成视频"
+    }
+  }
+}
+```
+
+**8. 编写测试**
+
+`tests/skyreels-video-generation.test.js`:
+
+```javascript
+const AIService = require('../index')
+
+describe('Skyreels 视频生成测试', () => {
+  test('应该获取 API 定义', () => {
+    const api = AIService.getAPI('text-to-video-generation-task-submit')
+    
+    expect(api).toBeDefined()
+    expect(api.provider).toBe('skyreels')
+    expect(api.type).toBe('async')
+  })
+  
+  test('应该获取 Function 定义', () => {
+    const func = AIService.getFunction('text-to-video-generation')
+    
+    expect(func).toBeDefined()
+    expect(func.type).toBe('async')
+    expect(func.apis.request).toBe('text-to-video-generation-task-submit')
+    expect(func.apis.query).toBe('text-to-video-generation-task-query')
+  })
+})
+```
+
+**9. 修改配置文件**
+
+增加提供商的api-key等配置: 
+
+```text
+.ai-service\config.json
+.ai-service\config.json.example
+.env.example
+```
+
+#### 开发检查清单
+
+完成开发后,请检查以下内容:
+
+- [ ] 参数定义文件已创建并正确引用
+- [ ] API 元数据已添加到 `metadata/apis/{provider}.js`
+- [ ] Function 元数据已添加到 `metadata/functions/{provider}.js`
+- [ ] Model 元数据已添加到 `metadata/models/{provider}.js`
+- [ ] 中文翻译已添加到 `locales/zh/`
+- [ ] 英文翻译已添加到 `locales/en/`
+- [ ] 测试用例已编写并通过
+- [ ] API 文档中的所有参数都已定义
+- [ ] 参数的必填项和约束条件已正确设置
+- [ ] 支持的模型列表已正确配置
+- [ ] 优先级已合理设置
+- [ ] 标签已正确添加
+
+#### 常见问题
+
+**Q: 如何处理异步 API?**
+
+A: 异步 API 需要定义两个 API: 一个用于提交任务 (request),一个用于查询任务状态 (query)。在 Function 元数据中,通过 `apis.request` 和 `apis.query` 分别引用。
+
+**Q: 如何复用通用参数?**
+
+A: 在 `params/providers/{provider}/{provider}-common.js` 中定义通用参数,然后在具体 API 的参数定义中通过扩展运算符 `...` 复用。
+
+**Q: 如何处理模型特定的约束?**
+
+A: 在 Model 元数据的 `capabilities` 字段中定义模型能力,然后在参数验证逻辑中检查这些约束。
+
+**Q: 如何支持新的 API 类型?**
+
+A: 在 `src/constants/types.js` 中添加新的 API 类型常量,并更新相关文档。
+
+**Q: 如何调试参数验证?**
+
+A: 使用 `funcInstance.validateParams(params)` 方法验证参数,查看返回的 `errors` 数组了解具体的验证错误。
+
+## 许可证
+
+MIT License
+
+## 联系方式
+
+如有问题或建议，请提交 Issue 或 Pull Request。

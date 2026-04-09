@@ -193,19 +193,19 @@
     "ltx": {
       "ltx-2-fast": {
         "displayName": "LTX 2 快速版",
-        "description": "LTX 2 快速模型"
+        "description": "LTX 快速版视频生成模型"
       },
       "ltx-2-pro": {
         "displayName": "LTX 2 专业版",
-        "description": "LTX 2 专业模型"
+        "description": "LTX 专业版视频生成模型，支持多种生成方式"
       },
       "ltx-2-3-fast": {
         "displayName": "LTX 2.3 快速版",
-        "description": "LTX 2.3 快速模型"
+        "description": "LTX 最新快速版视频生成模型，适合快速预览"
       },
       "ltx-2-3-pro": {
         "displayName": "LTX 2.3 专业版",
-        "description": "LTX 2.3 专业模型"
+        "description": "LTX 最新专业版视频生成模型，支持文本、图片、音频生成视频"
       }
     },
     "mureka": {
@@ -215,19 +215,19 @@
       },
       "mureka-7.5": {
         "displayName": "Mureka 7.5",
-        "description": "Mureka 7.5 模型"
+        "description": "Mureka 音乐生成模型"
       },
       "mureka-7.6": {
         "displayName": "Mureka 7.6",
-        "description": "Mureka 7.6 模型"
+        "description": "Mureka 音乐生成模型"
       },
       "mureka-o2": {
         "displayName": "Mureka O2",
-        "description": "Mureka O2 模型"
+        "description": "Mureka 音乐生成模型"
       },
       "mureka-8": {
         "displayName": "Mureka 8",
-        "description": "Mureka 8 模型"
+        "description": "Mureka 最新音乐生成模型"
       },
       "mureka-tts": {
         "displayName": "Mureka 语音合成",
@@ -245,18 +245,62 @@
       },
       "skyreels-v3": {
         "displayName": "SkyReels V3",
-        "description": "SkyReels V3 模型"
+        "description": "SkyReels 视频生成模型，支持文本和图片生成视频"
       },
       "skyreels-v4": {
         "displayName": "SkyReels V4",
-        "description": "SkyReels V4 模型"
+        "description": "SkyReels 最新视频生成模型，支持文本和图片生成视频"
       },
       "skyreels-avatar": {
-        "displayName": "SkyReels 头像",
-        "description": "SkyReels 头像模型"
+        "displayName": "SkyReels 数字人",
+        "description": "SkyReels 数字人模型，支持口型同步和动作生成"
       }
     },
     "volcengine": {
+      "doubao-seedream-5.0-lite": {
+        "displayName": "豆包 Seedream 5.0 Lite",
+        "description": "火山引擎轻量级图像生成模型，支持2K-3K分辨率"
+      },
+      "doubao-seedream-4.5": {
+        "displayName": "豆包 Seedream 4.5",
+        "description": "火山引擎高质量图像生成模型，支持2K-4K分辨率"
+      },
+      "doubao-seedream-4.0": {
+        "displayName": "豆包 Seedream 4.0",
+        "description": "火山引擎图像生成模型，支持1K-4K分辨率"
+      },
+      "doubao-seedream-3.0-t2i": {
+        "displayName": "豆包 Seedream 3.0 T2I",
+        "description": "火山引擎文生图模型"
+      },
+      "doubao-seedance-2-0": {
+        "displayName": "豆包 Seedance 2.0",
+        "description": "火山引擎最新视频生成模型，支持多模态参考"
+      },
+      "doubao-seedance-2-0-fast": {
+        "displayName": "豆包 Seedance 2.0 Fast",
+        "description": "火山引擎快速视频生成模型"
+      },
+      "doubao-seedance-1-5-pro": {
+        "displayName": "豆包 Seedance 1.5 Pro",
+        "description": "火山引擎专业版视频生成模型"
+      },
+      "doubao-seedance-1-0-pro": {
+        "displayName": "豆包 Seedance 1.0 Pro",
+        "description": "火山引擎视频生成模型"
+      },
+      "doubao-seedance-1-0-pro-fast": {
+        "displayName": "豆包 Seedance 1.0 Pro Fast",
+        "description": "火山引擎快速视频生成模型"
+      },
+      "doubao-seedance-1-0-lite": {
+        "displayName": "豆包 Seedance 1.0 Lite",
+        "description": "火山引擎轻量级视频生成模型"
+      },
+      "doubao-seed3d-1-0-250928": {
+        "displayName": "豆包 Seed3D 1.0",
+        "description": "火山引擎3D模型生成模型"
+      },
       "volcengine-video-v1": {
         "displayName": "火山引擎视频 V1",
         "description": "火山引擎视频生成模型"
@@ -268,6 +312,46 @@
       "volcengine-image-v1": {
         "displayName": "火山引擎图片 V1",
         "description": "火山引擎图片生成模型"
+      }
+    }
+  },
+  "functions": {
+    "mureka": {
+      "generate-song": {
+        "displayName": "生成歌曲",
+        "description": "根据歌词和风格生成歌曲"
+      },
+      "extend-song": {
+        "displayName": "延长歌曲",
+        "description": "延长已有歌曲"
+      },
+      "generate-lyrics": {
+        "displayName": "生成歌词",
+        "description": "根据主题生成歌词"
+      },
+      "extend-lyrics": {
+        "displayName": "延长歌词",
+        "description": "延长已有歌词"
+      },
+      "generate-instrumental": {
+        "displayName": "生成伴奏",
+        "description": "根据风格生成伴奏"
+      },
+      "create-speech": {
+        "displayName": "创建语音",
+        "description": "将文本转换为语音"
+      },
+      "create-podcast": {
+        "displayName": "创建播客",
+        "description": "创建一个播客"
+      },
+      "vocal-cloning": {
+        "displayName": "声音克隆",
+        "description": "克隆声音特征"
+      },
+      "upload-file": {
+        "displayName": "上传文件",
+        "description": "上传一个文件"
       }
     }
   }

@@ -9,7 +9,7 @@ module.exports = {
   'skyreels-v4': {
     name: 'skyreels-v4',
     displayName: 'Skyreels V4',
-    description: 'Skyreels最新视频生成模型，支持文本和图片生成视频',
+    description: 'Skyreels latest video generation model, supports text and image to video',
     logo: '',
     series: Series.SKYREELS,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -29,7 +29,7 @@ module.exports = {
   'skyreels-v3': {
     name: 'skyreels-v3',
     displayName: 'Skyreels V3',
-    description: 'Skyreels视频生成模型，支持文本和图片生成视频',
+    description: 'Skyreels video generation model, supports text and image to video',
     logo: '',
     series: Series.SKYREELS,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -49,7 +49,7 @@ module.exports = {
   'skyreels-avatar': {
     name: 'skyreels-avatar',
     displayName: 'Skyreels Avatar',
-    description: 'Skyreels数字人模型，支持口型同步和动作生成',
+    description: 'Skyreels digital human model, supports lip sync and motion generation',
     logo: '',
     series: Series.SKYREELS,
     type: [APITypes.AVATAR_GENERATION, APITypes.LIP_SYNC],

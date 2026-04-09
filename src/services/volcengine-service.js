@@ -88,7 +88,7 @@ class VolcengineService extends BaseService {
    */
   async queryTaskList(endpoint, queryParams = {}, options = {}) {
     const queryString = Object.entries(queryParams)
-      .filter(([key, value]) => value !== undefined && value !== null)
+      .filter(([_key, value]) => value !== undefined && value !== null)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join('&')
     

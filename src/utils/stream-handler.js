@@ -97,11 +97,12 @@ class StreamHandler {
    * @returns {Promise<void>}
    */
   async handleStream(stream, callbacks = {}) {
-    const { onData, onError, onDone } = callbacks
+    const { onError, onDone } = callbacks
     const reader = stream.getReader()
     const decoder = new TextDecoder(this.encoding)
 
     try {
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         const { done, value } = await reader.read()
 

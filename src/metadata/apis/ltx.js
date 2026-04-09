@@ -1,73 +1,71 @@
 /**
  * LTX 接口元数据定义
+ * 作为唯一的API定义源，包含所有API调用信息
  */
-
-const { APITypes, Providers } = require('../../constants')
-const { APITags } = require('../../constants/tags')
 
 module.exports = {
   'generate-video-from-text': {
     name: 'generate-video-from-text',
-    displayName: '文本生成视频',
-    description: '根据文本提示生成视频',
-    type: APITypes.TEXT_TO_VIDEO,
-    tags: [APITags.ASYNC],
-    priority: 100,
-    provider: Providers.LTX,
+    provider: 'ltx',
+    category: 'video',
+    endpoint: '/v1/text-to-video',
+    method: 'POST',
+    type: 'sync',
+    paramSchema: require('../../params/providers/ltx/video/generate-video-from-text'),
     models: ['ltx-2-fast', 'ltx-2-pro', 'ltx-2-3-fast', 'ltx-2-3-pro'],
-    apiClass: 'GenerateVideoFromText',
-    endpoint: '/v1/text-to-video'
+    tags: ['video', 'generation', 'text-to-video'],
+    priority: 100
   },
 
   'generate-video-from-image': {
     name: 'generate-video-from-image',
-    displayName: '图片生成视频',
-    description: '根据图片生成视频',
-    type: APITypes.IMAGE_TO_VIDEO,
-    tags: [APITags.ASYNC],
-    priority: 100,
-    provider: Providers.LTX,
+    provider: 'ltx',
+    category: 'video',
+    endpoint: '/v1/image-to-video',
+    method: 'POST',
+    type: 'sync',
+    paramSchema: require('../../params/providers/ltx/video/generate-video-from-image'),
     models: ['ltx-2-fast', 'ltx-2-pro', 'ltx-2-3-fast', 'ltx-2-3-pro'],
-    apiClass: 'GenerateVideoFromImage',
-    endpoint: '/v1/image-to-video'
+    tags: ['video', 'generation', 'image-to-video'],
+    priority: 100
   },
 
   'generate-video-from-audio': {
     name: 'generate-video-from-audio',
-    displayName: '音频生成视频',
-    description: '根据音频生成视频',
-    type: APITypes.AUDIO_TO_VIDEO,
-    tags: [APITags.ASYNC],
-    priority: 100,
-    provider: Providers.LTX,
+    provider: 'ltx',
+    category: 'video',
+    endpoint: '/v1/audio-to-video',
+    method: 'POST',
+    type: 'sync',
+    paramSchema: require('../../params/providers/ltx/video/generate-video-from-audio'),
     models: ['ltx-2-pro', 'ltx-2-3-pro'],
-    apiClass: 'GenerateVideoFromAudio',
-    endpoint: '/v1/audio-to-video'
+    tags: ['video', 'generation', 'audio-to-video'],
+    priority: 100
   },
 
   'extend-video-duration': {
     name: 'extend-video-duration',
-    displayName: '延长视频时长',
-    description: '延长已有视频的时长',
-    type: APITypes.VIDEO_EXTENSION,
-    tags: [APITags.ASYNC],
-    priority: 100,
-    provider: Providers.LTX,
+    provider: 'ltx',
+    category: 'video',
+    endpoint: '/v1/extend',
+    method: 'POST',
+    type: 'sync',
+    paramSchema: require('../../params/providers/ltx/video/extend-video-duration'),
     models: ['ltx-2-pro', 'ltx-2-3-pro'],
-    apiClass: 'ExtendVideoDuration',
-    endpoint: '/v1/extend'
+    tags: ['video', 'editing', 'extension'],
+    priority: 100
   },
 
   'retake-video-section': {
     name: 'retake-video-section',
-    displayName: '重拍视频片段',
-    description: '重新生成视频的某个片段',
-    type: APITypes.VIDEO_EDITING,
-    tags: [APITags.ASYNC],
-    priority: 100,
-    provider: Providers.LTX,
+    provider: 'ltx',
+    category: 'video',
+    endpoint: '/v1/retake',
+    method: 'POST',
+    type: 'sync',
+    paramSchema: require('../../params/providers/ltx/video/retake-video-section'),
     models: ['ltx-2-pro', 'ltx-2-3-pro'],
-    apiClass: 'RetakeVideoSection',
-    endpoint: '/v1/retake'
+    tags: ['video', 'editing', 'retake'],
+    priority: 100
   }
 }

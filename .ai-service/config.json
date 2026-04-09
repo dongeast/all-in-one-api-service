@@ -2,36 +2,6 @@
   "version": "1.0",
   "defaultProvider": "openai",
   "providers": {
-    "openai": {
-      "apiKey": "",
-      "baseURL": "https://api.openai.com/v1",
-      "timeout": 30000
-    },
-    "stability": {
-      "apiKey": "",
-      "baseURL": "https://api.stability.ai/v1",
-      "timeout": 60000
-    },
-    "replicate": {
-      "apiToken": "",
-      "baseURL": "https://api.replicate.com/v1",
-      "timeout": 120000
-    },
-    "gemini": {
-      "apiKey": "",
-      "baseURL": "https://generativelanguage.googleapis.com/v1",
-      "timeout": 30000
-    },
-    "anthropic": {
-      "apiKey": "",
-      "baseURL": "https://api.anthropic.com/v1",
-      "timeout": 60000
-    },
-    "midjourney": {
-      "apiKey": "",
-      "baseURL": "https://api.midjourney.com/v1",
-      "timeout": 120000
-    },
     "skyreels": {
       "realApiKey": "sk_1iunxgnf2n4egk228xc5fa8u71htwjihi",
       "apiKey": "xxxxx",

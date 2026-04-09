@@ -1,91 +1,24 @@
 /**
  * 接口元数据注册中心
  * 集中管理所有API接口的元数据信息
+ * 作为唯一的API定义源
  */
 
-const { getProviderPriority } = require('../constants')
+const BaseRegistry = require('./base-registry')
 
 /**
  * 接口元数据注册中心类
  */
-class APIRegistry {
+class APIRegistry extends BaseRegistry {
+  /**
+   * 创建API注册中心实例
+   */
   constructor() {
-    this.apis = new Map()
-    this.typeIndex = new Map()
-    this.tagIndex = new Map()
-    this.providerIndex = new Map()
-    this.modelIndex = new Map()
-  }
-
-  /**
-   * 注册接口
-   * 当不同 Provider 提供相同 ID 的接口时，保留优先级最高的
-   * @param {object} apiMeta - 接口元数据
-   */
-  register(apiMeta) {
-    const { name, type, tags, provider, models } = apiMeta
-
-    const existingAPI = this.apis.get(name)
-    if (existingAPI) {
-      const existingPriority = getProviderPriority(existingAPI.provider)
-      const currentPriority = getProviderPriority(provider)
-      
-      if (currentPriority <= existingPriority) {
-        return
-      }
-    }
-
-    this.apis.set(name, apiMeta)
-
-    const types = Array.isArray(type) ? type : [type]
-    types.forEach(t => {
-      if (!this.typeIndex.has(t)) {
-        this.typeIndex.set(t, new Set())
-      }
-      this.typeIndex.get(t).add(name)
+    super({
+      itemName: 'api',
+      idField: 'name',
+      indexFields: ['type', 'tags', 'provider', 'models', 'category']
     })
-
-    if (tags && Array.isArray(tags)) {
-      tags.forEach(tag => {
-        if (!this.tagIndex.has(tag)) {
-          this.tagIndex.set(tag, new Set())
-        }
-        this.tagIndex.get(tag).add(name)
-      })
-    }
-
-    if (provider) {
-      if (!this.providerIndex.has(provider)) {
-        this.providerIndex.set(provider, new Set())
-      }
-      this.providerIndex.get(provider).add(name)
-    }
-
-    if (models && Array.isArray(models)) {
-      models.forEach(model => {
-        if (!this.modelIndex.has(model)) {
-          this.modelIndex.set(model, new Set())
-        }
-        this.modelIndex.get(model).add(name)
-      })
-    }
-  }
-
-  /**
-   * 批量注册接口
-   * @param {object} apis - 接口元数据对象
-   */
-  registerAll(apis) {
-    Object.values(apis).forEach(api => this.register(api))
-  }
-
-  /**
-   * 根据名称获取接口
-   * @param {string} name - 接口名称
-   * @returns {object|null} 接口元数据
-   */
-  get(name) {
-    return this.apis.get(name) || null
   }
 
   /**
@@ -95,31 +28,7 @@ class APIRegistry {
    * @returns {Array} 接口列表
    */
   getByType(type, options = {}) {
-    const apiNames = this.typeIndex.get(type)
-    if (!apiNames) return []
-
-    let apis = Array.from(apiNames).map(name => this.apis.get(name))
-
-    if (options.tags) {
-      const filterTags = Array.isArray(options.tags) ? options.tags : [options.tags]
-      apis = apis.filter(api =>
-        filterTags.some(tag => api.tags && api.tags.includes(tag))
-      )
-    }
-
-    if (options.provider) {
-      apis = apis.filter(api => api.provider === options.provider)
-    }
-
-    if (options.model) {
-      apis = apis.filter(api =>
-        api.models && api.models.includes(options.model)
-      )
-    }
-
-    apis.sort((a, b) => (b.priority || 0) - (a.priority || 0))
-
-    return apis
+    return this.getByField('type', type, options)
   }
 
   /**
@@ -129,18 +38,36 @@ class APIRegistry {
    * @returns {Array} 接口列表
    */
   getByModel(model, options = {}) {
-    const apiNames = this.modelIndex.get(model)
-    if (!apiNames) return []
+    return this.getByField('models', model, options)
+  }
 
-    let apis = Array.from(apiNames).map(name => this.apis.get(name))
+  /**
+   * 根据Provider获取接口列表
+   * @param {string} provider - Provider名称
+   * @returns {Array} 接口列表
+   */
+  getByProvider(provider) {
+    return this.getByField('provider', provider)
+  }
 
-    if (options.type) {
-      apis = apis.filter(api => api.type === options.type)
-    }
+  /**
+   * 根据标签获取接口列表
+   * @param {string|Array} tags - 标签
+   * @param {object} options - 查询选项
+   * @returns {Array} 接口列表
+   */
+  getByTags(tags, options = {}) {
+    return this.getByField('tags', tags, options)
+  }
 
-    apis.sort((a, b) => (b.priority || 0) - (a.priority || 0))
-
-    return apis
+  /**
+   * 根据分类获取接口列表
+   * @param {string} category - 分类名称
+   * @param {object} options - 查询选项
+   * @returns {Array} 接口列表
+   */
+  getByCategory(category, options = {}) {
+    return this.getByField('category', category, options)
   }
 
   /**
@@ -156,42 +83,136 @@ class APIRegistry {
   }
 
   /**
-   * 获取所有接口
-   * @returns {Array} 接口列表
+   * 获取API的endpoint
+   * @param {string} apiName - API名称
+   * @returns {string|null} endpoint
    */
-  getAll() {
-    return Array.from(this.apis.values())
+  getEndpoint(apiName) {
+    const api = this.get(apiName)
+    return api?.endpoint || null
   }
 
   /**
-   * 根据Provider获取接口列表
-   * @param {string} provider - Provider名称
-   * @returns {Array} 接口列表
+   * 获取API的method
+   * @param {string} apiName - API名称
+   * @returns {string} method（默认POST）
    */
-  getByProvider(provider) {
-    const apiNames = this.providerIndex.get(provider)
-    if (!apiNames) return []
-    return Array.from(apiNames).map(name => this.apis.get(name))
+  getMethod(apiName) {
+    const api = this.get(apiName)
+    return api?.method || 'POST'
   }
 
   /**
-   * 检查接口是否存在
-   * @param {string} name - 接口名称
+   * 获取API的类型
+   * @param {string} apiName - API名称
+   * @returns {string|null} type
+   */
+  getType(apiName) {
+    const api = this.get(apiName)
+    return api?.type || null
+  }
+
+  /**
+   * 获取API的参数schema
+   * @param {string} apiName - API名称
+   * @returns {object|null} paramSchema
+   */
+  getParamSchema(apiName) {
+    const api = this.get(apiName)
+    return api?.paramSchema || null
+  }
+
+  /**
+   * 获取API的完整调用信息
+   * @param {string} apiName - API名称
+   * @returns {object|null} 调用信息
+   */
+  getCallInfo(apiName) {
+    const api = this.get(apiName)
+    if (!api) return null
+    
+    return {
+      name: api.name,
+      endpoint: api.endpoint,
+      method: api.method || 'POST',
+      type: api.type,
+      provider: api.provider,
+      category: api.category,
+      paramSchema: api.paramSchema,
+      models: api.models || [],
+      tags: api.tags || [],
+      priority: api.priority || 100
+    }
+  }
+
+  /**
+   * 验证API是否存在
+   * @param {string} apiName - API名称
    * @returns {boolean} 是否存在
    */
-  has(name) {
-    return this.apis.has(name)
+  validateAPI(apiName) {
+    return this.has(apiName)
   }
 
   /**
-   * 获取接口数量
-   * @returns {number} 接口数量
+   * 获取所有可用的endpoint列表
+   * @returns {Array<string>} endpoint列表
    */
-  size() {
-    return this.apis.size
+  getAllEndpoints() {
+    return this.getAll()
+      .map(api => api.endpoint)
+      .filter(endpoint => endpoint)
+  }
+
+  /**
+   * 根据endpoint查找API
+   * @param {string} endpoint - endpoint路径
+   * @returns {object|null} API定义
+   */
+  getByEndpoint(endpoint) {
+    const apis = this.getAll()
+    return apis.find(api => api.endpoint === endpoint) || null
+  }
+
+  /**
+   * 获取API的输入参数定义
+   * @param {string} apiName - API名称
+   * @returns {object} 输入参数定义
+   */
+  getInputSchema(apiName) {
+    const api = this.get(apiName)
+    return api?.paramSchema?.input || {}
+  }
+
+  /**
+   * 获取API的输出参数定义
+   * @param {string} apiName - API名称
+   * @returns {object} 输出参数定义
+   */
+  getOutputSchema(apiName) {
+    const api = this.get(apiName)
+    return api?.paramSchema?.output || {}
+  }
+
+  /**
+   * 验证API参数
+   * @param {string} apiName - API名称
+   * @param {object} params - 参数对象
+   * @returns {object} 验证结果
+   */
+  validateParams(apiName, params) {
+    const api = this.get(apiName)
+    if (!api || !api.paramSchema) {
+      return { valid: true, errors: [] }
+    }
+    
+    const BaseParam = require('../params/base-param')
+    const param = new BaseParam(api.paramSchema)
+    return param.validate(params)
   }
 }
 
 const apiRegistry = new APIRegistry()
 
 module.exports = apiRegistry
+module.exports.APIRegistry = APIRegistry

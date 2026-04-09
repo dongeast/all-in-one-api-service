@@ -7,7 +7,7 @@ const ltx = require('./ltx')
 const volcengine = require('./volcengine')
 const skyreels = require('./skyreels')
 const mureka = require('./mureka')
-const { registerAPIsMetadata, getAPIsMetadata, getAPIMetadata, getAllAPIsMetadata } = require('../metadata-registry')
+const { registerAPIsMetadata, getAPIsMetadata, getAPIMetadata, getAllAPIsMetadata } = require('../../utils/metadata-manager')
 
 registerAPIsMetadata('ltx', ltx)
 registerAPIsMetadata('volcengine', volcengine)

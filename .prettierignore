@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+*.log
+.DS_Store
+.env
+.env.local
+.ai-service/config.json
+.ai-service/config.local.json
+pnpm-lock.yaml
+package-lock.json

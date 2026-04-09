@@ -23,8 +23,8 @@ class ParamConfigManager {
    * @param {Array} compositeConstraints - 复合约束定义（可选）
    * @returns {object} 参数配置
    */
-  getParamConfig(schema, context = {}, modelCapabilities = null, compositeConstraints = null) {
-    const parameters = this.buildParameters(schema, context, modelCapabilities, compositeConstraints)
+  getParamConfig(schema, context = {}, modelCapabilities = null, _compositeConstraints = null) {
+    const parameters = this.buildParameters(schema, context, modelCapabilities, _compositeConstraints)
     const state = this.analyzeState(parameters, context)
     
     return {
@@ -34,8 +34,8 @@ class ParamConfigManager {
       state,
       hasModelCapabilities: !!modelCapabilities,
       modelCapabilities,
-      hasCompositeConstraints: !!compositeConstraints,
-      compositeConstraints
+      hasCompositeConstraints: !!_compositeConstraints,
+      compositeConstraints: _compositeConstraints
     }
   }
 
@@ -213,7 +213,7 @@ class ParamConfigManager {
    * @param {Array} compositeConstraints - 复合约束定义
    * @returns {boolean} 是否启用
    */
-  isEnabled(paramName, context, schema, modelCapabilities, compositeConstraints) {
+  isEnabled(paramName, context, schema, modelCapabilities, _compositeConstraints) {
     const fieldSchema = schema.input[paramName]
     
     if (fieldSchema && fieldSchema.dependsOn) {
@@ -332,7 +332,7 @@ class ParamConfigManager {
     if (paramName === 'resolution') {
       const resolutions = []
       if (modelCaps.resolutions) {
-        for (const [resName, resData] of Object.entries(modelCaps.resolutions)) {
+        for (const [_resName, resData] of Object.entries(modelCaps.resolutions)) {
           if (resData.landscape) resolutions.push(resData.landscape)
           if (resData.portrait) resolutions.push(resData.portrait)
         }

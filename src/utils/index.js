@@ -10,6 +10,7 @@ const fetchPolyfill = require('./fetch-polyfill')
 const streamHandler = require('./stream-handler')
 const { setLanguage, getLanguage, t } = require('./i18n')
 const metadataI18n = require('./metadata-i18n')
+const { CacheManager, CacheItem, cacheManager } = require('./cache-manager')
 
 module.exports = {
   ...envParser,
@@ -21,5 +22,8 @@ module.exports = {
   setLanguage,
   getLanguage,
   t,
-  ...metadataI18n
+  ...metadataI18n,
+  CacheManager,
+  CacheItem,
+  cacheManager
 }

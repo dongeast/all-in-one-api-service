@@ -21,9 +21,16 @@ function getTranslatedAPIMetadata(provider, apiName, language, originalMetadata 
   const translatedDisplayName = t(displayNameKey, { language })
   const translatedDescription = t(descriptionKey, { language })
   
+  const hasDisplayNameTranslation = translatedDisplayName !== displayNameKey
+  const hasDescriptionTranslation = translatedDescription !== descriptionKey
+  
   return {
-    displayName: translatedDisplayName !== displayNameKey ? translatedDisplayName : (originalMetadata?.displayName || displayNameKey),
-    description: translatedDescription !== descriptionKey ? translatedDescription : (originalMetadata?.description || descriptionKey)
+    displayName: hasDisplayNameTranslation 
+      ? translatedDisplayName 
+      : (originalMetadata?.displayName || apiName),
+    description: hasDescriptionTranslation 
+      ? translatedDescription 
+      : (originalMetadata?.description || '')
   }
 }
 
@@ -42,9 +49,16 @@ function getTranslatedModelMetadata(provider, modelName, language, originalMetad
   const translatedDisplayName = t(displayNameKey, { language })
   const translatedDescription = t(descriptionKey, { language })
   
+  const hasDisplayNameTranslation = translatedDisplayName !== displayNameKey
+  const hasDescriptionTranslation = translatedDescription !== descriptionKey
+  
   return {
-    displayName: translatedDisplayName !== displayNameKey ? translatedDisplayName : (originalMetadata?.displayName || displayNameKey),
-    description: translatedDescription !== descriptionKey ? translatedDescription : (originalMetadata?.description || descriptionKey)
+    displayName: hasDisplayNameTranslation 
+      ? translatedDisplayName 
+      : (originalMetadata?.displayName || modelName),
+    description: hasDescriptionTranslation 
+      ? translatedDescription 
+      : (originalMetadata?.description || '')
   }
 }
 

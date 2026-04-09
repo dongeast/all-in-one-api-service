@@ -13,10 +13,6 @@
     },
     "./services": "./src/services/index.js",
     "./apis": "./src/apis/index.js",
-    "./apis/ltx": "./src/apis/ltx/index.js",
-    "./apis/volcengine": "./src/apis/volcengine/index.js",
-    "./apis/skyreels": "./src/apis/skyreels/index.js",
-    "./apis/mureka": "./src/apis/mureka/index.js",
     "./params": "./src/params/index.js",
     "./utils": "./src/utils/index.js",
     "./config": "./src/config/index.js",
@@ -24,20 +20,39 @@
     "./registry": "./src/registry/index.js",
     "./query-service": "./src/services/query-service.js"
   },
+  "browser": {
+    "./src/config/config-loader.js": "./browser/config/config-loader.js",
+    "./src/config/config-manager.js": "./browser/config/config-manager.js",
+    "./src/utils/env-parser.js": "./browser/utils/env-parser.js",
+    "./src/utils/logger.js": "./browser/utils/logger.js",
+    "./src/locales/index.js": "./browser/locales/index.js",
+    "./index.js": "./browser/index.js"
+  },
   "files": [
     "index.js",
     "index.esm.js",
     "index.d.ts",
-    "src/**/*"
+    "src/**/*",
+    "browser/**/*"
   ],
   "scripts": {
-    "test": "node tests/run-tests.js --tests",
-    "test:all": "node tests/run-tests.js --all",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:all": "npm run test:coverage",
     "test:examples": "node tests/run-tests.js --examples",
     "test:stream": "node tests/run-tests.js stream-basic",
     "test:list": "node tests/run-tests.js --list",
     "lint": "eslint src/",
-    "build": "echo \"No build step required for CommonJS module\"",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write \"src/**/*.{js,ts,json}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,json}\"",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build",
     "setup": "node scripts/setup-config.js"
   },
   "keywords": [
@@ -59,7 +74,14 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "eslint": "^8.57.0"
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.11.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.0",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.3.0"
   },
   "optionalDependencies": {
     "node-fetch": "^2.6.7"

@@ -66,7 +66,7 @@ function extractArrayField(response, fieldSchema) {
   }
 
   if (itemSchema) {
-    array = array.map((item, index) => {
+    array = array.map((item, _index) => {
       if (itemSchema.path) {
         return getValueByPath(item, itemSchema.path, itemSchema.default)
       }

@@ -7,7 +7,7 @@ const ltx = require('./ltx')
 const volcengine = require('./volcengine')
 const skyreels = require('./skyreels')
 const mureka = require('./mureka')
-const { registerModelsMetadata, getModelsMetadata, getModelMetadata, getAllModelsMetadata } = require('../metadata-registry')
+const { registerModelsMetadata, getModelsMetadata, getModelMetadata, getAllModelsMetadata } = require('../../utils/metadata-manager')
 
 registerModelsMetadata('ltx', ltx)
 registerModelsMetadata('volcengine', volcengine)

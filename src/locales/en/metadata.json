@@ -193,19 +193,19 @@
     "ltx": {
       "ltx-2-fast": {
         "displayName": "LTX 2 Fast",
-        "description": "LTX 2 Fast model"
+        "description": "LTX fast video generation model"
       },
       "ltx-2-pro": {
         "displayName": "LTX 2 Pro",
-        "description": "LTX 2 Pro model"
+        "description": "LTX professional video generation model, supports multiple generation methods"
       },
       "ltx-2-3-fast": {
         "displayName": "LTX 2.3 Fast",
-        "description": "LTX 2.3 Fast model"
+        "description": "LTX latest fast video generation model, suitable for quick preview"
       },
       "ltx-2-3-pro": {
         "displayName": "LTX 2.3 Pro",
-        "description": "LTX 2.3 Pro model"
+        "description": "LTX latest professional video generation model, supports text, image, and audio to video"
       }
     },
     "mureka": {
@@ -215,19 +215,19 @@
       },
       "mureka-7.5": {
         "displayName": "Mureka 7.5",
-        "description": "Mureka 7.5 model"
+        "description": "Mureka music generation model"
       },
       "mureka-7.6": {
         "displayName": "Mureka 7.6",
-        "description": "Mureka 7.6 model"
+        "description": "Mureka music generation model"
       },
       "mureka-o2": {
         "displayName": "Mureka O2",
-        "description": "Mureka O2 model"
+        "description": "Mureka music generation model"
       },
       "mureka-8": {
         "displayName": "Mureka 8",
-        "description": "Mureka 8 model"
+        "description": "Mureka latest music generation model"
       },
       "mureka-tts": {
         "displayName": "Mureka TTS",
@@ -245,18 +245,62 @@
       },
       "skyreels-v3": {
         "displayName": "SkyReels V3",
-        "description": "SkyReels V3 model"
+        "description": "SkyReels video generation model, supports text and image to video"
       },
       "skyreels-v4": {
         "displayName": "SkyReels V4",
-        "description": "SkyReels V4 model"
+        "description": "SkyReels latest video generation model, supports text and image to video"
       },
       "skyreels-avatar": {
         "displayName": "SkyReels Avatar",
-        "description": "SkyReels avatar model"
+        "description": "SkyReels digital human model, supports lip sync and motion generation"
       }
     },
     "volcengine": {
+      "doubao-seedream-5.0-lite": {
+        "displayName": "Doubao Seedream 5.0 Lite",
+        "description": "Volcengine lightweight image generation model, supports 2K-3K resolution"
+      },
+      "doubao-seedream-4.5": {
+        "displayName": "Doubao Seedream 4.5",
+        "description": "Volcengine high-quality image generation model, supports 2K-4K resolution"
+      },
+      "doubao-seedream-4.0": {
+        "displayName": "Doubao Seedream 4.0",
+        "description": "Volcengine image generation model, supports 1K-4K resolution"
+      },
+      "doubao-seedream-3.0-t2i": {
+        "displayName": "Doubao Seedream 3.0 T2I",
+        "description": "Volcengine text-to-image model"
+      },
+      "doubao-seedance-2-0": {
+        "displayName": "Doubao Seedance 2.0",
+        "description": "Volcengine latest video generation model, supports multi-modal reference"
+      },
+      "doubao-seedance-2-0-fast": {
+        "displayName": "Doubao Seedance 2.0 Fast",
+        "description": "Volcengine fast video generation model"
+      },
+      "doubao-seedance-1-5-pro": {
+        "displayName": "Doubao Seedance 1.5 Pro",
+        "description": "Volcengine professional video generation model"
+      },
+      "doubao-seedance-1-0-pro": {
+        "displayName": "Doubao Seedance 1.0 Pro",
+        "description": "Volcengine video generation model"
+      },
+      "doubao-seedance-1-0-pro-fast": {
+        "displayName": "Doubao Seedance 1.0 Pro Fast",
+        "description": "Volcengine fast video generation model"
+      },
+      "doubao-seedance-1-0-lite": {
+        "displayName": "Doubao Seedance 1.0 Lite",
+        "description": "Volcengine lightweight video generation model"
+      },
+      "doubao-seed3d-1-0-250928": {
+        "displayName": "Doubao Seed3D 1.0",
+        "description": "Volcengine 3D model generation model"
+      },
       "volcengine-video-v1": {
         "displayName": "Volcengine Video V1",
         "description": "Volcengine video generation model"
@@ -268,6 +312,96 @@
       "volcengine-image-v1": {
         "displayName": "Volcengine Image V1",
         "description": "Volcengine image generation model"
+      }
+    }
+  },
+  "functions": {
+    "mureka": {
+      "generate-song": {
+        "displayName": "Generate Song",
+        "description": "Generate song from lyrics and style"
+      },
+      "extend-song": {
+        "displayName": "Extend Song",
+        "description": "Extend an existing song"
+      },
+      "generate-lyrics": {
+        "displayName": "Generate Lyrics",
+        "description": "Generate lyrics from theme"
+      },
+      "extend-lyrics": {
+        "displayName": "Extend Lyrics",
+        "description": "Extend existing lyrics"
+      },
+      "generate-instrumental": {
+        "displayName": "Generate Instrumental",
+        "description": "Generate instrumental from style"
+      },
+      "create-speech": {
+        "displayName": "Create Speech",
+        "description": "Convert text to speech"
+      },
+      "create-podcast": {
+        "displayName": "Create Podcast",
+        "description": "Create a podcast"
+      },
+      "vocal-cloning": {
+        "displayName": "Vocal Cloning",
+        "description": "Clone voice characteristics"
+      },
+      "upload-file": {
+        "displayName": "Upload File",
+        "description": "Upload a file"
+      }
+    },
+    "ltx": {
+      "generate-video-from-text": {
+        "displayName": "Generate Video from Text",
+        "description": "Generate video from text prompt"
+      },
+      "generate-video-from-image": {
+        "displayName": "Generate Video from Image",
+        "description": "Generate video from image"
+      },
+      "generate-video-from-audio": {
+        "displayName": "Generate Video from Audio",
+        "description": "Generate video from audio"
+      },
+      "extend-video-duration": {
+        "displayName": "Extend Video Duration",
+        "description": "Extend the duration of an existing video"
+      },
+      "retake-video-section": {
+        "displayName": "Retake Video Section",
+        "description": "Regenerate a section of the video"
+      }
+    },
+    "skyreels": {
+      "text-to-video-generation": {
+        "displayName": "Text to Video Generation",
+        "description": "Generate video from text"
+      },
+      "image-to-video-generation": {
+        "displayName": "Image to Video Generation",
+        "description": "Generate video from image"
+      },
+      "lip-sync": {
+        "displayName": "Lip Sync",
+        "description": "Add lip sync to video character"
+      }
+    },
+    "volcengine": {
+      "create-video-generation": {
+        "displayName": "Create Video Generation",
+        "description": "Create video generation task (text-to-video and image-to-video)"
+      },
+      "create-3d-generation": {
+        "displayName": "Create 3D Generation",
+        "description": "Create 3D generation task"
+      },
+      "generate-image": {
+        "displayName": "Generate Image",
+        "description": "Generate image from text"
       }
     }
   }

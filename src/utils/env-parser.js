@@ -120,7 +120,6 @@ function setNestedValue(obj, path, value) {
  */
 function loadEnvFile(filePath) {
   const fs = require('fs')
-  const path = require('path')
 
   if (!fs.existsSync(filePath)) {
     return {}
@@ -140,7 +139,7 @@ function loadEnvFile(filePath) {
     let value = line.slice(equalIndex + 1).trim()
 
     if ((value.startsWith('"') && value.endsWith('"')) ||
-        (value.startsWith("'") && value.endsWith("'"))) {
+        (value.startsWith('\'') && value.endsWith('\''))) {
       value = value.slice(1, -1)
     }
 

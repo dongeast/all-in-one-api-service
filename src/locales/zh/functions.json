@@ -1,0 +1,282 @@
+{
+  "functions": {
+    "mureka": {
+      "generate-song": {
+        "displayName": "生成歌曲",
+        "description": "根据歌词和风格生成歌曲",
+        "methods": {
+          "request": {
+            "description": "发起生成歌曲请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "getStatus": {
+            "description": "获取任务状态"
+          },
+          "waitForCompletion": {
+            "description": "等待任务完成"
+          },
+          "execute": {
+            "description": "执行完整流程（自动处理同步/异步）"
+          }
+        }
+      },
+      "extend-song": {
+        "displayName": "延长歌曲",
+        "description": "延长已有歌曲",
+        "methods": {
+          "request": {
+            "description": "发起延长歌曲请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "generate-lyrics": {
+        "displayName": "生成歌词",
+        "description": "根据主题生成歌词",
+        "methods": {
+          "request": {
+            "description": "生成歌词"
+          },
+          "execute": {
+            "description": "执行生成歌词"
+          }
+        }
+      },
+      "extend-lyrics": {
+        "displayName": "延长歌词",
+        "description": "延长已有歌词",
+        "methods": {
+          "request": {
+            "description": "延长歌词"
+          },
+          "execute": {
+            "description": "执行延长歌词"
+          }
+        }
+      },
+      "generate-instrumental": {
+        "displayName": "生成伴奏",
+        "description": "根据风格生成伴奏",
+        "methods": {
+          "request": {
+            "description": "发起生成伴奏请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "create-speech": {
+        "displayName": "创建语音",
+        "description": "将文本转换为语音",
+        "methods": {
+          "request": {
+            "description": "创建语音"
+          },
+          "execute": {
+            "description": "执行创建语音"
+          }
+        }
+      },
+      "create-podcast": {
+        "displayName": "创建播客",
+        "description": "创建播客音频",
+        "methods": {
+          "request": {
+            "description": "创建播客"
+          },
+          "execute": {
+            "description": "执行创建播客"
+          }
+        }
+      },
+      "vocal-cloning": {
+        "displayName": "声音克隆",
+        "description": "克隆声音特征",
+        "methods": {
+          "request": {
+            "description": "发起声音克隆请求"
+          },
+          "execute": {
+            "description": "执行声音克隆"
+          }
+        }
+      },
+      "upload-file": {
+        "displayName": "上传文件",
+        "description": "上传音频或视频文件",
+        "methods": {
+          "request": {
+            "description": "上传文件"
+          },
+          "execute": {
+            "description": "执行上传文件"
+          }
+        }
+      }
+    },
+    "ltx": {
+      "generate-video-from-text": {
+        "displayName": "文本生成视频",
+        "description": "根据文本提示生成视频",
+        "methods": {
+          "request": {
+            "description": "生成视频"
+          },
+          "execute": {
+            "description": "执行生成视频"
+          }
+        }
+      },
+      "generate-video-from-image": {
+        "displayName": "图片生成视频",
+        "description": "根据图片生成视频",
+        "methods": {
+          "request": {
+            "description": "生成视频"
+          },
+          "execute": {
+            "description": "执行生成视频"
+          }
+        }
+      },
+      "generate-video-from-audio": {
+        "displayName": "音频生成视频",
+        "description": "根据音频生成视频",
+        "methods": {
+          "request": {
+            "description": "生成视频"
+          },
+          "execute": {
+            "description": "执行生成视频"
+          }
+        }
+      },
+      "extend-video-duration": {
+        "displayName": "延长视频时长",
+        "description": "延长已有视频的时长",
+        "methods": {
+          "request": {
+            "description": "延长视频"
+          },
+          "execute": {
+            "description": "执行延长视频"
+          }
+        }
+      },
+      "retake-video-section": {
+        "displayName": "重拍视频片段",
+        "description": "重新生成视频的某个片段",
+        "methods": {
+          "request": {
+            "description": "重拍视频片段"
+          },
+          "execute": {
+            "description": "执行重拍视频片段"
+          }
+        }
+      }
+    },
+    "skyreels": {
+      "text-to-video-generation": {
+        "displayName": "文本生成视频",
+        "description": "根据文本生成视频",
+        "methods": {
+          "request": {
+            "description": "发起文本生成视频请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "image-to-video-generation": {
+        "displayName": "图片生成视频",
+        "description": "根据图片生成视频",
+        "methods": {
+          "request": {
+            "description": "发起图片生成视频请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "lip-sync": {
+        "displayName": "口型同步",
+        "description": "为视频人物添加口型同步",
+        "methods": {
+          "request": {
+            "description": "发起口型同步请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      }
+    },
+    "volcengine": {
+      "create-video-generation": {
+        "displayName": "创建视频生成",
+        "description": "创建视频生成任务（支持文生视频和图生视频）",
+        "methods": {
+          "request": {
+            "description": "创建视频生成任务"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "create-3d-generation": {
+        "displayName": "创建3D生成",
+        "description": "创建3D生成任务",
+        "methods": {
+          "request": {
+            "description": "创建3D生成任务"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "generate-image": {
+        "displayName": "生成图片",
+        "description": "根据文本生成图片",
+        "methods": {
+          "request": {
+            "description": "生成图片"
+          },
+          "execute": {
+            "description": "执行生成图片"
+          }
+        }
+      }
+    }
+  }
+}

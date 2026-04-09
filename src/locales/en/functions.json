@@ -1,0 +1,282 @@
+{
+  "functions": {
+    "mureka": {
+      "generate-song": {
+        "displayName": "Generate Song",
+        "description": "Generate song from lyrics and style",
+        "methods": {
+          "request": {
+            "description": "Submit generate song request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "getStatus": {
+            "description": "Get task status"
+          },
+          "waitForCompletion": {
+            "description": "Wait for task completion"
+          },
+          "execute": {
+            "description": "Execute complete workflow (auto handle sync/async)"
+          }
+        }
+      },
+      "extend-song": {
+        "displayName": "Extend Song",
+        "description": "Extend an existing song",
+        "methods": {
+          "request": {
+            "description": "Submit extend song request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "generate-lyrics": {
+        "displayName": "Generate Lyrics",
+        "description": "Generate lyrics from theme",
+        "methods": {
+          "request": {
+            "description": "Generate lyrics"
+          },
+          "execute": {
+            "description": "Execute generate lyrics"
+          }
+        }
+      },
+      "extend-lyrics": {
+        "displayName": "Extend Lyrics",
+        "description": "Extend existing lyrics",
+        "methods": {
+          "request": {
+            "description": "Extend lyrics"
+          },
+          "execute": {
+            "description": "Execute extend lyrics"
+          }
+        }
+      },
+      "generate-instrumental": {
+        "displayName": "Generate Instrumental",
+        "description": "Generate instrumental from style",
+        "methods": {
+          "request": {
+            "description": "Submit generate instrumental request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "create-speech": {
+        "displayName": "Create Speech",
+        "description": "Convert text to speech",
+        "methods": {
+          "request": {
+            "description": "Create speech"
+          },
+          "execute": {
+            "description": "Execute create speech"
+          }
+        }
+      },
+      "create-podcast": {
+        "displayName": "Create Podcast",
+        "description": "Create a podcast",
+        "methods": {
+          "request": {
+            "description": "Create podcast"
+          },
+          "execute": {
+            "description": "Execute create podcast"
+          }
+        }
+      },
+      "vocal-cloning": {
+        "displayName": "Vocal Cloning",
+        "description": "Clone voice characteristics",
+        "methods": {
+          "request": {
+            "description": "Submit vocal cloning request"
+          },
+          "execute": {
+            "description": "Execute vocal cloning"
+          }
+        }
+      },
+      "upload-file": {
+        "displayName": "Upload File",
+        "description": "Upload a file",
+        "methods": {
+          "request": {
+            "description": "Upload file"
+          },
+          "execute": {
+            "description": "Execute upload file"
+          }
+        }
+      }
+    },
+    "ltx": {
+      "generate-video-from-text": {
+        "displayName": "Generate Video from Text",
+        "description": "Generate video from text prompt",
+        "methods": {
+          "request": {
+            "description": "Generate video"
+          },
+          "execute": {
+            "description": "Execute generate video"
+          }
+        }
+      },
+      "generate-video-from-image": {
+        "displayName": "Generate Video from Image",
+        "description": "Generate video from image",
+        "methods": {
+          "request": {
+            "description": "Generate video"
+          },
+          "execute": {
+            "description": "Execute generate video"
+          }
+        }
+      },
+      "generate-video-from-audio": {
+        "displayName": "Generate Video from Audio",
+        "description": "Generate video from audio",
+        "methods": {
+          "request": {
+            "description": "Generate video"
+          },
+          "execute": {
+            "description": "Execute generate video"
+          }
+        }
+      },
+      "extend-video-duration": {
+        "displayName": "Extend Video Duration",
+        "description": "Extend the duration of an existing video",
+        "methods": {
+          "request": {
+            "description": "Extend video"
+          },
+          "execute": {
+            "description": "Execute extend video"
+          }
+        }
+      },
+      "retake-video-section": {
+        "displayName": "Retake Video Section",
+        "description": "Regenerate a section of the video",
+        "methods": {
+          "request": {
+            "description": "Retake video section"
+          },
+          "execute": {
+            "description": "Execute retake video section"
+          }
+        }
+      }
+    },
+    "skyreels": {
+      "text-to-video-generation": {
+        "displayName": "Text to Video Generation",
+        "description": "Generate video from text",
+        "methods": {
+          "request": {
+            "description": "Submit text to video request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "image-to-video-generation": {
+        "displayName": "Image to Video Generation",
+        "description": "Generate video from image",
+        "methods": {
+          "request": {
+            "description": "Submit image to video request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "lip-sync": {
+        "displayName": "Lip Sync",
+        "description": "Add lip sync to video character",
+        "methods": {
+          "request": {
+            "description": "Submit lip sync request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      }
+    },
+    "volcengine": {
+      "create-video-generation": {
+        "displayName": "Create Video Generation",
+        "description": "Create video generation task (text-to-video and image-to-video)",
+        "methods": {
+          "request": {
+            "description": "Create video generation task"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "create-3d-generation": {
+        "displayName": "Create 3D Generation",
+        "description": "Create 3D generation task",
+        "methods": {
+          "request": {
+            "description": "Create 3D generation task"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "generate-image": {
+        "displayName": "Generate Image",
+        "description": "Generate image from text",
+        "methods": {
+          "request": {
+            "description": "Generate image"
+          },
+          "execute": {
+            "description": "Execute generate image"
+          }
+        }
+      }
+    }
+  }
+}

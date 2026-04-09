@@ -3,7 +3,7 @@
  * 所有服务商的基类实现
  */
 
-const { generateId, formatError, retry } = require('../utils/helpers')
+const { generateId, retry } = require('../utils/helpers')
 const { createLogger } = require('../utils/logger')
 const { getFetch } = require('../utils/fetch-polyfill')
 

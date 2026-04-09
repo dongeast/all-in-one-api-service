@@ -105,9 +105,9 @@ class ConstraintEngine {
       if (constraint.validate.min !== undefined && value < constraint.validate.min) {
         const message = constraint.message
           ? constraint.message
-              .replace('{min}', constraint.validate.min)
-              .replace('{max}', constraint.validate.max || '')
-              .replace('{value}', value)
+            .replace('{min}', constraint.validate.min)
+            .replace('{max}', constraint.validate.max || '')
+            .replace('{value}', value)
           : `约束 "${constraint.name}" 验证失败: 值 ${value} 小于最小值 ${constraint.validate.min}`
         errors.push(message)
       }
@@ -115,9 +115,9 @@ class ConstraintEngine {
       if (constraint.validate.max !== undefined && value > constraint.validate.max) {
         const message = constraint.message
           ? constraint.message
-              .replace('{min}', constraint.validate.min || '')
-              .replace('{max}', constraint.validate.max)
-              .replace('{value}', value)
+            .replace('{min}', constraint.validate.min || '')
+            .replace('{max}', constraint.validate.max)
+            .replace('{value}', value)
           : `约束 "${constraint.name}" 验证失败: 值 ${value} 大于最大值 ${constraint.validate.max}`
         errors.push(message)
       }

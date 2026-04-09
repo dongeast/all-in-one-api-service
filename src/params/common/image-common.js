@@ -2,7 +2,7 @@
  * 图像类共用参数
  */
 
-const { textPrompt, seed, negativePrompt } = require('../templates')
+const { textPrompt, seed } = require('../templates')
 
 module.exports = {
   input: {

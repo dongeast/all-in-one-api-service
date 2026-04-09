@@ -9,7 +9,7 @@ module.exports = {
   'ltx-2-3-pro': {
     name: 'ltx-2-3-pro',
     displayName: 'LTX 2.3 Pro',
-    description: 'LTX最新专业版视频生成模型，支持文本、图片、音频生成视频',
+    description: 'LTX latest professional video generation model, supports text, image, and audio to video',
     logo: '',
     series: Series.LTX,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO, APITypes.AUDIO_TO_VIDEO],
@@ -33,7 +33,7 @@ module.exports = {
   'ltx-2-3-fast': {
     name: 'ltx-2-3-fast',
     displayName: 'LTX 2.3 Fast',
-    description: 'LTX最新快速版视频生成模型，适合快速预览',
+    description: 'LTX latest fast video generation model, suitable for quick preview',
     logo: '',
     series: Series.LTX,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -54,7 +54,7 @@ module.exports = {
   'ltx-2-pro': {
     name: 'ltx-2-pro',
     displayName: 'LTX 2 Pro',
-    description: 'LTX专业版视频生成模型，支持多种生成方式',
+    description: 'LTX professional video generation model, supports multiple generation methods',
     logo: '',
     series: Series.LTX,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO, APITypes.AUDIO_TO_VIDEO],
@@ -78,7 +78,7 @@ module.exports = {
   'ltx-2-fast': {
     name: 'ltx-2-fast',
     displayName: 'LTX 2 Fast',
-    description: 'LTX快速版视频生成模型',
+    description: 'LTX fast video generation model',
     logo: '',
     series: Series.LTX,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],

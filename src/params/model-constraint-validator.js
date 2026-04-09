@@ -91,7 +91,7 @@ class ModelConstraintValidator {
       suggestions.availableAspectRatios = modelCaps.aspectRatios
 
       const availableResolutions = []
-      for (const [resName, resData] of Object.entries(modelCaps.resolutions)) {
+      for (const [_resName, resData] of Object.entries(modelCaps.resolutions)) {
         if (aspectRatio === '16:9' && resData.landscape) {
           availableResolutions.push(resData.landscape)
         } else if (aspectRatio === '9:16' && resData.portrait) {

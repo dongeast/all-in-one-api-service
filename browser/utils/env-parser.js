@@ -1,0 +1,152 @@
+/**
+ * 浏览器环境环境变量解析器
+ * 在浏览器环境中，文件系统操作不可用，仅支持从全局对象读取配置
+ */
+
+const ENV_PREFIX = 'AI_SERVICE_'
+
+const KNOWN_PROVIDERS = [
+  'openai', 'anthropic', 'google', 'azure', 'aws',
+  'volcengine', 'baidu', 'alibaba', 'tencent', 'huawei',
+  'moonshot', 'zhipu', 'deepseek', 'minimax', 'baichuan',
+  'stability', 'midjourney', 'runway', 'pika',
+  'ltx', 'skyreels', 'replicate', 'gemini', 'custom'
+]
+
+const PROVIDER_KEY_MAPPINGS = {
+  'api_key': 'apiKey',
+  'api_token': 'apiToken',
+  'base_url': 'baseURL',
+  'api_base': 'apiBase',
+  'api_version': 'apiVersion',
+  'access_key': 'accessKey',
+  'secret_key': 'secretKey',
+  'region': 'region',
+  'timeout': 'timeout',
+  'max_retries': 'maxRetries'
+}
+
+/**
+ * 解析环境变量为配置对象
+ * @param {string} prefix - 环境变量前缀
+ * @returns {object} 解析后的配置对象
+ */
+function parseEnv(prefix = ENV_PREFIX) {
+  const config = { providers: {} }
+
+  if (typeof window !== 'undefined' && window.__AI_SERVICE_ENV__) {
+    const env = window.__AI_SERVICE_ENV__
+    Object.keys(env).forEach(key => {
+      if (key.startsWith(prefix)) {
+        const configPath = key.slice(prefix.length).toLowerCase()
+        const value = parseValue(env[key])
+        
+        const parts = configPath.split('_')
+        const possibleProvider = parts[0]
+        
+        if (KNOWN_PROVIDERS.includes(possibleProvider)) {
+          const providerName = possibleProvider
+          const remainingParts = parts.slice(1)
+          
+          if (remainingParts.length === 0) {
+            return
+          }
+          
+          const configKey = remainingParts.join('_')
+          const mappedKey = PROVIDER_KEY_MAPPINGS[configKey] || configKey
+          
+          if (!config.providers[providerName]) {
+            config.providers[providerName] = {}
+          }
+          config.providers[providerName][mappedKey] = value
+        } else {
+          setNestedValue(config, configPath, value)
+        }
+      }
+    })
+  }
+
+  return config
+}
+
+/**
+ * 解析环境变量值
+ * @param {string} value - 环境变量值
+ * @returns {any} 解析后的值
+ */
+function parseValue(value) {
+  if (value === 'true' || value === 'TRUE') return true
+  if (value === 'false' || value === 'FALSE') return false
+  if (value === 'null' || value === 'NULL') return null
+  if (value === 'undefined' || value === 'UNDEFINED') return undefined
+
+  if (/^\d+$/.test(value)) return parseInt(value, 10)
+  if (/^\d+\.\d+$/.test(value)) return parseFloat(value)
+
+  if (value.startsWith('[') || value.startsWith('{')) {
+    try {
+      return JSON.parse(value)
+    } catch (e) {
+      return value
+    }
+  }
+
+  return value
+}
+
+/**
+ * 设置嵌套对象的值
+ * @param {object} obj - 目标对象
+ * @param {string} path - 路径（用下划线分隔）
+ * @param {any} value - 值
+ */
+function setNestedValue(obj, path, value) {
+  const keys = path.split('_')
+  let current = obj
+
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i]
+    if (!(key in current)) {
+      current[key] = {}
+    }
+    current = current[key]
+  }
+
+  current[keys[keys.length - 1]] = value
+}
+
+/**
+ * 从.env文件加载环境变量（浏览器环境不支持）
+ * @param {string} filePath - .env文件路径
+ * @returns {object} 空对象
+ */
+function loadEnvFile(filePath) {
+  console.warn('loadEnvFile is not supported in browser environment')
+  return {}
+}
+
+/**
+ * 获取服务商配置的环境变量
+ * @param {string} provider - 服务商名称
+ * @param {string} key - 配置键名
+ * @param {string} prefix - 环境变量前缀
+ * @returns {string|undefined} 环境变量值
+ */
+function getProviderEnv(provider, key, prefix = ENV_PREFIX) {
+  const envKey = `${prefix}${provider.toUpperCase()}_${key.toUpperCase()}`
+  
+  if (typeof window !== 'undefined' && window.__AI_SERVICE_ENV__) {
+    return window.__AI_SERVICE_ENV__[envKey]
+  }
+  
+  return undefined
+}
+
+module.exports = {
+  ENV_PREFIX,
+  parseEnv,
+  parseValue,
+  setNestedValue,
+  loadEnvFile,
+  getProviderEnv
+}

@@ -6,10 +6,27 @@ const { APITypes, MediaTypes, Providers, Series } = require('../../constants')
 const { ModelTags } = require('../../constants/tags')
 
 module.exports = {
+  'auto': {
+    name: 'auto',
+    displayName: 'Auto',
+    description: 'Auto Mureka model',
+    logo: '',
+    series: Series.MUREKA,
+    type: [APITypes.SONG_GENERATION, APITypes.INSTRUMENTAL_GENERATION],
+    mediaType: MediaTypes.AUDIO,
+    tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE, ModelTags.RECOMMENDED],
+    priority: 100,
+    provider: Providers.MUREKA,
+    capabilities: {
+      supportsSongGeneration: true,
+      supportsInstrumentalGeneration: true,
+      supportsLyricsGeneration: true
+    }
+  },
   'mureka-8': {
     name: 'mureka-8',
     displayName: 'Mureka 8',
-    description: 'Mureka最新音乐生成模型',
+    description: 'Mureka latest music generation model',
     logo: '',
     series: Series.MUREKA,
     type: [APITypes.SONG_GENERATION, APITypes.INSTRUMENTAL_GENERATION],
@@ -27,7 +44,7 @@ module.exports = {
   'mureka-o2': {
     name: 'mureka-o2',
     displayName: 'Mureka O2',
-    description: 'Mureka音乐生成模型',
+    description: 'Mureka music generation model',
     logo: '',
     series: Series.MUREKA,
     type: APITypes.SONG_GENERATION,
@@ -44,7 +61,7 @@ module.exports = {
   'mureka-7.6': {
     name: 'mureka-7.6',
     displayName: 'Mureka 7.6',
-    description: 'Mureka音乐生成模型',
+    description: 'Mureka music generation model',
     logo: '',
     series: Series.MUREKA,
     type: [APITypes.SONG_GENERATION, APITypes.INSTRUMENTAL_GENERATION],
@@ -61,7 +78,7 @@ module.exports = {
   'mureka-7.5': {
     name: 'mureka-7.5',
     displayName: 'Mureka 7.5',
-    description: 'Mureka音乐生成模型',
+    description: 'Mureka music generation model',
     logo: '',
     series: Series.MUREKA,
     type: [APITypes.SONG_GENERATION, APITypes.INSTRUMENTAL_GENERATION],
@@ -78,7 +95,7 @@ module.exports = {
   'mureka-tts': {
     name: 'mureka-tts',
     displayName: 'Mureka TTS',
-    description: 'Mureka文本转语音模型',
+    description: 'Mureka text-to-speech model',
     logo: '',
     series: Series.MUREKA,
     type: APITypes.TEXT_TO_SPEECH,
@@ -95,7 +112,7 @@ module.exports = {
   'mureka-vocal-cloning': {
     name: 'mureka-vocal-cloning',
     displayName: 'Mureka Vocal Cloning',
-    description: 'Mureka声音克隆模型',
+    description: 'Mureka vocal cloning model',
     logo: '',
     series: Series.MUREKA,
     type: APITypes.VOCAL_CLONING,

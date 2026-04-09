@@ -9,9 +9,12 @@ const extractors = require('./extractors')
 const templates = require('./templates')
 const common = require('./common')
 const providers = require('./providers')
+const { ParamProcessor, createParamProcessor } = require('./param-processor')
 
 module.exports = {
   BaseParam,
+  ParamProcessor,
+  createParamProcessor,
   ...validators,
   ...transformers,
   ...extractors,

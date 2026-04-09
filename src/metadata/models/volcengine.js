@@ -8,8 +8,8 @@ const { ModelTags } = require('../../constants/tags')
 module.exports = {
   'doubao-seedream-5.0-lite': {
     name: 'doubao-seedream-5.0-lite',
-    displayName: '豆包 Seedream 5.0 Lite',
-    description: '火山引擎轻量级图像生成模型，支持2K-3K分辨率',
+    displayName: 'Doubao Seedream 5.0 Lite',
+    description: 'Volcengine lightweight image generation model, supports 2K-3K resolution',
     logo: '',
     series: Series.SEEDREAM,
     type: APITypes.TEXT_TO_IMAGE,
@@ -28,8 +28,8 @@ module.exports = {
 
   'doubao-seedream-4.5': {
     name: 'doubao-seedream-4.5',
-    displayName: '豆包 Seedream 4.5',
-    description: '火山引擎高质量图像生成模型，支持2K-4K分辨率',
+    displayName: 'Doubao Seedream 4.5',
+    description: 'Volcengine high-quality image generation model, supports 2K-4K resolution',
     logo: '',
     series: Series.SEEDREAM,
     type: APITypes.TEXT_TO_IMAGE,
@@ -46,8 +46,8 @@ module.exports = {
 
   'doubao-seedream-4.0': {
     name: 'doubao-seedream-4.0',
-    displayName: '豆包 Seedream 4.0',
-    description: '火山引擎图像生成模型，支持1K-4K分辨率',
+    displayName: 'Doubao Seedream 4.0',
+    description: 'Volcengine image generation model, supports 1K-4K resolution',
     logo: '',
     series: Series.SEEDREAM,
     type: APITypes.TEXT_TO_IMAGE,
@@ -64,8 +64,8 @@ module.exports = {
 
   'doubao-seedream-3.0-t2i': {
     name: 'doubao-seedream-3.0-t2i',
-    displayName: '豆包 Seedream 3.0 T2I',
-    description: '火山引擎文生图模型',
+    displayName: 'Doubao Seedream 3.0 T2I',
+    description: 'Volcengine text-to-image model',
     logo: '',
     series: Series.SEEDREAM,
     type: APITypes.TEXT_TO_IMAGE,
@@ -81,8 +81,8 @@ module.exports = {
 
   'doubao-seedance-2-0': {
     name: 'doubao-seedance-2-0',
-    displayName: '豆包 Seedance 2.0',
-    description: '火山引擎最新视频生成模型，支持多模态参考',
+    displayName: 'Doubao Seedance 2.0',
+    description: 'Volcengine latest video generation model, supports multi-modal reference',
     logo: '',
     series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -103,8 +103,8 @@ module.exports = {
 
   'doubao-seedance-2-0-fast': {
     name: 'doubao-seedance-2-0-fast',
-    displayName: '豆包 Seedance 2.0 Fast',
-    description: '火山引擎快速视频生成模型',
+    displayName: 'Doubao Seedance 2.0 Fast',
+    description: 'Volcengine fast video generation model',
     logo: '',
     series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -124,8 +124,8 @@ module.exports = {
 
   'doubao-seedance-1-5-pro': {
     name: 'doubao-seedance-1-5-pro',
-    displayName: '豆包 Seedance 1.5 Pro',
-    description: '火山引擎专业版视频生成模型',
+    displayName: 'Doubao Seedance 1.5 Pro',
+    description: 'Volcengine professional video generation model',
     logo: '',
     series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -144,8 +144,8 @@ module.exports = {
 
   'doubao-seedance-1-0-pro': {
     name: 'doubao-seedance-1-0-pro',
-    displayName: '豆包 Seedance 1.0 Pro',
-    description: '火山引擎视频生成模型',
+    displayName: 'Doubao Seedance 1.0 Pro',
+    description: 'Volcengine video generation model',
     logo: '',
     series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -163,8 +163,8 @@ module.exports = {
 
   'doubao-seedance-1-0-pro-fast': {
     name: 'doubao-seedance-1-0-pro-fast',
-    displayName: '豆包 Seedance 1.0 Pro Fast',
-    description: '火山引擎快速视频生成模型',
+    displayName: 'Doubao Seedance 1.0 Pro Fast',
+    description: 'Volcengine fast video generation model',
     logo: '',
     series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -182,8 +182,8 @@ module.exports = {
 
   'doubao-seedance-1-0-lite': {
     name: 'doubao-seedance-1-0-lite',
-    displayName: '豆包 Seedance 1.0 Lite',
-    description: '火山引擎轻量级视频生成模型',
+    displayName: 'Doubao Seedance 1.0 Lite',
+    description: 'Volcengine lightweight video generation model',
     logo: '',
     series: Series.SEEDANCE,
     type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
@@ -202,8 +202,8 @@ module.exports = {
 
   'doubao-seed3d-1-0-250928': {
     name: 'doubao-seed3d-1-0-250928',
-    displayName: '豆包 Seed3D 1.0',
-    description: '火山引擎3D模型生成模型',
+    displayName: 'Doubao Seed3D 1.0',
+    description: 'Volcengine 3D model generation model',
     logo: '',
     series: Series.SEED3D,
     type: APITypes.IMAGE_TO_3D,
