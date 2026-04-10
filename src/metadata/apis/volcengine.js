@@ -3,10 +3,13 @@
  * 作为唯一的API定义源，包含所有API调用信息
  */
 
+const { APITypes } = require('../../constants')
+
 module.exports = {
   'generate-image': {
     name: 'generate-image',
     provider: 'volcengine',
+    apiType: APITypes.TEXT_TO_IMAGE,
     category: 'image',
     endpoint: '/image/generate',
     method: 'POST',
@@ -20,6 +23,7 @@ module.exports = {
   'create-video-generation-task': {
     name: 'create-video-generation-task',
     provider: 'volcengine',
+    apiType: APITypes.TEXT_TO_VIDEO,
     category: 'video',
     endpoint: '/video/generation/submit',
     method: 'POST',
@@ -40,6 +44,7 @@ module.exports = {
   'query-video-generation-task': {
     name: 'query-video-generation-task',
     provider: 'volcengine',
+    apiType: APITypes.TASK_QUERY,
     category: 'video',
     endpoint: '/video/generation/query',
     method: 'GET',
@@ -60,6 +65,7 @@ module.exports = {
   'query-video-generation-task-list': {
     name: 'query-video-generation-task-list',
     provider: 'volcengine',
+    apiType: APITypes.TASK_QUERY,
     category: 'video',
     endpoint: '/video/generation/list',
     method: 'GET',
@@ -80,6 +86,7 @@ module.exports = {
   'cancel-delete-video-generation-task': {
     name: 'cancel-delete-video-generation-task',
     provider: 'volcengine',
+    apiType: APITypes.TASK_QUERY,
     category: 'video',
     endpoint: '/video/generation/cancel',
     method: 'POST',
@@ -100,6 +107,7 @@ module.exports = {
   'create-3d-generation-task': {
     name: 'create-3d-generation-task',
     provider: 'volcengine',
+    apiType: APITypes.IMAGE_TO_3D,
     category: '3d',
     endpoint: '/3d/generation/submit',
     method: 'POST',
@@ -113,6 +121,7 @@ module.exports = {
   'query-3d-generation-task': {
     name: 'query-3d-generation-task',
     provider: 'volcengine',
+    apiType: APITypes.TASK_QUERY,
     category: '3d',
     endpoint: '/3d/generation/query',
     method: 'GET',
@@ -126,6 +135,7 @@ module.exports = {
   'query-3d-generation-task-list': {
     name: 'query-3d-generation-task-list',
     provider: 'volcengine',
+    apiType: APITypes.TASK_QUERY,
     category: '3d',
     endpoint: '/3d/generation/list',
     method: 'GET',
@@ -139,6 +149,7 @@ module.exports = {
   'cancel-delete-3d-generation-task': {
     name: 'cancel-delete-3d-generation-task',
     provider: 'volcengine',
+    apiType: APITypes.TASK_QUERY,
     category: '3d',
     endpoint: '/3d/generation/cancel',
     method: 'POST',

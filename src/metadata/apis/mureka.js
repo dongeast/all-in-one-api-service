@@ -3,10 +3,13 @@
  * 作为唯一的API定义源，包含所有API调用信息
  */
 
+const { APITypes } = require('../../constants')
+
 module.exports = {
   'generate-song': {
     name: 'generate-song',
     provider: 'mureka',
+    apiType: APITypes.SONG_GENERATION,
     category: 'song',
     endpoint: '/song/generate',
     method: 'POST',
@@ -20,6 +23,7 @@ module.exports = {
   'extend-song': {
     name: 'extend-song',
     provider: 'mureka',
+    apiType: APITypes.SONG_GENERATION,
     category: 'song',
     endpoint: '/song/extend',
     method: 'POST',
@@ -33,6 +37,7 @@ module.exports = {
   'query-song-task': {
     name: 'query-song-task',
     provider: 'mureka',
+    apiType: APITypes.TASK_QUERY,
     category: 'song',
     endpoint: '/song/query',
     method: 'GET',
@@ -46,6 +51,7 @@ module.exports = {
   'generate-lyrics': {
     name: 'generate-lyrics',
     provider: 'mureka',
+    apiType: APITypes.TEXT_GENERATION,
     category: 'lyrics',
     endpoint: '/lyrics/generate',
     method: 'POST',
@@ -59,6 +65,7 @@ module.exports = {
   'extend-lyrics': {
     name: 'extend-lyrics',
     provider: 'mureka',
+    apiType: APITypes.TEXT_GENERATION,
     category: 'lyrics',
     endpoint: '/lyrics/extend',
     method: 'POST',
@@ -72,6 +79,7 @@ module.exports = {
   'generate-instrumental': {
     name: 'generate-instrumental',
     provider: 'mureka',
+    apiType: APITypes.INSTRUMENTAL_GENERATION,
     category: 'instrumental',
     endpoint: '/instrumental/generate',
     method: 'POST',
@@ -85,6 +93,7 @@ module.exports = {
   'query-instrumental-task': {
     name: 'query-instrumental-task',
     provider: 'mureka',
+    apiType: APITypes.TASK_QUERY,
     category: 'instrumental',
     endpoint: '/instrumental/query',
     method: 'GET',
@@ -98,6 +107,7 @@ module.exports = {
   'create-speech': {
     name: 'create-speech',
     provider: 'mureka',
+    apiType: APITypes.TEXT_TO_SPEECH,
     category: 'tts',
     endpoint: '/tts/speech',
     method: 'POST',
@@ -111,6 +121,7 @@ module.exports = {
   'create-podcast': {
     name: 'create-podcast',
     provider: 'mureka',
+    apiType: APITypes.TEXT_TO_SPEECH,
     category: 'tts',
     endpoint: '/tts/podcast',
     method: 'POST',
@@ -124,6 +135,7 @@ module.exports = {
   'vocal-cloning': {
     name: 'vocal-cloning',
     provider: 'mureka',
+    apiType: APITypes.VOCAL_CLONING,
     category: 'vocal',
     endpoint: '/vocal/cloning',
     method: 'POST',
@@ -137,6 +149,7 @@ module.exports = {
   'upload-file': {
     name: 'upload-file',
     provider: 'mureka',
+    apiType: APITypes.FILE_UPLOAD,
     category: 'files',
     endpoint: '/files/upload',
     method: 'POST',
@@ -150,6 +163,7 @@ module.exports = {
   'create-upload': {
     name: 'create-upload',
     provider: 'mureka',
+    apiType: APITypes.FILE_UPLOAD,
     category: 'upload',
     endpoint: '/upload/create',
     method: 'POST',
@@ -163,6 +177,7 @@ module.exports = {
   'add-upload-part': {
     name: 'add-upload-part',
     provider: 'mureka',
+    apiType: APITypes.FILE_UPLOAD,
     category: 'upload',
     endpoint: '/upload/part',
     method: 'POST',
@@ -176,6 +191,7 @@ module.exports = {
   'complete-upload': {
     name: 'complete-upload',
     provider: 'mureka',
+    apiType: APITypes.FILE_UPLOAD,
     category: 'upload',
     endpoint: '/upload/complete',
     method: 'POST',
@@ -189,6 +205,7 @@ module.exports = {
   'describe-song': {
     name: 'describe-song',
     provider: 'mureka',
+    apiType: APITypes.TASK_QUERY,
     category: 'song',
     endpoint: '/song/describe',
     method: 'POST',
@@ -202,6 +219,7 @@ module.exports = {
   'recognize-song': {
     name: 'recognize-song',
     provider: 'mureka',
+    apiType: APITypes.TASK_QUERY,
     category: 'song',
     endpoint: '/song/recognize',
     method: 'POST',
@@ -215,6 +233,7 @@ module.exports = {
   'stem-song': {
     name: 'stem-song',
     provider: 'mureka',
+    apiType: APITypes.AUDIO_GENERATION,
     category: 'song',
     endpoint: '/song/stem',
     method: 'POST',

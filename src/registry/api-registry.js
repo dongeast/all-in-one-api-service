@@ -17,7 +17,7 @@ class APIRegistry extends BaseRegistry {
     super({
       itemName: 'api',
       idField: 'name',
-      indexFields: ['type', 'tags', 'provider', 'models', 'category']
+      indexFields: ['apiType', 'type', 'tags', 'provider', 'models', 'category']
     })
   }
 
@@ -68,6 +68,28 @@ class APIRegistry extends BaseRegistry {
    */
   getByCategory(category, options = {}) {
     return this.getByField('category', category, options)
+  }
+
+  /**
+   * 根据API类型获取接口列表
+   * @param {string} apiType - API类型
+   * @param {object} options - 查询选项
+   * @returns {Array} 接口列表
+   */
+  getByAPIType(apiType, options = {}) {
+    return this.getByField('apiType', apiType, options)
+  }
+
+  /**
+   * 根据API类型和模型获取最佳接口
+   * @param {string} apiType - API类型
+   * @param {string} model - 模型名称
+   * @param {object} options - 查询选项
+   * @returns {object|null} 最佳接口
+   */
+  getBestAPIByType(apiType, model, options = {}) {
+    const apis = this.getByAPIType(apiType, { ...options, model })
+    return apis.length > 0 ? apis[0] : null
   }
 
   /**

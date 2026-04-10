@@ -4,11 +4,14 @@
  * 只引用API名称，不定义endpoint和method
  */
 
+const { APITypes } = require('../../constants')
+
 module.exports = {
   'generate-song': {
     name: 'generate-song',
     type: 'async',
     provider: 'mureka',
+    apiType: APITypes.SONG_GENERATION,
     category: 'song',
     
     apis: {
@@ -25,6 +28,7 @@ module.exports = {
     name: 'extend-song',
     type: 'async',
     provider: 'mureka',
+    apiType: APITypes.SONG_GENERATION,
     category: 'song',
     
     apis: {
@@ -41,6 +45,7 @@ module.exports = {
     name: 'generate-lyrics',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.TEXT_GENERATION,
     category: 'lyrics',
     
     apis: {
@@ -56,6 +61,7 @@ module.exports = {
     name: 'extend-lyrics',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.TEXT_GENERATION,
     category: 'lyrics',
     
     apis: {
@@ -71,6 +77,7 @@ module.exports = {
     name: 'generate-instrumental',
     type: 'async',
     provider: 'mureka',
+    apiType: APITypes.INSTRUMENTAL_GENERATION,
     category: 'instrumental',
     
     apis: {
@@ -87,6 +94,7 @@ module.exports = {
     name: 'create-speech',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.TEXT_TO_SPEECH,
     category: 'tts',
     
     apis: {
@@ -102,6 +110,7 @@ module.exports = {
     name: 'create-podcast',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.TEXT_TO_SPEECH,
     category: 'tts',
     
     apis: {
@@ -117,6 +126,7 @@ module.exports = {
     name: 'vocal-cloning',
     type: 'async',
     provider: 'mureka',
+    apiType: APITypes.VOCAL_CLONING,
     category: 'vocal',
     
     apis: {
@@ -132,6 +142,7 @@ module.exports = {
     name: 'upload-file',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.FILE_UPLOAD,
     category: 'files',
     
     apis: {
@@ -147,6 +158,7 @@ module.exports = {
     name: 'create-upload',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.FILE_UPLOAD,
     category: 'upload',
     
     apis: {
@@ -162,6 +174,7 @@ module.exports = {
     name: 'add-upload-part',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.FILE_UPLOAD,
     category: 'upload',
     
     apis: {
@@ -177,6 +190,7 @@ module.exports = {
     name: 'complete-upload',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.FILE_UPLOAD,
     category: 'upload',
     
     apis: {
@@ -192,6 +206,7 @@ module.exports = {
     name: 'describe-song',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.TASK_QUERY,
     category: 'song',
     
     apis: {
@@ -207,6 +222,7 @@ module.exports = {
     name: 'recognize-song',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.TASK_QUERY,
     category: 'song',
     
     apis: {
@@ -222,6 +238,7 @@ module.exports = {
     name: 'stem-song',
     type: 'sync',
     provider: 'mureka',
+    apiType: APITypes.AUDIO_GENERATION,
     category: 'song',
     
     apis: {

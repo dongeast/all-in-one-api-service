@@ -497,6 +497,212 @@ class FunctionManager {
   getFunctionStats() {
     return functionRegistry.getStats()
   }
+
+  /**
+   * 根据API类型获取支持的系列列表
+   * @param {string} apiType - API类型
+   * @returns {Array} 系列列表
+   */
+  getSeriesByAPIType(apiType) {
+    this.ensureInitialized()
+    return this.modelRegistry.getSeriesByType(apiType)
+  }
+
+  /**
+   * 根据API类型和系列获取模型列表
+   * @param {string} apiType - API类型
+   * @param {string} series - 系列名称
+   * @param {object} options - 查询选项
+   * @returns {Array} 模型列表
+   */
+  getModelsByTypeAndSeries(apiType, series, options = {}) {
+    this.ensureInitialized()
+    return this.modelRegistry.getByTypeAndSeries(apiType, series, options)
+  }
+
+  /**
+   * 根据API类型和模型获取最佳Function
+   * @param {string} apiType - API类型
+   * @param {string} model - 模型名称
+   * @param {object} options - 查询选项
+   * @returns {object|null} 最佳Function
+   */
+  getBestFunctionByTypeAndModel(apiType, model, options = {}) {
+    this.ensureInitialized()
+
+    const apis = this.apiRegistry.getAll()
+      .filter(api =>
+        api.models &&
+        api.models.includes(model) &&
+        api.apiType === apiType
+      )
+      .sort((a, b) => (b.priority || 0) - (a.priority || 0))
+
+    if (apis.length === 0) return null
+
+    const bestAPI = apis[0]
+
+    return this.getFunctionByAPI(bestAPI.name)
+  }
+
+  /**
+   * 获取Function的参数定义
+   * @param {string} functionName - Function名称
+   * @returns {object|null} 参数定义 { input, output }
+   */
+  getFunctionParams(functionName) {
+    const func = this.getFunctionDetail(functionName)
+    if (!func) return null
+
+    const apiName = func.apis?.request
+    if (!apiName) return null
+
+    const api = this.getAPIDetail(apiName)
+    if (!api || !api.paramSchema) return null
+
+    return {
+      input: api.paramSchema.input || {},
+      output: api.paramSchema.output || {}
+    }
+  }
+
+  /**
+   * 获取可选项列表（级联查询）
+   * 根据已选择的参数，返回其他参数的可选项
+   * @param {object} selected - 已选择的参数
+   * @param {string} selected.apiType - API类型（可选）
+   * @param {string} selected.series - 系列名称（可选）
+   * @param {string} selected.model - 模型名称（可选）
+   * @param {string} selected.provider - 提供商名称（可选）
+   * @returns {object} 可选项列表
+   */
+  getAvailableOptions(selected = {}) {
+    this.ensureInitialized()
+
+    const result = {
+      apiTypes: [],
+      series: [],
+      models: [],
+      providers: [],
+      functions: []
+    }
+
+    const { apiType, series, model, provider } = selected
+
+    if (apiType) {
+      result.apiTypes = [apiType]
+      
+      const models = this.modelRegistry.getByType(apiType)
+      const seriesSet = new Set()
+      const providerSet = new Set()
+      const functionSet = new Set()
+
+      models.forEach(m => {
+        seriesSet.add(m.series)
+        providerSet.add(m.provider)
+      })
+
+      if (series) {
+        const filteredModels = models.filter(m => m.series === series)
+        result.series = [series]
+        result.models = filteredModels.map(m => m.name)
+        
+        const filteredProviderSet = new Set()
+        filteredModels.forEach(m => filteredProviderSet.add(m.provider))
+        result.providers = Array.from(filteredProviderSet)
+
+        if (model) {
+          const targetModel = filteredModels.find(m => m.name === model)
+          if (targetModel) {
+            result.models = [model]
+            result.providers = [targetModel.provider]
+            
+            const apis = this.apiRegistry.getAll()
+              .filter(api => 
+                api.apiType === apiType &&
+                api.models && api.models.includes(model)
+              )
+            
+            if (provider) {
+              const filteredAPIs = apis.filter(api => api.provider === provider)
+              result.providers = [provider]
+              result.functions = filteredAPIs.map(api => api.name)
+            } else {
+              result.functions = apis.map(api => api.name)
+            }
+          }
+        } else {
+          const apis = this.apiRegistry.getAll()
+            .filter(api => 
+              api.apiType === apiType &&
+              api.models && api.models.some(mName => 
+                filteredModels.some(m => m.name === mName)
+              )
+            )
+          result.functions = apis.map(api => api.name)
+        }
+      } else {
+        result.series = Array.from(seriesSet)
+        result.models = models.map(m => m.name)
+        result.providers = Array.from(providerSet)
+        
+        const apis = this.apiRegistry.getAll()
+          .filter(api => 
+            api.apiType === apiType &&
+            api.models && api.models.some(mName => 
+              models.some(m => m.name === mName)
+            )
+          )
+        result.functions = apis.map(api => api.name)
+      }
+    } else {
+      result.apiTypes = Object.values(APITypes)
+      
+      const allModels = this.modelRegistry.getAll()
+      const seriesSet = new Set()
+      const providerSet = new Set()
+      
+      allModels.forEach(m => {
+        seriesSet.add(m.series)
+        providerSet.add(m.provider)
+      })
+      
+      result.series = Array.from(seriesSet)
+      result.models = allModels.map(m => m.name)
+      result.providers = Array.from(providerSet)
+      result.functions = functionRegistry.getAll().map(f => f.name)
+    }
+
+    return result
+  }
+
+  /**
+   * 获取API类型列表
+   * @returns {Array} API类型列表
+   */
+  getAPITypes() {
+    return Object.values(APITypes)
+  }
+
+  /**
+   * 获取所有系列列表
+   * @returns {Array} 系列列表
+   */
+  getAllSeries() {
+    this.ensureInitialized()
+    const { SeriesMeta } = require('../constants/series')
+    return Object.values(SeriesMeta)
+  }
+
+  /**
+   * 获取所有提供商列表
+   * @returns {Array} 提供商列表
+   */
+  getAllProviders() {
+    this.ensureInitialized()
+    const { ProviderMeta } = require('../constants/providers')
+    return Object.values(ProviderMeta)
+  }
 }
 
 const functionManager = new FunctionManager()

@@ -3,10 +3,13 @@
  * 作为唯一的API定义源，包含所有API调用信息
  */
 
+const { APITypes } = require('../../constants')
+
 module.exports = {
   'generate-video-from-text': {
     name: 'generate-video-from-text',
     provider: 'ltx',
+    apiType: APITypes.TEXT_TO_VIDEO,
     category: 'video',
     endpoint: '/v1/text-to-video',
     method: 'POST',
@@ -20,6 +23,7 @@ module.exports = {
   'generate-video-from-image': {
     name: 'generate-video-from-image',
     provider: 'ltx',
+    apiType: APITypes.IMAGE_TO_VIDEO,
     category: 'video',
     endpoint: '/v1/image-to-video',
     method: 'POST',
@@ -33,6 +37,7 @@ module.exports = {
   'generate-video-from-audio': {
     name: 'generate-video-from-audio',
     provider: 'ltx',
+    apiType: APITypes.AUDIO_TO_VIDEO,
     category: 'video',
     endpoint: '/v1/audio-to-video',
     method: 'POST',
@@ -46,6 +51,7 @@ module.exports = {
   'extend-video-duration': {
     name: 'extend-video-duration',
     provider: 'ltx',
+    apiType: APITypes.VIDEO_EXTENSION,
     category: 'video',
     endpoint: '/v1/extend',
     method: 'POST',
@@ -59,6 +65,7 @@ module.exports = {
   'retake-video-section': {
     name: 'retake-video-section',
     provider: 'ltx',
+    apiType: APITypes.VIDEO_EDITING,
     category: 'video',
     endpoint: '/v1/retake',
     method: 'POST',

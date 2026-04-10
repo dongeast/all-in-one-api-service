@@ -16,7 +16,7 @@ class ModelRegistry extends BaseRegistry {
     super({
       itemName: 'model',
       idField: 'name',
-      indexFields: ['type', 'tags', 'provider']
+      indexFields: ['type', 'tags', 'provider', 'series']
     })
   }
 
@@ -61,6 +61,41 @@ class ModelRegistry extends BaseRegistry {
    */
   getByProvider(provider) {
     return this.getByField('provider', provider)
+  }
+
+  /**
+   * 根据系列获取模型列表
+   * @param {string} series - 系列名称
+   * @param {object} options - 查询选项
+   * @returns {Array} 模型列表
+   */
+  getBySeries(series, options = {}) {
+    return this.getByField('series', series, options)
+  }
+
+  /**
+   * 根据API类型获取支持的系列列表
+   * @param {string} apiType - API类型
+   * @returns {Array} 系列列表
+   */
+  getSeriesByType(apiType) {
+    const { SeriesMeta } = require('../constants/series')
+    const models = this.getByType(apiType)
+    const seriesSet = new Set(models.map(m => m.series))
+    return Array.from(seriesSet)
+      .map(s => SeriesMeta[s])
+      .filter(s => s)
+  }
+
+  /**
+   * 根据API类型和系列获取模型列表
+   * @param {string} apiType - API类型
+   * @param {string} series - 系列名称
+   * @param {object} options - 查询选项
+   * @returns {Array} 模型列表
+   */
+  getByTypeAndSeries(apiType, series, options = {}) {
+    return this.getByCriteria({ type: apiType, series }, options)
   }
 }
 

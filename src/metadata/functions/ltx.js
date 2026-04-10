@@ -4,11 +4,14 @@
  * 只引用API名称，不定义endpoint和method
  */
 
+const { APITypes } = require('../../constants')
+
 module.exports = {
   'generate-video-from-text': {
     name: 'generate-video-from-text',
     type: 'sync',
     provider: 'ltx',
+    apiType: APITypes.TEXT_TO_VIDEO,
     category: 'video',
     
     apis: {
@@ -24,6 +27,7 @@ module.exports = {
     name: 'generate-video-from-image',
     type: 'sync',
     provider: 'ltx',
+    apiType: APITypes.IMAGE_TO_VIDEO,
     category: 'video',
     
     apis: {
@@ -39,6 +43,7 @@ module.exports = {
     name: 'generate-video-from-audio',
     type: 'sync',
     provider: 'ltx',
+    apiType: APITypes.AUDIO_TO_VIDEO,
     category: 'video',
     
     apis: {
@@ -54,6 +59,7 @@ module.exports = {
     name: 'extend-video-duration',
     type: 'sync',
     provider: 'ltx',
+    apiType: APITypes.VIDEO_EXTENSION,
     category: 'video',
     
     apis: {
@@ -69,6 +75,7 @@ module.exports = {
     name: 'retake-video-section',
     type: 'sync',
     provider: 'ltx',
+    apiType: APITypes.VIDEO_EDITING,
     category: 'video',
     
     apis: {
