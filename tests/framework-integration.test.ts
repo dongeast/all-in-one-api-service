@@ -330,9 +330,9 @@ describe('框架功能测试', () => {
     test('应该支持多种API类型', () => {
       const { APITypes } = AIService.Constants
       
-      expect(APITypes.TEXT_TO_VIDEO).toBe('text_to_video')
-      expect(APITypes.TEXT_TO_IMAGE).toBe('text_to_image')
-      expect(APITypes.TEXT_TO_AUDIO).toBe('text_to_audio')
+      expect(APITypes.TEXT_TO_VIDEO.id).toBe('text_to_video')
+      expect(APITypes.TEXT_TO_IMAGE.id).toBe('text_to_image')
+      expect(APITypes.TEXT_TO_AUDIO.id).toBe('text_to_audio')
     })
   })
 
@@ -583,9 +583,11 @@ describe('框架功能测试', () => {
       const { APITypes } = AIService.Constants
       
       expect(APITypes).toBeDefined()
-      expect(APITypes.TEXT_TO_VIDEO).toBe('text_to_video')
-      expect(APITypes.TEXT_TO_IMAGE).toBe('text_to_image')
-      expect(APITypes.TEXT_TO_AUDIO).toBe('text_to_audio')
+      expect(APITypes.TEXT_TO_VIDEO.id).toBe('text_to_video')
+      expect(APITypes.TEXT_TO_IMAGE.id).toBe('text_to_image')
+      expect(APITypes.TEXT_TO_AUDIO.id).toBe('text_to_audio')
+      expect(APITypes.TEXT_TO_VIDEO.inputOutput).toBeDefined()
+      expect(APITypes.TEXT_TO_VIDEO.description).toBeDefined()
     })
 
     test('应该获取媒体类型常量', () => {
