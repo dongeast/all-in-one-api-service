@@ -15,7 +15,13 @@ module.exports = {
     method: 'POST',
     type: 'sync',
     paramSchema: require('../../params/providers/volcengine/image/generate-image'),
-    models: ['doubao-seedit-1-0'],
+    models: [
+      'doubao-seedit-1-0',
+      'doubao-seedream-5.0-lite',
+      'doubao-seedream-4.5',
+      'doubao-seedream-4.0',
+      'doubao-seedream-3.0-t2i'
+    ],
     tags: ['image', 'generation', 'text-to-image'],
     priority: 100
   },

@@ -437,11 +437,21 @@ class MetadataManager {
     let models = this.modelRegistry.getAll()
 
     if (options.type) {
-      models = models.filter(m => m.type === options.type)
+      models = models.filter(m => {
+        const types = Array.isArray(m.type) ? m.type : [m.type]
+        return types.some(t => {
+          const typeId = typeof t === 'object' && t.id ? t.id : t
+          return typeId === options.type
+        })
+      })
     }
 
     if (options.provider) {
       models = models.filter(m => m.provider === options.provider)
+    }
+
+    if (options.series) {
+      models = models.filter(m => m.series === options.series)
     }
 
     if (options.tags) {
