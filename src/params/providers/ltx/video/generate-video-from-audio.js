@@ -3,6 +3,7 @@
  */
 
 const ltxCommon = require('../ltx-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {

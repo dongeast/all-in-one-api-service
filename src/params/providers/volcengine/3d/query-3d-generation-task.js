@@ -2,10 +2,13 @@
  * 火山引擎查询3D生成任务参数定义
  */
 
+const { ParamType, ElementType } = require('../../../common')
+
 module.exports = {
   input: {
     id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: true,
       description: '3D生成任务ID'
     }

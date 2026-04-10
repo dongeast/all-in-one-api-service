@@ -3,18 +3,21 @@
  */
 
 const skyreelsCommon = require('../skyreels-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     video_url: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.UPLOAD,
       required: true,
       description: '原始视频URL,支持MP4格式,最大30秒',
       format: 'uri'
     },
 
     style_name: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: true,
       description: '目标视频风格名称',
       options: [

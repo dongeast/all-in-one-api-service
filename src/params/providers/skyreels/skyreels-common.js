@@ -3,17 +3,20 @@
  */
 
 const { textPrompt } = require('../../templates')
+const { ParamType, ElementType } = require('../../common')
 
 module.exports = {
   input: {
     prompt: {
       ...textPrompt.prompt,
+      elementType: ElementType.TEXTAREA,
       description: '视频生成提示词',
       maxLength: 1280
     },
 
     duration: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.SLIDER,
       required: false,
       description: '视频时长（秒）',
       min: 1,
@@ -22,7 +25,8 @@ module.exports = {
     },
 
     aspect_ratio: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.RATIO,
       required: false,
       description: '视频宽高比',
       options: ['16:9', '9:16', '3:4', '4:3', '1:1'],
@@ -30,7 +34,8 @@ module.exports = {
     },
 
     mode: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '质量/性能模式',
       options: ['fast', 'std', 'pro'],
@@ -38,14 +43,16 @@ module.exports = {
     },
 
     sound: {
-      type: 'boolean',
+      type: ParamType.BOOLEAN,
+      elementType: ElementType.SWITCH,
       required: false,
       description: '是否包含音效',
       default: false
     },
 
     prompt_optimizer: {
-      type: 'boolean',
+      type: ParamType.BOOLEAN,
+      elementType: ElementType.SWITCH,
       required: false,
       description: '是否启用自动提示词优化',
       default: true

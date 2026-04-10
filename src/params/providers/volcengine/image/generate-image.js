@@ -4,6 +4,7 @@
 
 const volcengineCommon = require('../volcengine-common')
 const modelCapabilities = require('../model-capabilities')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
@@ -15,7 +16,8 @@ module.exports = {
     },
 
     image: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.UPLOAD,
       required: false,
       description: '输入图像信息，支持URL或Base64编码，最多14张参考图像'
     },
@@ -32,7 +34,8 @@ module.exports = {
     seed: volcengineCommon.input.seed,
 
     sequential_image_generation: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '是否启用连续图像生成',
       options: ['auto', 'disabled'],
@@ -40,20 +43,23 @@ module.exports = {
     },
 
     sequential_image_generation_options: {
-      type: 'object',
+      type: ParamType.OBJECT,
+      elementType: ElementType.INPUT,
       required: false,
       description: '连续图像生成配置'
     },
 
     stream: {
-      type: 'boolean',
+      type: ParamType.BOOLEAN,
+      elementType: ElementType.SWITCH,
       required: false,
       description: '是否启用流式输出模式',
       default: false
     },
 
     guidance_scale: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.SLIDER,
       required: false,
       description: '模型输出与提示词的一致性',
       min: 1,
@@ -62,7 +68,8 @@ module.exports = {
     },
 
     output_format: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '输出图像文件格式',
       options: ['png', 'jpeg'],
@@ -74,7 +81,8 @@ module.exports = {
     watermark: volcengineCommon.input.watermark,
 
     optimize_prompt_options: {
-      type: 'object',
+      type: ParamType.OBJECT,
+      elementType: ElementType.INPUT,
       required: false,
       description: '提示词优化功能配置'
     }

@@ -2,12 +2,15 @@
  * 火山引擎取消/删除视频生成任务参数定义
  */
 
+const { ParamType, ElementType } = require('../../../common')
+
 module.exports = {
   input: {
     id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: true,
-      description: '要取消或删除的视频生成任务ID'
+      description: '视频生成任务ID'
     }
   },
 

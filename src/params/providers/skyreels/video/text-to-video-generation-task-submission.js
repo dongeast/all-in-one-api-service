@@ -3,6 +3,7 @@
  */
 
 const skyreelsCommon = require('../skyreels-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {

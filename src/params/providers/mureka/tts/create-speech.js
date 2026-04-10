@@ -3,18 +3,21 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     text: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.TEXTAREA,
       required: true,
       description: '要转换为语音的文本',
       maxLength: 500
     },
 
     voice: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '语音选择',
       options: ['Ethan', 'Victoria', 'Jake', 'Luna', 'Emma'],
@@ -22,7 +25,8 @@ module.exports = {
     },
 
     voice_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: '自定义语音ID(通过 files/upload API)',
       mutuallyExclusiveWith: ['voice']

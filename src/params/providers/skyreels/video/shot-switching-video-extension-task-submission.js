@@ -3,6 +3,7 @@
  */
 
 const skyreelsCommon = require('../skyreels-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
@@ -12,7 +13,8 @@ module.exports = {
     },
 
     prefix_video: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.UPLOAD,
       required: true,
       description: '要扩展的视频,支持MP4格式,最大30秒',
       format: 'uri'
@@ -26,7 +28,8 @@ module.exports = {
     },
 
     cut_type: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '镜头切换类型',
       options: [

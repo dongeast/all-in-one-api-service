@@ -3,6 +3,7 @@
  */
 
 const ltxCommon = require('../ltx-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
@@ -25,7 +26,8 @@ module.exports = {
     },
 
     mode: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       default: 'end',
       description: '在何处扩展视频',

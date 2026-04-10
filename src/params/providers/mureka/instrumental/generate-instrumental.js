@@ -3,11 +3,13 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     model: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '模型选择',
       options: ['auto', 'mureka-7.5', 'mureka-7.6', 'mureka-8'],
@@ -15,7 +17,8 @@ module.exports = {
     },
 
     n: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.SLIDER,
       required: false,
       description: '生成数量',
       min: 1,
@@ -24,20 +27,23 @@ module.exports = {
     },
 
     prompt: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.TEXTAREA,
       required: false,
       description: '音乐风格提示词',
       maxLength: 1024
     },
 
     instrumental_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: '伴奏ID(通过 files/upload API)'
     },
 
     stream: {
-      type: 'boolean',
+      type: ParamType.BOOLEAN,
+      elementType: ElementType.SWITCH,
       required: false,
       description: '是否启用流式播放',
       default: false

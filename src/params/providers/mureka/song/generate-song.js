@@ -3,6 +3,7 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
@@ -30,19 +31,22 @@ module.exports = {
     },
 
     reference_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: '参考音乐ID(通过 files/upload API)'
     },
 
     vocal_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: '人声ID(通过 files/upload API)'
     },
 
     melody_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: '旋律ID(通过 files/upload API)'
     },

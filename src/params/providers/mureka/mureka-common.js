@@ -3,24 +3,28 @@
  */
 
 const { textPrompt } = require('../../templates')
+const { ParamType, ElementType } = require('../../common')
 
 module.exports = {
   input: {
     prompt: {
       ...textPrompt.prompt,
+      elementType: ElementType.TEXTAREA,
       description: '提示词',
       maxLength: 1024
     },
 
     lyrics: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.TEXTAREA,
       required: false,
       description: '歌词内容',
       maxLength: 3000
     },
 
     model: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '模型选择',
       options: ['auto', 'mureka-7.5', 'mureka-7.6', 'mureka-o2', 'mureka-8'],
@@ -28,7 +32,8 @@ module.exports = {
     },
 
     n: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.SLIDER,
       required: false,
       description: '生成数量',
       min: 1,
@@ -37,7 +42,8 @@ module.exports = {
     },
 
     stream: {
-      type: 'boolean',
+      type: ParamType.BOOLEAN,
+      elementType: ElementType.SWITCH,
       required: false,
       description: '是否启用流式播放',
       default: false

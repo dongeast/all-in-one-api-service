@@ -4,6 +4,7 @@
 
 const volcengineCommon = require('../volcengine-common')
 const modelCapabilities = require('../model-capabilities')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
@@ -13,7 +14,8 @@ module.exports = {
     },
 
     content: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: true,
       description: '3D生成输入内容，必须包含1张图像'
     }

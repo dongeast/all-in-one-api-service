@@ -3,11 +3,13 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     task_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: true,
       description: '任务ID'
     }

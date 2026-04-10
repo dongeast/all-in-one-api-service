@@ -3,17 +3,20 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     upload_id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: true,
       description: '上传任务ID'
     },
 
     part_ids: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: false,
       description: '部分ID列表(按顺序)',
       items: 'string'

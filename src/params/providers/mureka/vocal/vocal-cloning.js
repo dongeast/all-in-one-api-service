@@ -3,11 +3,13 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     file: {
-      type: 'file',
+      type: ParamType.FILE,
+      elementType: ElementType.UPLOAD,
       required: true,
       description: '人声样本文件(二进制)',
       constraints: {

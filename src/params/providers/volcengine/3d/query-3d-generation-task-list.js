@@ -2,10 +2,13 @@
  * 火山引擎查询3D生成任务列表参数定义
  */
 
+const { ParamType, ElementType } = require('../../../common')
+
 module.exports = {
   input: {
     page_num: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.INPUT,
       required: false,
       description: '结果页码',
       min: 1,
@@ -13,7 +16,8 @@ module.exports = {
     },
 
     page_size: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.INPUT,
       required: false,
       description: '每页结果数量',
       min: 1,
@@ -21,20 +25,23 @@ module.exports = {
     },
 
     'filter.status': {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '按任务状态过滤',
       options: ['queued', 'running', 'cancelled', 'succeeded', 'failed']
     },
 
     'filter.task_ids': {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: '按任务ID过滤，多个ID用&分隔'
     },
 
     'filter.model': {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: '按模型Endpoint ID过滤'
     }

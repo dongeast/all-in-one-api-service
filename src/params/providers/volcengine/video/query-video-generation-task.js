@@ -3,11 +3,13 @@
  */
 
 const volcengineCommon = require('../volcengine-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     id: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: true,
       description: '视频生成任务ID'
     }

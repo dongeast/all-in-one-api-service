@@ -3,6 +3,7 @@
  */
 
 const skyreelsCommon = require('../skyreels-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
@@ -12,27 +13,31 @@ module.exports = {
     },
 
     first_frame_image: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.UPLOAD,
       required: true,
       description: '视频首帧图片',
       format: 'uri'
     },
 
     audios: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: true,
       description: '音频文件URL列表,支持mp3/wav格式,每个音频时长<=200秒',
       minItems: 1,
       maxItems: 1,
       items: {
-        type: 'string',
+        type: ParamType.STRING,
+        elementType: ElementType.UPLOAD,
         format: 'uri',
         description: '音频URL,支持mp3/wav格式'
       }
     },
 
     traj_type: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '镜头运动类型',
       options: [
@@ -52,7 +57,8 @@ module.exports = {
     },
 
     camera_control_strength: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.SLIDER,
       required: false,
       description: '镜头运动幅度',
       min: 0.01,
@@ -61,24 +67,28 @@ module.exports = {
     },
 
     camera_control_pro: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: false,
       description: '复杂镜头运动参数,支持精确控制多个时间段',
       items: {
-        type: 'object',
+        type: ParamType.OBJECT,
         properties: {
           start_time: {
-            type: 'number',
+            type: ParamType.NUMBER,
+            elementType: ElementType.INPUT,
             required: true,
             description: '镜头运动开始时间（秒）'
           },
           end_time: {
-            type: 'number',
+            type: ParamType.NUMBER,
+            elementType: ElementType.INPUT,
             required: true,
             description: '镜头运动结束时间（秒）,-1 表示到视频结束'
           },
           traj_type: {
-            type: 'enum',
+            type: ParamType.ENUM,
+            elementType: ElementType.SELECT,
             required: true,
             description: '第一个镜头运动类型',
             options: [
@@ -95,7 +105,8 @@ module.exports = {
             ]
           },
           camera_control_strength: {
-            type: 'number',
+            type: ParamType.NUMBER,
+            elementType: ElementType.SLIDER,
             required: false,
             description: '第一个镜头运动幅度',
             min: 0,
@@ -103,7 +114,8 @@ module.exports = {
             default: 0.8
           },
           traj_type_2: {
-            type: 'enum',
+            type: ParamType.ENUM,
+            elementType: ElementType.SELECT,
             required: false,
             description: '第二个镜头运动类型（支持双镜头运动组合）',
             options: [
@@ -120,7 +132,8 @@ module.exports = {
             ]
           },
           camera_control_strength_2: {
-            type: 'number',
+            type: ParamType.NUMBER,
+            elementType: ElementType.SLIDER,
             required: false,
             description: '第二个镜头运动幅度',
             min: 0,
@@ -131,7 +144,8 @@ module.exports = {
     },
 
     mode: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '返回结果的分辨率模式',
       options: ['std', 'pro'],

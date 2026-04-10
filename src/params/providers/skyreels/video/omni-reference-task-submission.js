@@ -3,6 +3,7 @@
  */
 
 const skyreelsCommon = require('../skyreels-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
@@ -18,35 +19,41 @@ module.exports = {
     },
 
     ref_images: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: false,
       description: '参考图片列表',
       items: {
-        type: 'object',
+        type: ParamType.OBJECT,
         properties: {
           tag: {
-            type: 'string',
+            type: ParamType.STRING,
+            elementType: ElementType.INPUT,
             required: true,
             description: '参考图片标识符,必须以 @ 开头',
             pattern: '^@'
           },
           type: {
-            type: 'enum',
+            type: ParamType.ENUM,
+            elementType: ElementType.SELECT,
             required: true,
             description: '图片参考类型',
             options: ['grid', 'image']
           },
           image_urls: {
-            type: 'array',
+            type: ParamType.ARRAY,
+            elementType: ElementType.INPUT,
             required: true,
             description: '图片URL列表',
             items: {
-              type: 'string',
+              type: ParamType.STRING,
+              elementType: ElementType.UPLOAD,
               format: 'uri'
             }
           },
           audio_url: {
-            type: 'string',
+            type: ParamType.STRING,
+            elementType: ElementType.UPLOAD,
             required: false,
             description: '对应的语音音色URL',
             format: 'uri'
@@ -56,26 +63,30 @@ module.exports = {
     },
 
     ref_videos: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: false,
       description: '参考视频配置列表',
       items: {
-        type: 'object',
+        type: ParamType.OBJECT,
         properties: {
           tag: {
-            type: 'string',
+            type: ParamType.STRING,
+            elementType: ElementType.INPUT,
             required: true,
             description: '视频参考标识符,必须以 @ 开头',
             pattern: '^@'
           },
           type: {
-            type: 'enum',
+            type: ParamType.ENUM,
+            elementType: ElementType.SELECT,
             required: true,
             description: '视频参考类型',
             options: ['reference', 'extend']
           },
           video_url: {
-            type: 'string',
+            type: ParamType.STRING,
+            elementType: ElementType.UPLOAD,
             required: true,
             description: '视频URL,支持MP4/MOV格式,最大10秒',
             format: 'uri'

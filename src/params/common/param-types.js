@@ -24,7 +24,8 @@ const ElementType = {
   UPLOAD: 'upload',
   COLOR_PICKER: 'color-picker',
   DATE_PICKER: 'date-picker',
-  SWITCH: 'switch'
+  SWITCH: 'switch',
+  RATIO: 'ratio'
 }
 
 module.exports = {

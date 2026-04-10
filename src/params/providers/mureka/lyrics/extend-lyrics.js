@@ -3,11 +3,13 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     lyrics: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.TEXTAREA,
       required: true,
       description: '要扩展的歌词内容'
     }

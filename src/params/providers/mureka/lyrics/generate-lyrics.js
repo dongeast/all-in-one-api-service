@@ -3,11 +3,13 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     prompt: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.TEXTAREA,
       required: true,
       description: '生成歌词的提示词'
     }

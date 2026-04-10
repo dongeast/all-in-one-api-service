@@ -3,24 +3,28 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     upload_name: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: true,
       description: '上传文件名称'
     },
 
     purpose: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: true,
       description: '上传用途',
       options: ['fine-tuning']
     },
 
     bytes: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.INPUT,
       required: false,
       description: '文件总大小(字节)'
     }

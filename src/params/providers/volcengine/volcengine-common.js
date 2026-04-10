@@ -3,22 +3,26 @@
  */
 
 const { textPrompt } = require('../../templates')
+const { ParamType, ElementType } = require('../../common')
 
 module.exports = {
   input: {
     model: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: true,
       description: '模型ID或端点ID'
     },
 
     prompt: {
       ...textPrompt.prompt,
+      elementType: ElementType.TEXTAREA,
       description: '生成提示词，支持中英文'
     },
 
     width: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.SLIDER,
       required: false,
       description: '图像宽度（像素）',
       min: 256,
@@ -26,7 +30,8 @@ module.exports = {
     },
 
     height: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.SLIDER,
       required: false,
       description: '图像高度（像素）',
       min: 256,
@@ -34,13 +39,15 @@ module.exports = {
     },
 
     size: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
       required: false,
       description: '图像尺寸（格式：宽x高，如 2048x2048）'
     },
 
     seed: {
-      type: 'number',
+      type: ParamType.NUMBER,
+      elementType: ElementType.INPUT,
       required: false,
       description: '随机种子，用于控制生成随机性',
       min: -1,
@@ -49,14 +56,16 @@ module.exports = {
     },
 
     watermark: {
-      type: 'boolean',
+      type: ParamType.BOOLEAN,
+      elementType: ElementType.SWITCH,
       required: false,
       description: '是否添加水印',
       default: true
     },
 
     response_format: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '响应格式',
       options: ['url', 'b64_json'],

@@ -3,6 +3,7 @@
  */
 
 const skyreelsCommon = require('../skyreels-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
@@ -12,35 +13,41 @@ module.exports = {
     },
 
     first_frame_image: {
-      type: 'string',
+      type: ParamType.STRING,
+      elementType: ElementType.UPLOAD,
       required: true,
       description: '视频首帧图片',
       format: 'uri'
     },
 
     audios: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: true,
       description: '音频文件URL列表,支持mp3/wav格式,每个音频时长<=200秒',
       items: {
-        type: 'string',
+        type: ParamType.STRING,
+        elementType: ElementType.UPLOAD,
         format: 'uri',
         description: '音频URL,支持mp3/wav格式'
       }
     },
 
     bboxes: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: true,
       description: '多人音频2视频人脸边界框,bboxes数量必须与audios数量匹配',
       minItems: 1,
       items: {
-        type: 'array',
+        type: ParamType.ARRAY,
+        elementType: ElementType.INPUT,
         description: '边界框[x, y, width, height]',
         minItems: 4,
         maxItems: 4,
         items: {
-          type: 'number',
+          type: ParamType.NUMBER,
+          elementType: ElementType.INPUT,
           description: '边界框坐标值',
           min: 0
         }
@@ -66,7 +73,8 @@ module.exports = {
     },
 
     bboxes_type: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '多人bbox类型是主体检测还是人脸检测',
       options: ['face', 'body'],
@@ -74,7 +82,8 @@ module.exports = {
     },
 
     mode: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: false,
       description: '返回结果的分辨率模式',
       options: ['std', 'pro'],

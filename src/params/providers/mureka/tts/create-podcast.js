@@ -3,25 +3,29 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     conversations: {
-      type: 'array',
+      type: ParamType.ARRAY,
+      elementType: ElementType.INPUT,
       required: true,
       description: '对话内容数组',
       maxItems: 10,
       minItems: 1,
       itemSchema: {
-        type: 'object',
+        type: ParamType.OBJECT,
         properties: {
           text: {
-            type: 'string',
+            type: ParamType.STRING,
+            elementType: ElementType.TEXTAREA,
             required: true,
             description: '对话文本内容'
           },
           voice: {
-            type: 'enum',
+            type: ParamType.ENUM,
+            elementType: ElementType.SELECT,
             required: true,
             description: '语音选择',
             options: ['Ethan', 'Victoria', 'Jake', 'Luna', 'Emma']

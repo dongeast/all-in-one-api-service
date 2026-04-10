@@ -3,11 +3,13 @@
  */
 
 const murekaCommon = require('../mureka-common')
+const { ParamType, ElementType } = require('../../../common')
 
 module.exports = {
   input: {
     file: {
-      type: 'file',
+      type: ParamType.FILE,
+      elementType: ElementType.UPLOAD,
       required: true,
       description: 'The File object (not file name) to be uploaded',
       constraints: {
@@ -17,7 +19,8 @@ module.exports = {
     },
 
     purpose: {
-      type: 'enum',
+      type: ParamType.ENUM,
+      elementType: ElementType.SELECT,
       required: true,
       description: 'The intended purpose of the uploaded file',
       options: ['reference', 'vocal', 'melody', 'instrumental', 'voice', 'audio']
