@@ -6,7 +6,7 @@ module.exports = {
   prompt: {
     type: 'string',
     required: true,
-    description: '文本提示词',
+    description: 'Text prompt',
     minLength: 1,
     maxLength: 10000
   }

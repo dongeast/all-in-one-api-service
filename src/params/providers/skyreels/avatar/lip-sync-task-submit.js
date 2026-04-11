@@ -11,7 +11,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '视频文件URL,支持MP4格式',
+      description: 'Video file URL, supports MP4 format',
       format: 'uri'
     },
 
@@ -19,7 +19,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '音频文件URL',
+      description: 'Audio file URL',
       format: 'uri'
     },
 
@@ -27,7 +27,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: false,
-      description: '用于人脸驱动的参考角色图片URL',
+      description: 'Reference character image URL for face driving',
       format: 'uri'
     }
   },

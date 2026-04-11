@@ -11,7 +11,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: true,
-      description: '任务ID'
+      description: 'Task ID'
     }
   },
 

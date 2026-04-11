@@ -8,21 +8,21 @@ module.exports = {
   input: {
     prompt: {
       ...textPrompt.prompt,
-      description: '输入文本',
+      description: 'Input text',
       maxLength: 4096
     },
 
     voice: {
       type: 'string',
       required: false,
-      description: '语音类型',
+      description: 'Voice type',
       default: 'alloy'
     },
 
     speed: {
       type: 'number',
       required: false,
-      description: '语速',
+      description: 'Speech rate',
       min: 0.25,
       max: 4.0,
       default: 1.0
@@ -31,7 +31,7 @@ module.exports = {
     format: {
       type: 'enum',
       required: false,
-      description: '音频格式',
+      description: 'Audio format',
       options: ['mp3', 'opus', 'aac', 'flac', 'wav', 'pcm'],
       default: 'mp3'
     },
@@ -39,38 +39,38 @@ module.exports = {
     language: {
       type: 'string',
       required: false,
-      description: '语言代码'
+      description: 'Language code'
     },
 
     file: {
       type: 'string',
       required: false,
-      description: '音频文件路径或URL'
+      description: 'Audio file path or URL'
     }
   },
 
   output: {
     audioUrl: {
       type: 'string',
-      description: '音频URL',
+      description: 'Audio URL',
       path: 'data.url'
     },
 
     audioContent: {
       type: 'string',
-      description: 'Base64编码的音频内容',
+      description: 'Base64 encoded audio content',
       path: 'data.b64_json'
     },
 
     transcript: {
       type: 'string',
-      description: '转录文本',
+      description: 'Transcribed text',
       path: 'text'
     },
 
     duration: {
       type: 'number',
-      description: '音频时长（秒）',
+      description: 'Audio duration (seconds)',
       path: 'duration'
     }
   }

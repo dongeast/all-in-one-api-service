@@ -10,7 +10,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: true,
-      description: '视频生成任务ID'
+      description: 'Video generation task ID'
     }
   },
 

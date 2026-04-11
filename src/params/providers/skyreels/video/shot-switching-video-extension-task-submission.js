@@ -16,7 +16,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '要扩展的视频,支持MP4格式,最大30秒',
+      description: 'Video to extend, supports MP4 format, max 30 seconds',
       format: 'uri'
     },
 
@@ -31,7 +31,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '镜头切换类型',
+      description: 'Shot switching type',
       options: [
         'Auto',
         'Cut-In',

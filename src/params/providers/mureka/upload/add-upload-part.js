@@ -11,14 +11,14 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: true,
-      description: '上传任务ID'
+      description: 'Upload task ID'
     },
 
     file: {
       type: ParamType.FILE,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '文件对象(二进制)',
+      description: 'File object (binary)',
       constraints: {
         maxSize: 10 * 1024 * 1024,
         formats: ['mp3', 'm4a'],
@@ -31,19 +31,19 @@ module.exports = {
   output: {
     id: {
       type: 'string',
-      description: '上传部分ID',
+      description: 'Upload part ID',
       path: 'id'
     },
 
     upload_id: {
       type: 'string',
-      description: '上传任务ID',
+      description: 'Upload task ID',
       path: 'upload_id'
     },
 
     created_at: {
       type: 'number',
-      description: '创建时间戳(秒)',
+      description: 'Creation timestamp (seconds)',
       path: 'created_at'
     }
   }

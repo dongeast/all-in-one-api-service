@@ -11,7 +11,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '原始视频URL,支持MP4格式,最大30秒',
+      description: 'Original video URL, supports MP4 format, max 30 seconds',
       format: 'uri'
     },
 
@@ -19,7 +19,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: true,
-      description: '目标视频风格名称',
+      description: 'Target video style name',
       options: [
         'simpsons',
         'lego',

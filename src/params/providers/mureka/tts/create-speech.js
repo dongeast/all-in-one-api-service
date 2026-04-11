@@ -11,7 +11,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.TEXTAREA,
       required: true,
-      description: '要转换为语音的文本',
+      description: 'Text to convert to speech',
       maxLength: 500
     },
 
@@ -19,7 +19,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '语音选择',
+      description: 'Voice selection',
       options: ['Ethan', 'Victoria', 'Jake', 'Luna', 'Emma'],
       mutuallyExclusiveWith: ['voice_id']
     },
@@ -28,7 +28,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: false,
-      description: '自定义语音ID(通过 files/upload API)',
+      description: 'Custom voice ID (via files/upload API)',
       mutuallyExclusiveWith: ['voice']
     }
   },
@@ -40,13 +40,13 @@ module.exports = {
   output: {
     url: {
       type: 'string',
-      description: '音频文件URL',
+      description: 'Audio file URL',
       path: 'url'
     },
 
     expires_at: {
       type: 'number',
-      description: 'URL过期时间戳(秒)',
+      description: 'URL expiration timestamp (seconds)',
       path: 'expires_at'
     }
   }

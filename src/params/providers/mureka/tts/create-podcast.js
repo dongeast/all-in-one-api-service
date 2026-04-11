@@ -11,7 +11,7 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: true,
-      description: '对话内容数组',
+      description: 'Dialogue content array',
       maxItems: 10,
       minItems: 1,
       itemSchema: {
@@ -21,13 +21,13 @@ module.exports = {
             type: ParamType.STRING,
             elementType: ElementType.TEXTAREA,
             required: true,
-            description: '对话文本内容'
+            description: 'Dialogue text content'
           },
           voice: {
             type: ParamType.ENUM,
             elementType: ElementType.SELECT,
             required: true,
-            description: '语音选择',
+            description: 'Voice selection',
             options: ['Ethan', 'Victoria', 'Jake', 'Luna', 'Emma']
           }
         }
@@ -38,13 +38,13 @@ module.exports = {
   output: {
     url: {
       type: 'string',
-      description: '音频文件URL',
+      description: 'Audio file URL',
       path: 'url'
     },
 
     expires_at: {
       type: 'number',
-      description: 'URL过期时间戳(秒)',
+      description: 'URL expiration timestamp (seconds)',
       path: 'expires_at'
     }
   }

@@ -11,14 +11,14 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.TEXTAREA,
       required: true,
-      description: '要扩展的歌词内容'
+      description: 'Lyrics content to extend'
     }
   },
 
   output: {
     lyrics: {
       type: 'string',
-      description: '扩展后的歌词',
+      description: 'Extended lyrics',
       path: 'lyrics'
     }
   }

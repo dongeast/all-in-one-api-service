@@ -6,20 +6,20 @@ module.exports = {
   prompt: {
     type: 'string',
     required: true,
-    description: '提示词',
+    description: 'Prompt',
     minLength: 1
   },
 
   model: {
     type: 'string',
     required: false,
-    description: '模型名称'
+    description: 'Model name'
   },
 
   timeout: {
     type: 'number',
     required: false,
-    description: '超时时间（毫秒）',
+    description: 'Timeout (milliseconds)',
     min: 1000,
     max: 300000,
     default: 30000
@@ -28,7 +28,7 @@ module.exports = {
   retryCount: {
     type: 'number',
     required: false,
-    description: '重试次数',
+    description: 'Number of retries',
     min: 0,
     max: 10,
     integer: true,

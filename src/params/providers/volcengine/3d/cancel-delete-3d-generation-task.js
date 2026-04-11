@@ -10,7 +10,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: true,
-      description: '要取消或删除的3D生成任务ID'
+      description: '3D generation task ID to cancel or delete'
     }
   },
 

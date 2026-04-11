@@ -6,7 +6,7 @@ module.exports = {
   negativePrompt: {
     type: 'string',
     required: false,
-    description: '反向提示词（不希望出现的内容）',
+    description: 'Negative prompt (content to avoid)',
     maxLength: 10000,
     default: ''
   }

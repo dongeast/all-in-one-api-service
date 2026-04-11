@@ -11,50 +11,50 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: true,
-      description: '任务ID'
+      description: 'Task ID'
     }
   },
 
   output: {
     id: {
       ...murekaCommon.output.id,
-      description: '任务ID',
+      description: 'Task ID',
       path: 'id'
     },
 
     created_at: {
       ...murekaCommon.output.created_at,
-      description: '创建时间戳(秒)',
+      description: 'Creation timestamp (seconds)',
       path: 'created_at'
     },
 
     finished_at: {
       ...murekaCommon.output.finished_at,
-      description: '完成时间戳(秒)',
+      description: 'Completion timestamp (seconds)',
       path: 'finished_at'
     },
 
     model: {
       ...murekaCommon.output.model,
-      description: '使用的模型',
+      description: 'Model to use',
       path: 'model'
     },
 
     status: {
       ...murekaCommon.output.status,
-      description: '任务状态',
+      description: 'Task status',
       path: 'status'
     },
 
     failed_reason: {
       ...murekaCommon.output.failed_reason,
-      description: '失败原因',
+      description: 'Failure reason',
       path: 'failed_reason'
     },
 
     choices: {
       ...murekaCommon.output.choices,
-      description: '生成结果列表',
+      description: 'Generation results list',
       path: 'choices'
     }
   }

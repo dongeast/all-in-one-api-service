@@ -8,14 +8,14 @@ module.exports = {
   input: {
     prompt: {
       ...textPrompt.prompt,
-      description: '输入文本/提示词',
+      description: 'Input text/prompt',
       maxLength: 128000
     },
 
     maxTokens: {
       type: 'number',
       required: false,
-      description: '最大输出token数',
+      description: 'Maximum output token count',
       min: 1,
       max: 128000,
       integer: true,
@@ -25,7 +25,7 @@ module.exports = {
     temperature: {
       type: 'number',
       required: false,
-      description: '温度参数（控制随机性）',
+      description: 'Temperature parameter (controls randomness)',
       min: 0,
       max: 2,
       default: 1
@@ -34,7 +34,7 @@ module.exports = {
     topP: {
       type: 'number',
       required: false,
-      description: 'Top-p采样参数',
+      description: 'Top-p sampling parameter',
       min: 0,
       max: 1,
       default: 1
@@ -43,7 +43,7 @@ module.exports = {
     topK: {
       type: 'number',
       required: false,
-      description: 'Top-k采样参数',
+      description: 'Top-k sampling parameter',
       min: 1,
       integer: true
     },
@@ -51,7 +51,7 @@ module.exports = {
     stop: {
       type: 'array',
       required: false,
-      description: '停止序列',
+      description: 'Stop sequences',
       itemSchema: {
         type: 'string'
       }
@@ -60,7 +60,7 @@ module.exports = {
     stream: {
       type: 'boolean',
       required: false,
-      description: '是否流式输出',
+      description: 'Whether to stream output',
       default: false
     }
   },
@@ -68,19 +68,19 @@ module.exports = {
   output: {
     text: {
       type: 'string',
-      description: '生成的文本',
+      description: 'Generated text',
       path: 'choices[0].message.content'
     },
 
     finishReason: {
       type: 'string',
-      description: '结束原因',
+      description: 'Finish reason',
       path: 'choices[0].finish_reason'
     },
 
     usage: {
       type: 'object',
-      description: 'Token使用情况',
+      description: 'Token usage',
       path: 'usage',
       fields: {
         promptTokens: { path: 'prompt_tokens' },
@@ -91,13 +91,13 @@ module.exports = {
 
     created: {
       type: 'number',
-      description: '创建时间戳',
+      description: 'Creation timestamp',
       path: 'created'
     },
 
     model: {
       type: 'string',
-      description: '使用的模型',
+      description: 'Model used',
       path: 'model'
     }
   }

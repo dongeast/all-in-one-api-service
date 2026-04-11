@@ -10,7 +10,7 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.INPUT,
       required: false,
-      description: '结果页码',
+      description: 'Result page number',
       min: 1,
       max: 500
     },
@@ -19,7 +19,7 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.INPUT,
       required: false,
-      description: '每页结果数量',
+      description: 'Number of results per page',
       min: 1,
       max: 500
     },
@@ -28,7 +28,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '按任务状态过滤',
+      description: 'Filter by task status',
       options: ['queued', 'running', 'cancelled', 'succeeded', 'failed']
     },
 
@@ -36,21 +36,21 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: false,
-      description: '按任务ID过滤，多个ID用&分隔'
+      description: 'Filter by task ID, multiple IDs separated by &'
     },
 
     'filter.model': {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: false,
-      description: '按模型Endpoint ID过滤'
+      description: 'Filter by model Endpoint ID'
     }
   },
 
   output: {
     items: {
       type: 'array',
-      description: '3D生成任务列表',
+      description: 'List of 3D generation tasks',
       path: 'items'
     }
   }

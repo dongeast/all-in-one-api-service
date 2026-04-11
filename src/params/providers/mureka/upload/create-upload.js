@@ -11,14 +11,14 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: true,
-      description: '上传文件名称'
+      description: 'Upload file name'
     },
 
     purpose: {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: true,
-      description: '上传用途',
+      description: 'Upload purpose',
       options: ['fine-tuning']
     },
 
@@ -26,56 +26,56 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.INPUT,
       required: false,
-      description: '文件总大小(字节)'
+      description: 'Total file size (bytes)'
     }
   },
 
   output: {
     id: {
       type: 'string',
-      description: '上传任务ID',
+      description: 'Upload task ID',
       path: 'id'
     },
 
     upload_name: {
       type: 'string',
-      description: '上传文件名',
+      description: 'Upload file name',
       path: 'upload_name'
     },
 
     purpose: {
       type: 'string',
-      description: '上传用途',
+      description: 'Upload purpose',
       path: 'purpose'
     },
 
     bytes: {
       type: 'number',
-      description: '文件大小',
+      description: 'File size',
       path: 'bytes'
     },
 
     created_at: {
       type: 'number',
-      description: '创建时间戳(秒)',
+      description: 'Creation timestamp (seconds)',
       path: 'created_at'
     },
 
     expires_at: {
       type: 'number',
-      description: '过期时间戳(秒)',
+      description: 'Expiration timestamp (seconds)',
       path: 'expires_at'
     },
 
     status: {
       type: 'string',
-      description: '任务状态',
+      description: 'Task status',
       path: 'status'
     },
 
     parts: {
       type: 'array',
-      description: '部分ID列表',
+      description: 'Part ID list',
       path: 'parts'
     }
   }

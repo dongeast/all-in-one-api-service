@@ -11,182 +11,182 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: true,
-      description: '视频生成任务ID'
+      description: 'Video generation task ID'
     }
   },
 
   output: {
     id: {
       type: 'string',
-      description: '视频生成任务ID',
+      description: 'Video generation task ID',
       path: 'id'
     },
 
     model: {
       type: 'string',
-      description: '使用的模型名称和版本',
+      description: 'Model name and version used',
       path: 'model'
     },
 
     status: {
       type: 'string',
-      description: '任务状态',
+      description: 'Task status',
       path: 'status'
     },
 
     error: {
       type: 'object',
-      description: '错误信息',
+      description: 'Error information',
       path: 'error'
     },
 
     'error.code': {
       type: 'string',
-      description: '错误码',
+      description: 'Error code',
       path: 'error.code'
     },
 
     'error.message': {
       type: 'string',
-      description: '错误消息',
+      description: 'Error message',
       path: 'error.message'
     },
 
     created_at: {
       type: 'number',
-      description: '任务创建Unix时间戳（秒）',
+      description: 'Task creation Unix timestamp (seconds)',
       path: 'created_at'
     },
 
     updated_at: {
       type: 'number',
-      description: '任务状态更新Unix时间戳（秒）',
+      description: 'Task status update Unix timestamp (seconds)',
       path: 'updated_at'
     },
 
     content: {
       type: 'object',
-      description: '视频生成输出',
+      description: 'Video generation output',
       path: 'content'
     },
 
     'content.video_url': {
       type: 'string',
-      description: '生成的视频URL（mp4格式），有效期24小时',
+      description: 'Generated video URL (mp4 format), valid for 24 hours',
       path: 'content.video_url'
     },
 
     'content.last_frame_url': {
       type: 'string',
-      description: '最后一帧图像URL，有效期24小时',
+      description: 'Last frame image URL, valid for 24 hours',
       path: 'content.last_frame_url'
     },
 
     seed: {
       type: 'number',
-      description: '本次请求使用的种子值',
+      description: 'Seed value used for this request',
       path: 'seed'
     },
 
     resolution: {
       type: 'string',
-      description: '生成的视频分辨率',
+      description: 'Generated video resolution',
       path: 'resolution'
     },
 
     ratio: {
       type: 'string',
-      description: '生成的视频宽高比',
+      description: 'Generated video aspect ratio',
       path: 'ratio'
     },
 
     duration: {
       type: 'number',
-      description: '生成的视频时长（秒）',
+      description: 'Generated video duration (seconds)',
       path: 'duration'
     },
 
     frames: {
       type: 'number',
-      description: '生成的视频帧数',
+      description: 'Generated video frame count',
       path: 'frames'
     },
 
     framespersecond: {
       type: 'number',
-      description: '生成的视频帧率',
+      description: 'Generated video frame rate',
       path: 'framespersecond'
     },
 
     generate_audio: {
       type: 'boolean',
-      description: '视频是否包含同步音频',
+      description: 'Whether video contains synchronized audio',
       path: 'generate_audio'
     },
 
     usage: {
       type: 'object',
-      description: 'Token使用信息',
+      description: 'Token usage information',
       path: 'usage'
     },
 
     'usage.completion_tokens': {
       type: 'number',
-      description: '视频生成消耗的token数',
+      description: 'Tokens consumed for video generation',
       path: 'usage.completion_tokens'
     },
 
     'usage.total_tokens': {
       type: 'number',
-      description: '总消耗token数',
+      description: 'Total tokens consumed',
       path: 'usage.total_tokens'
     },
 
     tools: {
       type: 'array',
-      description: '模型实际使用的工具',
+      description: 'Tools actually used by the model',
       path: 'tools'
     },
 
     safety_identifier: {
       type: 'string',
-      description: '终端用户唯一标识符',
+      description: 'End user unique identifier',
       path: 'safety_identifier'
     },
 
     draft: {
       type: 'boolean',
-      description: '生成的视频是否为草稿',
+      description: 'Whether the generated video is a draft',
       path: 'draft'
     },
 
     draft_task_id: {
       type: 'string',
-      description: '草稿视频任务ID',
+      description: 'Draft video task ID',
       path: 'draft_task_id'
     },
 
     service_tier: {
       type: 'string',
-      description: '处理任务使用的服务层级',
+      description: 'Service tier used for processing task',
       path: 'service_tier'
     },
 
     execution_expires_after: {
       type: 'number',
-      description: '任务超时阈值（秒）',
+      description: 'Task timeout threshold (seconds)',
       path: 'execution_expires_after'
     },
 
     'usage.tool_usage': {
       type: 'object',
-      description: '工具使用信息',
+      description: 'Tool usage information',
       path: 'usage.tool_usage'
     },
 
     'usage.tool_usage.web_search': {
       type: 'number',
-      description: '网页搜索调用次数',
+      description: 'Number of web search calls',
       path: 'usage.tool_usage.web_search'
     }
   }

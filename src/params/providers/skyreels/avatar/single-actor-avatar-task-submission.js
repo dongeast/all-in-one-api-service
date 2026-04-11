@@ -16,7 +16,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '视频首帧图片',
+      description: 'Video first frame image',
       format: 'uri'
     },
 
@@ -24,14 +24,14 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: true,
-      description: '音频文件URL列表,支持mp3/wav格式,每个音频时长<=200秒',
+      description: 'Audio file URL list, supports mp3/wav format, each audio duration <= 200 seconds',
       minItems: 1,
       maxItems: 1,
       items: {
         type: ParamType.STRING,
         elementType: ElementType.UPLOAD,
         format: 'uri',
-        description: '音频URL,支持mp3/wav格式'
+        description: 'Audio URL, supports mp3/wav format'
       }
     },
 
@@ -39,7 +39,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '返回结果的分辨率模式',
+      description: 'Resolution mode for returned results',
       options: ['std', 'pro'],
       default: 'std'
     }

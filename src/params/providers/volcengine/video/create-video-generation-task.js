@@ -14,21 +14,21 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: true,
-      description: '视频生成输入内容，支持文本、图像、音频、视频'
+      description: 'Video generation input content, supports text, image, audio, video'
     },
 
     callback_url: {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: false,
-      description: '任务状态通知的回调URL'
+      description: 'Callback URL for task status notification'
     },
 
     return_last_frame: {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否返回生成视频的最后一帧',
+      description: 'Whether to return the last frame of generated video',
       default: false
     },
 
@@ -36,7 +36,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '服务层级类型',
+      description: 'Service tier type',
       options: ['default', 'flex'],
       default: 'default'
     },
@@ -45,7 +45,7 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.INPUT,
       required: false,
-      description: '任务超时阈值（秒）',
+      description: 'Task timeout threshold (seconds)',
       min: 3600,
       max: 259200,
       default: 172800
@@ -55,7 +55,7 @@ module.exports = {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否生成同步音频（仅适用于 Seedance 2.0 & 2.0 fast, Seedance 1.5 pro）',
+      description: 'Whether to generate synchronized audio (only for Seedance 2.0 & 2.0 fast, Seedance 1.5 pro)',
       default: true
     },
 
@@ -63,7 +63,7 @@ module.exports = {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否启用草稿模式（仅适用于 Seedance 1.5 pro）',
+      description: 'Whether to enable draft mode (only for Seedance 1.5 pro)',
       default: false
     },
 
@@ -71,14 +71,14 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: false,
-      description: '模型工具配置（仅适用于 Seedance 2.0 & 2.0 fast）'
+      description: 'Model tool configuration (only for Seedance 2.0 & 2.0 fast)'
     },
 
     safety_identifier: {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: false,
-      description: '终端用户唯一标识符',
+      description: 'End user unique identifier',
       maxLength: 64
     },
 
@@ -86,7 +86,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '视频分辨率',
+      description: 'Video resolution',
       options: ['480p', '720p', '1080p']
     },
 
@@ -94,7 +94,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '生成视频的宽高比',
+      description: 'Generated video aspect ratio',
       options: ['16:9', '4:3', '1:1', '3:4', '9:16', '21:9', 'adaptive']
     },
 
@@ -102,14 +102,14 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.INPUT,
       required: false,
-      description: '视频时长（秒）'
+      description: 'Video duration (seconds)'
     },
 
     frames: {
       type: ParamType.NUMBER,
       elementType: ElementType.INPUT,
       required: false,
-      description: '视频帧数',
+      description: 'Video frame count',
       min: 29,
       max: 289
     },
@@ -120,7 +120,7 @@ module.exports = {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否固定镜头（参考图像场景不支持）',
+      description: 'Whether to fix camera (not supported for reference image scenarios)',
       default: false
     },
 
@@ -128,7 +128,7 @@ module.exports = {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否为视频添加水印',
+      description: 'Whether to add watermark to video',
       default: false
     }
   },
@@ -136,7 +136,7 @@ module.exports = {
   output: {
     id: {
       type: 'string',
-      description: '视频生成任务ID，有效期7天',
+      description: 'Video generation task ID, valid for 7 days',
       path: 'id'
     }
   },

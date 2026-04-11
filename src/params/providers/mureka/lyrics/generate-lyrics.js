@@ -11,20 +11,20 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.TEXTAREA,
       required: true,
-      description: '生成歌词的提示词'
+      description: 'Prompt for generating lyrics'
     }
   },
 
   output: {
     title: {
       type: 'string',
-      description: '生成的标题',
+      description: 'Generated title',
       path: 'title'
     },
 
     lyrics: {
       type: 'string',
-      description: '生成的歌词',
+      description: 'Generated lyrics',
       path: 'lyrics'
     }
   }

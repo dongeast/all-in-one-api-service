@@ -10,7 +10,7 @@ module.exports = {
     prompt: {
       ...textPrompt.prompt,
       elementType: ElementType.TEXTAREA,
-      description: '视频生成提示词',
+      description: 'Video generation prompt',
       maxLength: 1280
     },
 
@@ -18,7 +18,7 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '视频时长（秒）',
+      description: 'Video duration (seconds)',
       min: 1,
       max: 30,
       default: 5
@@ -28,7 +28,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.RATIO,
       required: false,
-      description: '视频宽高比',
+      description: 'Video aspect ratio',
       options: ['16:9', '9:16', '3:4', '4:3', '1:1'],
       default: '16:9'
     },
@@ -37,7 +37,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '质量/性能模式',
+      description: 'Quality/performance mode',
       options: ['fast', 'std', 'pro'],
       default: 'std'
     },
@@ -46,7 +46,7 @@ module.exports = {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否包含音效',
+      description: 'Whether to include sound effects',
       default: false
     },
 
@@ -54,7 +54,7 @@ module.exports = {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否启用自动提示词优化',
+      description: 'Whether to enable automatic prompt optimization',
       default: true
     }
   },
@@ -62,55 +62,55 @@ module.exports = {
   output: {
     task_id: {
       type: 'string',
-      description: '任务ID',
+      description: 'Task ID',
       path: 'task_id'
     },
 
     msg: {
       type: 'string',
-      description: '消息描述',
+      description: 'Message description',
       path: 'msg'
     },
 
     code: {
       type: 'number',
-      description: '状态码',
+      description: 'Status code',
       path: 'code'
     },
 
     status: {
       type: 'string',
-      description: '任务状态',
+      description: 'Task status',
       path: 'status'
     },
 
     trace_id: {
       type: 'string',
-      description: '请求跟踪ID',
+      description: 'Request trace ID',
       path: 'trace_id'
     },
 
     video_url: {
       type: 'string',
-      description: '视频URL',
+      description: 'Video URL',
       path: 'data.video_url'
     },
 
     duration_output: {
       type: 'number',
-      description: '视频时长（秒）',
+      description: 'Video duration (seconds)',
       path: 'data.duration'
     },
 
     resolution: {
       type: 'string',
-      description: '视频分辨率',
+      description: 'Video resolution',
       path: 'data.resolution'
     },
 
     cost_credits: {
       type: 'number',
-      description: '消耗的积分',
+      description: 'Credits consumed',
       path: 'data.cost_credits'
     }
   },

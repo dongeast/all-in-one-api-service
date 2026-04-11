@@ -11,7 +11,7 @@ module.exports = {
     prompt: {
       ...textPrompt.prompt,
       elementType: ElementType.TEXTAREA,
-      description: '视频生成提示词',
+      description: 'Video generation prompt',
       maxLength: 5000
     },
 
@@ -19,7 +19,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: true,
-      description: '使用的模型',
+      description: 'Model to use',
       options: ['ltx-2-fast', 'ltx-2-pro', 'ltx-2-3-fast', 'ltx-2-3-pro']
     },
 
@@ -27,17 +27,18 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '视频时长（秒）',
+      description: 'Video duration (seconds)',
       min: 2,
       max: 20,
-      default: 8
+      default: 8,
+      unit: 's'
     },
 
     resolution: {
       type: ParamType.ENUM,
-      elementType: ElementType.SELECT,
+      elementType: ElementType.RESOLUTION,
       required: false,
-      description: '视频分辨率',
+      description: 'Video resolution',
       options: [
         '1920x1080',
         '1080x1920',
@@ -52,26 +53,27 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '帧率',
+      description: 'Frame rate',
       min: 24,
       max: 50,
       integer: true,
-      default: 24
+      default: 24,
+      unit: 'fps'
     },
 
     generate_audio: {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否生成音频',
+      description: 'Whether to generate audio',
       default: true
     },
 
     camera_motion: {
       type: ParamType.ENUM,
-      elementType: ElementType.SELECT,
+      elementType: 'camera-motion',
       required: false,
-      description: '镜头运动效果',
+      description: 'Camera motion effect',
       options: [
         'dolly_in',
         'dolly_out',
@@ -86,37 +88,41 @@ module.exports = {
 
     image_uri: {
       type: ParamType.STRING,
-      elementType: ElementType.UPLOAD,
+      elementType: ElementType.IMAGE_UPLOAD,
       required: false,
-      description: '图片URI，用作视频的第一帧'
+      maxItems: 1,
+      maxSizeMB: 10,
+      description: 'Image URI to use as the first frame of the video'
     },
 
     audio_uri: {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: false,
-      description: '音频文件URI，用作视频的音轨'
+      description: 'Audio file URI to use as the video soundtrack'
     },
 
     video_uri: {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: false,
-      description: '视频URI，用于编辑或扩展'
+      description: 'Video URI for editing or extension'
     },
 
     last_frame_uri: {
       type: ParamType.STRING,
-      elementType: ElementType.UPLOAD,
+      elementType: ElementType.IMAGE_UPLOAD,
       required: false,
-      description: '图片URI，用作视频的最后一帧（仅ltx-2-3模型支持）'
+      maxItems: 1,
+      maxSizeMB: 10,
+      description: 'Image URI to use as the last frame of the video (only supported by ltx-2-3 models)'
     },
 
     guidance_scale: {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '引导比例（CFG）',
+      description: 'Guidance scale (CFG)',
       min: 1,
       max: 20,
       default: 5
@@ -126,7 +132,7 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.INPUT,
       required: false,
-      description: '开始时间（秒）',
+      description: 'Start time (seconds)',
       min: 0
     },
 
@@ -134,7 +140,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '操作模式',
+      description: 'Operation mode',
       options: ['replace_audio', 'replace_video', 'replace_audio_and_video', 'end', 'start']
     },
 
@@ -142,28 +148,29 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '从输入视频使用的上下文时长（秒）',
+      description: 'Context duration from input video (seconds)',
       min: 0,
-      max: 20
+      max: 20,
+      unit: 's'
     }
   },
 
   output: {
     video: {
       type: 'buffer',
-      description: '视频二进制数据',
+      description: 'Video binary data',
       path: 'video'
     },
 
     contentType: {
       type: 'string',
-      description: '内容类型',
+      description: 'Content type',
       path: 'contentType'
     },
 
     error: {
       type: 'object',
-      description: '错误信息',
+      description: 'Error information',
       path: 'error'
     }
   },

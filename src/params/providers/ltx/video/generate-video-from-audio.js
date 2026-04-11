@@ -10,37 +10,37 @@ module.exports = {
     audio_uri: {
       ...ltxCommon.input.audio_uri,
       required: true,
-      description: '音频文件URI，将用作视频的音轨。时长必须在2到20秒之间'
+      description: 'Audio file URI to use as video soundtrack. Duration must be between 2 and 20 seconds'
     },
 
     image_uri: {
       ...ltxCommon.input.image_uri,
       required: false,
-      description: '输入图片URI，将用作视频的第一帧。如果未提供prompt则必需'
+      description: 'Input image URI to use as the first frame of the video. Required if prompt is not provided'
     },
 
     prompt: {
       ...ltxCommon.input.prompt,
       required: false,
-      description: '描述视频应该如何生成的文本。如果未提供image_uri则必需'
+      description: 'Text describing how the video should be generated. Required if image_uri is not provided'
     },
 
     resolution: {
       ...ltxCommon.input.resolution,
       required: false,
-      description: '生成的视频分辨率，格式为WIDTHxHEIGHT。由图片方向自动确定'
+      description: 'Generated video resolution, format is WIDTHxHEIGHT. Automatically determined by image orientation'
     },
 
     guidance_scale: {
       ...ltxCommon.input.guidance_scale,
-      description: '视频生成的引导比例（CFG）。文本生成视频默认为5，提供图片时默认为9'
+      description: 'Video generation guidance scale (CFG). Default is 5 for text-to-video, 9 when image is provided'
     },
 
     model: {
       ...ltxCommon.input.model,
       required: false,
       default: 'ltx-2-3-pro',
-      description: '使用的模型（仅支持Pro模型：ltx-2-pro, ltx-2-3-pro）',
+      description: 'Model to use (only Pro models supported: ltx-2-pro, ltx-2-3-pro)',
       options: ['ltx-2-pro', 'ltx-2-3-pro']
     }
   },

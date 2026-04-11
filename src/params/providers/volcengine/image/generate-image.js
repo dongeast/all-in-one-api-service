@@ -12,48 +12,61 @@ module.exports = {
 
     prompt: {
       ...volcengineCommon.input.prompt,
-      description: '图像生成提示词，支持中英文，建议最多300个中文字符或600个英文单词'
+      description: 'Image generation prompt, supports Chinese and English, recommended max 300 Chinese characters or 600 English words'
     },
 
     image: {
       type: ParamType.STRING,
-      elementType: ElementType.UPLOAD,
+      elementType: ElementType.IMAGE_UPLOAD,
       required: false,
-      description: '输入图像信息，支持URL或Base64编码，最多14张参考图像'
+      description: 'Input image information, supports URL or Base64 encoding, max 14 reference images'
     },
 
     size: {
-      ...volcengineCommon.input.size,
-      description: '图像尺寸（格式：宽x高，如 2048x2048）或分辨率标识（如 2K、4K）'
+      type: ParamType.ENUM,
+      elementType: ElementType.RESOLUTION,
+      required: false,
+      description: 'Image size (width x height) or resolution identifier',
+      options: [
+        '1024x1024',
+        '1280x720',
+        '720x1280',
+        '2048x2048',
+        '2848x1600',
+        '1600x2848',
+        '4096x4096',
+        '5504x3040',
+        '3040x5504'
+      ],
+      default: '2048x2048'
     },
-
-    width: volcengineCommon.input.width,
-
-    height: volcengineCommon.input.height,
 
     seed: volcengineCommon.input.seed,
 
     sequential_image_generation: {
       type: ParamType.ENUM,
-      elementType: ElementType.SELECT,
+      elementType: ElementType.RADIO,
       required: false,
-      description: '是否启用连续图像生成',
+      description: 'Whether to enable continuous image generation',
       options: ['auto', 'disabled'],
       default: 'disabled'
     },
 
     sequential_image_generation_options: {
       type: ParamType.OBJECT,
-      elementType: ElementType.INPUT,
+      elementType: ElementType.DEFAULT,  // 隐藏，不在前端显示
       required: false,
-      description: '连续图像生成配置'
+      description: 'Continuous image generation configuration',
+      default: {
+        max_images: 15  // 默认最多生成15张
+      }
     },
 
     stream: {
       type: ParamType.BOOLEAN,
-      elementType: ElementType.SWITCH,
+      elementType: ElementType.DEFAULT,
       required: false,
-      description: '是否启用流式输出模式',
+      description: 'Whether to enable streaming output mode',
       default: false
     },
 
@@ -61,7 +74,7 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '模型输出与提示词的一致性',
+      description: 'Consistency between model output and prompt',
       min: 1,
       max: 10,
       default: 2.5
@@ -69,9 +82,9 @@ module.exports = {
 
     output_format: {
       type: ParamType.ENUM,
-      elementType: ElementType.SELECT,
+      elementType: ElementType.RADIO,
       required: false,
-      description: '输出图像文件格式',
+      description: 'Output image file format',
       options: ['png', 'jpeg'],
       default: 'jpeg'
     },
@@ -82,9 +95,9 @@ module.exports = {
 
     optimize_prompt_options: {
       type: ParamType.OBJECT,
-      elementType: ElementType.INPUT,
+      elementType: ElementType.DEFAULT,
       required: false,
-      description: '提示词优化功能配置'
+      description: 'Prompt optimization configuration'
     }
   },
 

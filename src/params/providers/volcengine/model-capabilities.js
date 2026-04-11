@@ -10,7 +10,7 @@ module.exports = {
     compositeConstraints: [
       {
         name: 'totalPixels',
-        description: '总像素范围约束',
+        description: 'Total pixel range constraint',
         expression: 'width * height',
         params: ['width', 'height'],
         validate: {
@@ -21,7 +21,7 @@ module.exports = {
       },
       {
         name: 'aspectRatio',
-        description: '宽高比范围约束',
+        description: 'Aspect ratio range constraint',
         expression: 'width / height',
         params: ['width', 'height'],
         validate: {
@@ -54,7 +54,7 @@ module.exports = {
     compositeConstraints: [
       {
         name: 'totalPixels',
-        description: '总像素范围约束',
+        description: 'Total pixel range constraint',
         expression: 'width * height',
         params: ['width', 'height'],
         validate: {
@@ -65,7 +65,7 @@ module.exports = {
       },
       {
         name: 'aspectRatio',
-        description: '宽高比范围约束',
+        description: 'Aspect ratio range constraint',
         expression: 'width / height',
         params: ['width', 'height'],
         validate: {
@@ -98,7 +98,7 @@ module.exports = {
     compositeConstraints: [
       {
         name: 'totalPixels',
-        description: '总像素范围约束',
+        description: 'Total pixel range constraint',
         expression: 'width * height',
         params: ['width', 'height'],
         validate: {
@@ -109,7 +109,7 @@ module.exports = {
       },
       {
         name: 'aspectRatio',
-        description: '宽高比范围约束',
+        description: 'Aspect ratio range constraint',
         expression: 'width / height',
         params: ['width', 'height'],
         validate: {

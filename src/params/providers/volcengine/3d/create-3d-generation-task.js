@@ -10,21 +10,21 @@ module.exports = {
   input: {
     model: {
       ...volcengineCommon.input.model,
-      description: '模型ID或端点ID（必须为 doubao-seed3d-1-0-250928）'
+      description: 'Model ID or endpoint ID (must be doubao-seed3d-1-0-250928)'
     },
 
     content: {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: true,
-      description: '3D生成输入内容，必须包含1张图像'
+      description: '3D generation input content, must contain 1 image'
     }
   },
 
   output: {
     id: {
       type: 'string',
-      description: '3D生成任务ID，有效期7天',
+      description: '3D generation task ID, valid for 7 days',
       path: 'id'
     }
   },

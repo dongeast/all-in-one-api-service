@@ -8,7 +8,7 @@ module.exports = {
   input: {
     prompt: {
       ...textPrompt.prompt,
-      description: '视频生成提示词',
+      description: 'Video generation prompt',
       maxLength: 2000
     },
 
@@ -17,7 +17,7 @@ module.exports = {
     duration: {
       type: 'number',
       required: false,
-      description: '视频时长（秒）',
+      description: 'Video duration (seconds)',
       min: 1,
       max: 60,
       default: 5
@@ -26,7 +26,7 @@ module.exports = {
     fps: {
       type: 'number',
       required: false,
-      description: '帧率',
+      description: 'Frame rate',
       min: 1,
       max: 60,
       integer: true,
@@ -36,7 +36,7 @@ module.exports = {
     width: {
       type: 'number',
       required: false,
-      description: '视频宽度',
+      description: 'Video width',
       min: 256,
       max: 2048,
       integer: true
@@ -45,7 +45,7 @@ module.exports = {
     height: {
       type: 'number',
       required: false,
-      description: '视频高度',
+      description: 'Video height',
       min: 256,
       max: 2048,
       integer: true
@@ -55,25 +55,25 @@ module.exports = {
   output: {
     videoUrl: {
       type: 'string',
-      description: '视频URL',
+      description: 'Video URL',
       path: 'data.url'
     },
 
     videoId: {
       type: 'string',
-      description: '视频ID',
+      description: 'Video ID',
       path: 'data.id'
     },
 
     duration: {
       type: 'number',
-      description: '视频时长（秒）',
+      description: 'Video duration (seconds)',
       path: 'data.duration'
     },
 
     created: {
       type: 'number',
-      description: '创建时间戳',
+      description: 'Creation timestamp',
       path: 'created'
     }
   }

@@ -19,139 +19,139 @@ const InputOutputTypes = {
   TEXT_TO_IMAGE: {
     input: MediaTypes.TEXT,
     output: MediaTypes.IMAGE,
-    display_name: '文本生成图像'
+    display_name: 'Text to Image'
   },
   IMAGE_TO_IMAGE: {
     input: MediaTypes.IMAGE,
     output: MediaTypes.IMAGE,
-    display_name: '图像转换'
+    display_name: 'Image to Image'
   },
   IMAGE_EDITING: {
     input: MediaTypes.IMAGE,
     output: MediaTypes.IMAGE,
-    display_name: '图像编辑'
+    display_name: 'Image Editing'
   },
   IMAGE_UPSCALING: {
     input: MediaTypes.IMAGE,
     output: MediaTypes.IMAGE,
-    display_name: '图像放大'
+    display_name: 'Image Upscaling'
   },
 
   // 视频生成类
   TEXT_TO_VIDEO: {
     input: MediaTypes.TEXT,
     output: MediaTypes.VIDEO,
-    display_name: '文本生成视频'
+    display_name: 'Text to Video'
   },
   IMAGE_TO_VIDEO: {
     input: MediaTypes.IMAGE,
     output: MediaTypes.VIDEO,
-    display_name: '图像生成视频'
+    display_name: 'Image to Video'
   },
   AUDIO_TO_VIDEO: {
     input: MediaTypes.AUDIO,
     output: MediaTypes.VIDEO,
-    display_name: '音频生成视频'
+    display_name: 'Audio to Video'
   },
   VIDEO_EDITING: {
     input: MediaTypes.VIDEO,
     output: MediaTypes.VIDEO,
-    display_name: '视频编辑'
+    display_name: 'Video Editing'
   },
   VIDEO_EXTENSION: {
     input: MediaTypes.VIDEO,
     output: MediaTypes.VIDEO,
-    display_name: '视频延长'
+    display_name: 'Video Extension'
   },
 
   // 音频生成类
   TEXT_TO_AUDIO: {
     input: MediaTypes.TEXT,
     output: MediaTypes.AUDIO,
-    display_name: '文本生成音频'
+    display_name: 'Text to Audio'
   },
   TEXT_TO_SPEECH: {
     input: MediaTypes.TEXT,
     output: MediaTypes.AUDIO,
-    display_name: '文本转语音'
+    display_name: 'Text to Speech'
   },
   SPEECH_TO_TEXT: {
     input: MediaTypes.AUDIO,
     output: MediaTypes.TEXT,
-    display_name: '语音转文本'
+    display_name: 'Speech to Text'
   },
   AUDIO_GENERATION: {
     input: MediaTypes.TEXT,
     output: MediaTypes.AUDIO,
-    display_name: '音频生成'
+    display_name: 'Audio Generation'
   },
   MUSIC_GENERATION: {
     input: MediaTypes.TEXT,
     output: MediaTypes.AUDIO,
-    display_name: '音乐生成'
+    display_name: 'Music Generation'
   },
   SONG_GENERATION: {
     input: MediaTypes.TEXT,
     output: MediaTypes.AUDIO,
-    display_name: '歌曲生成'
+    display_name: 'Song Generation'
   },
   INSTRUMENTAL_GENERATION: {
     input: MediaTypes.TEXT,
     output: MediaTypes.AUDIO,
-    display_name: '伴奏生成'
+    display_name: 'Instrumental Generation'
   },
   VOCAL_CLONING: {
     input: MediaTypes.AUDIO,
     output: MediaTypes.AUDIO,
-    display_name: '声音克隆'
+    display_name: 'Vocal Cloning'
   },
 
   // 文本生成类
   TEXT_GENERATION: {
     input: MediaTypes.TEXT,
     output: MediaTypes.TEXT,
-    display_name: '文本生成'
+    display_name: 'Text Generation'
   },
   TEXT_EDITING: {
     input: MediaTypes.TEXT,
     output: MediaTypes.TEXT,
-    display_name: '文本编辑'
+    display_name: 'Text Editing'
   },
 
   // 3D生成类
   IMAGE_TO_3D: {
     input: MediaTypes.IMAGE,
     output: MediaTypes.AUDIO_3D,
-    display_name: '图像生成3D'
+    display_name: 'Image to 3D'
   },
   TEXT_TO_3D: {
     input: MediaTypes.TEXT,
     output: MediaTypes.AUDIO_3D,
-    display_name: '文本生成3D'
+    display_name: 'Text to 3D'
   },
 
   // 查询类
   TASK_QUERY: {
     input: MediaTypes.TEXT,
     output: MediaTypes.TEXT,
-    display_name: '任务查询'
+    display_name: 'Task Query'
   },
   FILE_UPLOAD: {
     input: MediaTypes.FILE,
     output: MediaTypes.FILE,
-    display_name: '文件上传'
+    display_name: 'File Upload'
   },
 
   // Avatar类
   AVATAR_GENERATION: {
     input: MediaTypes.IMAGE,
     output: MediaTypes.VIDEO,
-    display_name: '数字人生成'
+    display_name: 'Avatar Generation'
   },
   LIP_SYNC: {
     input: MediaTypes.VIDEO,
     output: MediaTypes.VIDEO,
-    display_name: '口型同步'
+    display_name: 'Lip Sync'
   }
 }
 
@@ -160,143 +160,136 @@ const InputOutputTypes = {
  * 定义API的功能类型分类，包含完整元数据
  */
 const APITypes = {
-  // 图像生成类
   TEXT_TO_IMAGE: {
     id: 'text_to_image',
     inputOutput: InputOutputTypes.TEXT_TO_IMAGE,
-    description: '根据文本描述生成图像'
+    description: 'Generate image from text description'
   },
   IMAGE_TO_IMAGE: {
     id: 'image_to_image',
     inputOutput: InputOutputTypes.IMAGE_TO_IMAGE,
-    description: '将输入图像转换为另一种风格的图像'
+    description: 'Convert input image to another style'
   },
   IMAGE_EDITING: {
     id: 'image_editing',
     inputOutput: InputOutputTypes.IMAGE_EDITING,
-    description: '对图像进行编辑修改'
+    description: 'Edit and modify images'
   },
   IMAGE_UPSCALING: {
     id: 'image_upscaling',
     inputOutput: InputOutputTypes.IMAGE_UPSCALING,
-    description: '提升图像分辨率和质量'
+    description: 'Enhance image resolution and quality'
   },
 
-  // 视频生成类
   TEXT_TO_VIDEO: {
     id: 'text_to_video',
     inputOutput: InputOutputTypes.TEXT_TO_VIDEO,
-    description: '根据文本描述生成视频'
+    description: 'Generate video from text description'
   },
   IMAGE_TO_VIDEO: {
     id: 'image_to_video',
     inputOutput: InputOutputTypes.IMAGE_TO_VIDEO,
-    description: '将静态图像转换为动态视频'
+    description: 'Convert static image to dynamic video'
   },
   AUDIO_TO_VIDEO: {
     id: 'audio_to_video',
     inputOutput: InputOutputTypes.AUDIO_TO_VIDEO,
-    description: '根据音频内容生成视频'
+    description: 'Generate video from audio content'
   },
   VIDEO_EDITING: {
     id: 'video_editing',
     inputOutput: InputOutputTypes.VIDEO_EDITING,
-    description: '对视频进行编辑修改'
+    description: 'Edit and modify videos'
   },
   VIDEO_EXTENSION: {
     id: 'video_extension',
     inputOutput: InputOutputTypes.VIDEO_EXTENSION,
-    description: '延长视频时长'
+    description: 'Extend video duration'
   },
 
-  // 音频生成类
   TEXT_TO_AUDIO: {
     id: 'text_to_audio',
     inputOutput: InputOutputTypes.TEXT_TO_AUDIO,
-    description: '根据文本描述生成音频'
+    description: 'Generate audio from text description'
   },
   TEXT_TO_SPEECH: {
     id: 'text_to_speech',
     inputOutput: InputOutputTypes.TEXT_TO_SPEECH,
-    description: '将文本转换为语音'
+    description: 'Convert text to speech'
   },
   SPEECH_TO_TEXT: {
     id: 'speech_to_text',
     inputOutput: InputOutputTypes.SPEECH_TO_TEXT,
-    description: '将语音转换为文本'
+    description: 'Convert speech to text'
   },
   AUDIO_GENERATION: {
     id: 'audio_generation',
     inputOutput: InputOutputTypes.AUDIO_GENERATION,
-    description: '生成各种类型的音频'
+    description: 'Generate various types of audio'
   },
   MUSIC_GENERATION: {
     id: 'music_generation',
     inputOutput: InputOutputTypes.MUSIC_GENERATION,
-    description: '根据描述生成音乐'
+    description: 'Generate music from description'
   },
   SONG_GENERATION: {
     id: 'song_generation',
     inputOutput: InputOutputTypes.SONG_GENERATION,
-    description: '生成完整的歌曲'
+    description: 'Generate complete songs'
   },
   INSTRUMENTAL_GENERATION: {
     id: 'instrumental_generation',
     inputOutput: InputOutputTypes.INSTRUMENTAL_GENERATION,
-    description: '生成器乐伴奏'
+    description: 'Generate instrumental accompaniment'
   },
   VOCAL_CLONING: {
     id: 'vocal_cloning',
     inputOutput: InputOutputTypes.VOCAL_CLONING,
-    description: '克隆特定声音特征'
+    description: 'Clone specific voice characteristics'
   },
 
-  // 文本生成类
   TEXT_GENERATION: {
     id: 'text_generation',
     inputOutput: InputOutputTypes.TEXT_GENERATION,
-    description: '生成文本内容'
+    description: 'Generate text content'
   },
   TEXT_EDITING: {
     id: 'text_editing',
     inputOutput: InputOutputTypes.TEXT_EDITING,
-    description: '编辑和修改文本'
+    description: 'Edit and modify text'
   },
 
-  // 3D生成类
   IMAGE_TO_3D: {
     id: 'image_to_3d',
     inputOutput: InputOutputTypes.IMAGE_TO_3D,
-    description: '从图像生成3D模型'
+    description: 'Generate 3D model from image'
   },
   TEXT_TO_3D: {
     id: 'text_to_3d',
     inputOutput: InputOutputTypes.TEXT_TO_3D,
-    description: '根据文本描述生成3D模型'
+    description: 'Generate 3D model from text description'
   },
 
-  // 查询类
   TASK_QUERY: {
     id: 'task_query',
     inputOutput: InputOutputTypes.TASK_QUERY,
-    description: '查询任务状态'
+    description: 'Query task status'
   },
   FILE_UPLOAD: {
     id: 'file_upload',
     inputOutput: InputOutputTypes.FILE_UPLOAD,
-    description: '上传文件'
+    description: 'Upload files'
   },
 
-  // Avatar类
   AVATAR_GENERATION: {
     id: 'avatar_generation',
     inputOutput: InputOutputTypes.AVATAR_GENERATION,
-    description: '生成数字人形象'
+    description: 'Generate digital avatar'
   },
   LIP_SYNC: {
     id: 'lip_sync',
     inputOutput: InputOutputTypes.LIP_SYNC,
-    description: '视频口型与音频同步'
+    description: 'Synchronize video lip movements with audio'
   }
 }
 

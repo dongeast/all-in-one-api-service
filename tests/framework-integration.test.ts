@@ -645,6 +645,148 @@ describe('框架功能测试', () => {
   })
 
   /**
+   * 测试16：同时限定API类型和模型系列进行查询
+   */
+  describe('16. 同时限定API类型和模型系列进行查询', () => {
+    test('应该根据API类型和模型系列筛选model', () => {
+      const { Series } = AIService.Constants
+      
+      const models = AIService.getModels({ 
+        type: 'text_to_video',
+        series: Series.LTX 
+      })
+      
+      expect(Array.isArray(models)).toBe(true)
+      models.forEach((model: any) => {
+        const types = Array.isArray(model.type) ? model.type : [model.type]
+        const typeIds = types.map((t: any) => typeof t === 'object' ? t.id : t)
+        expect(typeIds).toContain('text_to_video')
+        expect(model.series).toBe(Series.LTX)
+      })
+    })
+
+    test('应该获取火山引擎seedance系列的视频生成模型', () => {
+      const { Series } = AIService.Constants
+      
+      const models = AIService.getModels({ 
+        type: 'text_to_video',
+        series: Series.SEEDANCE 
+      })
+      
+      expect(Array.isArray(models)).toBe(true)
+      expect(models.length).toBeGreaterThan(0)
+      
+      models.forEach((model: any) => {
+        expect(model.series).toBe(Series.SEEDANCE)
+        const types = Array.isArray(model.type) ? model.type : [model.type]
+        const typeIds = types.map((t: any) => typeof t === 'object' ? t.id : t)
+        expect(typeIds).toContain('text_to_video')
+        expect(model.provider).toBe('volcengine')
+      })
+    })
+
+    test('应该获取火山引擎seedream系列的图像生成模型', () => {
+      const { Series } = AIService.Constants
+      
+      const models = AIService.getModels({ 
+        type: 'text_to_image',
+        series: Series.SEEDREAM 
+      })
+      
+      expect(Array.isArray(models)).toBe(true)
+      expect(models.length).toBeGreaterThan(0)
+      
+      models.forEach((model: any) => {
+        expect(model.series).toBe(Series.SEEDREAM)
+        const typeObj = typeof model.type === 'object' ? model.type : { id: model.type }
+        expect(typeObj.id).toBe('text_to_image')
+        expect(model.provider).toBe('volcengine')
+      })
+    })
+
+    test('应该根据API类型和模型系列获取最佳function', () => {
+      const { Series } = AIService.Constants
+      
+      const models = AIService.getModels({ 
+        type: 'text_to_video',
+        series: Series.LTX 
+      })
+      
+      if (models.length > 0) {
+        const firstModel = models[0]
+        const bestFunction = AIService.getBestFunction('text_to_video', firstModel.name)
+        
+        if (bestFunction) {
+          expect(bestFunction.type).toBe('text_to_video')
+          expect(bestFunction.models).toContain(firstModel.name)
+        }
+      }
+    })
+
+    test('应该返回空数组当没有匹配的模型', () => {
+      const models = AIService.getModels({ 
+        type: 'non_existent_type',
+        series: 'non_existent_series' 
+      })
+      
+      expect(Array.isArray(models)).toBe(true)
+      expect(models.length).toBe(0)
+    })
+
+    test('应该支持多语言查询', () => {
+      const { Series } = AIService.Constants
+      
+      const modelsZh = AIService.getModels({ 
+        type: 'text_to_video',
+        series: Series.SEEDANCE 
+      }, 'zh')
+      
+      const modelsEn = AIService.getModels({ 
+        type: 'text_to_video',
+        series: Series.SEEDANCE 
+      }, 'en')
+      
+      expect(Array.isArray(modelsZh)).toBe(true)
+      expect(Array.isArray(modelsEn)).toBe(true)
+      expect(modelsZh.length).toBe(modelsEn.length)
+    })
+
+    test('应该正确处理数组类型的type字段', () => {
+      const { Series } = AIService.Constants
+      
+      const models = AIService.getModels({ 
+        type: 'image_to_video',
+        series: Series.LTX 
+      })
+      
+      expect(Array.isArray(models)).toBe(true)
+      models.forEach((model: any) => {
+        const types = Array.isArray(model.type) ? model.type : [model.type]
+        const typeIds = types.map((t: any) => typeof t === 'object' ? t.id : t)
+        expect(typeIds).toContain('image_to_video')
+        expect(model.series).toBe(Series.LTX)
+      })
+    })
+
+    test('应该按优先级排序结果', () => {
+      const { Series } = AIService.Constants
+      
+      const models = AIService.getModels({ 
+        type: 'text_to_video',
+        series: Series.SEEDANCE 
+      })
+      
+      if (models.length > 1) {
+        for (let i = 0; i < models.length - 1; i++) {
+          const currentPriority = models[i].priority || 0
+          const nextPriority = models[i + 1].priority || 0
+          expect(currentPriority).toBeGreaterThanOrEqual(nextPriority)
+        }
+      }
+    })
+  })
+
+  /**
    * 额外测试：框架基础功能
    */
   describe('框架基础功能', () => {

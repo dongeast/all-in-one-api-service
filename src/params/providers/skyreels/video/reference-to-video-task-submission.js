@@ -16,7 +16,7 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: true,
-      description: '1-4个主体参考图片',
+      description: '1-4 subject reference images',
       minItems: 1,
       maxItems: 4,
       items: {

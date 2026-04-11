@@ -8,14 +8,14 @@ module.exports = {
   input: {
     prompt: {
       ...textPrompt.prompt,
-      description: '图像生成提示词',
+      description: 'Image generation prompt',
       maxLength: 4000
     },
 
     negativePrompt: {
       type: 'string',
       required: false,
-      description: '反向提示词',
+      description: 'Negative prompt',
       default: ''
     },
 
@@ -24,7 +24,7 @@ module.exports = {
     width: {
       type: 'number',
       required: false,
-      description: '图像宽度',
+      description: 'Image width',
       min: 64,
       max: 2048,
       integer: true
@@ -33,7 +33,7 @@ module.exports = {
     height: {
       type: 'number',
       required: false,
-      description: '图像高度',
+      description: 'Image height',
       min: 64,
       max: 2048,
       integer: true
@@ -42,7 +42,7 @@ module.exports = {
     numOutputs: {
       type: 'number',
       required: false,
-      description: '生成图像数量',
+      description: 'Number of images to generate',
       min: 1,
       max: 10,
       integer: true,
@@ -53,7 +53,7 @@ module.exports = {
   output: {
     images: {
       type: 'array',
-      description: '生成的图像列表',
+      description: 'Generated image list',
       path: 'data',
       itemSchema: {
         fields: {
@@ -65,19 +65,19 @@ module.exports = {
 
     imageUrl: {
       type: 'string',
-      description: '第一张图像的URL',
+      description: 'First image URL',
       path: 'data[0].url'
     },
 
     imageId: {
       type: 'string',
-      description: '图像ID',
+      description: 'Image ID',
       path: 'data[0].id'
     },
 
     created: {
       type: 'number',
-      description: '创建时间戳',
+      description: 'Creation timestamp',
       path: 'created'
     }
   }

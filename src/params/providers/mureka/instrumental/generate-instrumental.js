@@ -11,7 +11,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '模型选择',
+      description: 'Model selection',
       options: ['auto', 'mureka-7.5', 'mureka-7.6', 'mureka-8'],
       default: 'auto'
     },
@@ -20,7 +20,7 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '生成数量',
+      description: 'Number of generations',
       min: 1,
       max: 3,
       default: 2
@@ -30,7 +30,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.TEXTAREA,
       required: false,
-      description: '音乐风格提示词',
+      description: 'Music style prompt',
       maxLength: 1024
     },
 
@@ -38,14 +38,14 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: false,
-      description: '伴奏ID(通过 files/upload API)'
+      description: 'Instrumental ID (via files/upload API)'
     },
 
     stream: {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: '是否启用流式播放',
+      description: 'Enable streaming playback',
       default: false
     }
   },
@@ -53,43 +53,43 @@ module.exports = {
   output: {
     id: {
       type: 'string',
-      description: '任务ID',
+      description: 'Task ID',
       path: 'id'
     },
 
     created_at: {
       type: 'number',
-      description: '创建时间戳(秒)',
+      description: 'Creation timestamp (seconds)',
       path: 'created_at'
     },
 
     finished_at: {
       type: 'number',
-      description: '完成时间戳(秒)',
+      description: 'Completion timestamp (seconds)',
       path: 'finished_at'
     },
 
     model: {
       type: 'string',
-      description: '使用的模型',
+      description: 'Model used',
       path: 'model'
     },
 
     status: {
       type: 'string',
-      description: '任务状态',
+      description: 'Task status',
       path: 'status'
     },
 
     failed_reason: {
       type: 'string',
-      description: '失败原因',
+      description: 'Failure reason',
       path: 'failed_reason'
     },
 
     choices: {
       type: 'array',
-      description: '生成结果列表',
+      description: 'Generation results list',
       path: 'choices'
     }
   }

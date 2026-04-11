@@ -16,7 +16,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '视频首帧图片',
+      description: 'Video first frame image',
       format: 'uri'
     },
 
@@ -24,12 +24,12 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: true,
-      description: '音频文件URL列表,支持mp3/wav格式,每个音频时长<=200秒',
+      description: 'Audio file URL list, supports mp3/wav format, each audio duration <= 200 seconds',
       items: {
         type: ParamType.STRING,
         elementType: ElementType.UPLOAD,
         format: 'uri',
-        description: '音频URL,支持mp3/wav格式'
+        description: 'Audio URL, supports mp3/wav format'
       }
     },
 
@@ -37,18 +37,18 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: true,
-      description: '多人音频2视频人脸边界框,bboxes数量必须与audios数量匹配',
+      description: 'Multi-person audio-to-video face bounding boxes, bboxes count must match audios count',
       minItems: 1,
       items: {
         type: ParamType.ARRAY,
         elementType: ElementType.INPUT,
-        description: '边界框[x, y, width, height]',
+        description: 'Bounding box [x, y, width, height]',
         minItems: 4,
         maxItems: 4,
         items: {
           type: ParamType.NUMBER,
           elementType: ElementType.INPUT,
-          description: '边界框坐标值',
+          description: 'Bounding box coordinate value',
           min: 0
         }
       },
@@ -76,7 +76,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '多人bbox类型是主体检测还是人脸检测',
+      description: 'Multi-person bbox type is subject detection or face detection',
       options: ['face', 'body'],
       default: 'face'
     },
@@ -85,7 +85,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '返回结果的分辨率模式',
+      description: 'Resolution mode for returned results',
       options: ['std', 'pro'],
       default: 'std'
     }

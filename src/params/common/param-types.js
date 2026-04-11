@@ -15,6 +15,7 @@ const ParamType = {
 }
 
 const ElementType = {
+  DEFAULT: 'default',
   INPUT: 'input',
   TEXTAREA: 'textarea',
   SELECT: 'select',
@@ -25,7 +26,9 @@ const ElementType = {
   COLOR_PICKER: 'color-picker',
   DATE_PICKER: 'date-picker',
   SWITCH: 'switch',
-  RATIO: 'ratio'
+  RATIO: 'ratio',
+  RESOLUTION: 'resolution',
+  IMAGE_UPLOAD: 'image-upload'
 }
 
 module.exports = {

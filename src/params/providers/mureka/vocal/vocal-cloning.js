@@ -11,7 +11,7 @@ module.exports = {
       type: ParamType.FILE,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '人声样本文件(二进制)',
+      description: 'Vocal sample file (binary)',
       constraints: {
         maxSize: 10 * 1024 * 1024,
         formats: ['mp3', 'm4a']
@@ -22,25 +22,25 @@ module.exports = {
   output: {
     id: {
       type: 'string',
-      description: '资源ID',
+      description: 'Resource ID',
       path: 'id'
     },
 
     filename: {
       type: 'string',
-      description: '上传的文件名',
+      description: 'Uploaded file name',
       path: 'filename'
     },
 
     bytes: {
       type: 'number',
-      description: '文件大小(字节)',
+      description: 'File size (bytes)',
       path: 'bytes'
     },
 
     created_at: {
       type: 'number',
-      description: '创建时间戳(秒)',
+      description: 'Creation timestamp (seconds)',
       path: 'created_at'
     }
   }

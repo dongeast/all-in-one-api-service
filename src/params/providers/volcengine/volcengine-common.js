@@ -11,45 +11,47 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: true,
-      description: '模型ID或端点ID'
+      description: 'Model ID or endpoint ID'
     },
 
     prompt: {
       ...textPrompt.prompt,
       elementType: ElementType.TEXTAREA,
-      description: '生成提示词，支持中英文'
+      description: 'Generation prompt, supports Chinese and English'
     },
 
     width: {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '图像宽度（像素）',
+      description: 'Image width (pixels)',
       min: 256,
-      max: 4096
+      max: 4096,
+      default: 256
     },
 
     height: {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '图像高度（像素）',
+      description: 'Image height (pixels)',
       min: 256,
-      max: 4096
+      max: 4096,
+      default: 256
     },
 
     size: {
       type: ParamType.STRING,
       elementType: ElementType.INPUT,
       required: false,
-      description: '图像尺寸（格式：宽x高，如 2048x2048）'
+      description: 'Image size (format: width x height, e.g. 2048x2048)'
     },
 
     seed: {
       type: ParamType.NUMBER,
-      elementType: ElementType.INPUT,
+      elementType: ElementType.DEFAULT,
       required: false,
-      description: '随机种子，用于控制生成随机性',
+      description: 'Random seed for controlling generation randomness',
       min: -1,
       max: 2147483647,
       default: -1
@@ -57,17 +59,17 @@ module.exports = {
 
     watermark: {
       type: ParamType.BOOLEAN,
-      elementType: ElementType.SWITCH,
+      elementType: ElementType.DEFAULT,
       required: false,
-      description: '是否添加水印',
-      default: true
+      description: 'Whether to add watermark',
+      default: false
     },
 
     response_format: {
       type: ParamType.ENUM,
-      elementType: ElementType.SELECT,
+      elementType: ElementType.RADIO,
       required: false,
-      description: '响应格式',
+      description: 'Response format',
       options: ['url', 'b64_json'],
       default: 'url'
     }
@@ -76,85 +78,85 @@ module.exports = {
   output: {
     model: {
       type: 'string',
-      description: '使用的模型ID',
+      description: 'Model ID used',
       path: 'model'
     },
 
     created: {
       type: 'number',
-      description: '创建时间戳（秒）',
+      description: 'Creation timestamp (seconds)',
       path: 'created'
     },
 
     data: {
       type: 'array',
-      description: '生成的图像信息数组',
+      description: 'Generated image information array',
       path: 'data'
     },
 
     'data[].url': {
       type: 'string',
-      description: '图像URL（24小时有效）',
+      description: 'Image URL (valid for 24 hours)',
       path: 'data[0].url'
     },
 
     'data[].b64_json': {
       type: 'string',
-      description: '图像Base64数据',
+      description: 'Image Base64 data',
       path: 'data[0].b64_json'
     },
 
     'data[].size': {
       type: 'string',
-      description: '图像尺寸',
+      description: 'Image size',
       path: 'data[0].size'
     },
 
     'data[].error': {
       type: 'object',
-      description: '错误信息',
+      description: 'Error information',
       path: 'data[0].error'
     },
 
     usage: {
       type: 'object',
-      description: '使用量信息',
+      description: 'Usage information',
       path: 'usage'
     },
 
     'usage.generated_images': {
       type: 'number',
-      description: '成功生成的图像数量',
+      description: 'Number of successfully generated images',
       path: 'usage.generated_images'
     },
 
     'usage.output_tokens': {
       type: 'number',
-      description: '输出token数',
+      description: 'Output token count',
       path: 'usage.output_tokens'
     },
 
     'usage.total_tokens': {
       type: 'number',
-      description: '总token数',
+      description: 'Total token count',
       path: 'usage.total_tokens'
     },
 
     error: {
       type: 'object',
-      description: '错误信息',
+      description: 'Error information',
       path: 'error'
     },
 
     'error.code': {
       type: 'string',
-      description: '错误码',
+      description: 'Error code',
       path: 'error.code'
     },
 
     'error.message': {
       type: 'string',
-      description: '错误消息',
+      description: 'Error message',
       path: 'error.message'
     }
   },

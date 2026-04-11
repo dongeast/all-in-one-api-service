@@ -13,7 +13,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '视频首帧图片',
+      description: 'Video first frame image',
       format: 'uri'
     },
 
@@ -21,7 +21,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: false,
-      description: '视频尾帧图片',
+      description: 'Video last frame image',
       format: 'uri'
     },
 
@@ -29,7 +29,7 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: false,
-      description: '视频中间帧图片列表',
+      description: 'Video middle frame image list',
       maxItems: 6,
       items: {
         type: ParamType.OBJECT,
@@ -38,21 +38,21 @@ module.exports = {
             type: ParamType.STRING,
             elementType: ElementType.INPUT,
             required: true,
-            description: '参考图片标识符,必须以 @ 开头',
+            description: 'Reference image identifier, must start with @',
             pattern: '^@'
           },
           image_url: {
             type: ParamType.STRING,
             elementType: ElementType.UPLOAD,
             required: true,
-            description: '图片URL',
+            description: 'Image URL',
             format: 'uri'
           },
           time_stamp: {
             type: ParamType.NUMBER,
             elementType: ElementType.INPUT,
             required: false,
-            description: '目标时间戳,-1 表示未指定',
+            description: 'Target timestamp, -1 means unspecified',
             default: -1
           }
         }

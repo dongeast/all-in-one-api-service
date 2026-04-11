@@ -22,7 +22,7 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: false,
-      description: '参考图片列表',
+      description: 'Reference image list',
       items: {
         type: ParamType.OBJECT,
         properties: {
@@ -30,21 +30,21 @@ module.exports = {
             type: ParamType.STRING,
             elementType: ElementType.INPUT,
             required: true,
-            description: '参考图片标识符,必须以 @ 开头',
+            description: 'Reference image identifier, must start with @',
             pattern: '^@'
           },
           type: {
             type: ParamType.ENUM,
             elementType: ElementType.SELECT,
             required: true,
-            description: '图片参考类型',
+            description: 'Image reference type',
             options: ['grid', 'image']
           },
           image_urls: {
             type: ParamType.ARRAY,
             elementType: ElementType.INPUT,
             required: true,
-            description: '图片URL列表',
+            description: 'Image URL list',
             items: {
               type: ParamType.STRING,
               elementType: ElementType.UPLOAD,
@@ -55,7 +55,7 @@ module.exports = {
             type: ParamType.STRING,
             elementType: ElementType.UPLOAD,
             required: false,
-            description: '对应的语音音色URL',
+            description: 'Corresponding voice tone URL',
             format: 'uri'
           }
         }
@@ -66,7 +66,7 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: false,
-      description: '参考视频配置列表',
+      description: 'Reference video configuration list',
       items: {
         type: ParamType.OBJECT,
         properties: {
@@ -74,21 +74,21 @@ module.exports = {
             type: ParamType.STRING,
             elementType: ElementType.INPUT,
             required: true,
-            description: '视频参考标识符,必须以 @ 开头',
+            description: 'Video reference identifier, must start with @',
             pattern: '^@'
           },
           type: {
             type: ParamType.ENUM,
             elementType: ElementType.SELECT,
             required: true,
-            description: '视频参考类型',
+            description: 'Video reference type',
             options: ['reference', 'extend']
           },
           video_url: {
             type: ParamType.STRING,
             elementType: ElementType.UPLOAD,
             required: true,
-            description: '视频URL,支持MP4/MOV格式,最大10秒',
+            description: 'Video URL, supports MP4/MOV format, max 10 seconds',
             format: 'uri'
           }
         }

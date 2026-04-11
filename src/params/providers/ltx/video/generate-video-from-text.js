@@ -12,34 +12,34 @@ module.exports = {
     model: {
       ...ltxCommon.input.model,
       required: true,
-      description: '使用的模型（支持：ltx-2-fast, ltx-2-pro, ltx-2-3-fast, ltx-2-3-pro）'
+      description: 'Model to use (supports: ltx-2-fast, ltx-2-pro, ltx-2-3-fast, ltx-2-3-pro)'
     },
 
     duration: {
       ...ltxCommon.input.duration,
       required: true,
-      description: '视频时长（秒），根据模型不同有不同的可用时长选项'
+      description: 'Video duration (seconds), different available duration options depending on model'
     },
 
     resolution: {
       ...ltxCommon.input.resolution,
       required: true,
-      description: '输出视频分辨率（如：1920x1080, 1080x1920, 2560x1440, 3840x2160）'
+      description: 'Output video resolution (e.g.: 1920x1080, 1080x1920, 2560x1440, 3840x2160)'
     },
 
     fps: {
       ...ltxCommon.input.fps,
-      description: '帧率，根据模型和分辨率不同有不同的可用帧率'
+      description: 'Frame rate, different available frame rates depending on model and resolution'
     },
 
     generate_audio: {
       ...ltxCommon.input.generate_audio,
-      description: '是否为视频生成音频，true时包含AI生成的音频，false时仅生成无声视频'
+      description: 'Whether to generate audio for video, true includes AI-generated audio, false generates silent video only'
     },
 
     camera_motion: {
       ...ltxCommon.input.camera_motion,
-      description: '对生成的视频应用镜头运动效果'
+      description: 'Apply camera motion effect to generated video'
     }
   },
 

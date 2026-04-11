@@ -16,7 +16,7 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.UPLOAD,
       required: true,
-      description: '视频首帧图片',
+      description: 'Video first frame image',
       format: 'uri'
     },
 
@@ -24,14 +24,14 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: true,
-      description: '音频文件URL列表,支持mp3/wav格式,每个音频时长<=200秒',
+      description: 'Audio file URL list, supports mp3/wav format, each audio duration <= 200 seconds',
       minItems: 1,
       maxItems: 1,
       items: {
         type: ParamType.STRING,
         elementType: ElementType.UPLOAD,
         format: 'uri',
-        description: '音频URL,支持mp3/wav格式'
+        description: 'Audio URL, supports mp3/wav format'
       }
     },
 
@@ -39,7 +39,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '镜头运动类型',
+      description: 'Camera motion type',
       options: [
         'static',
         'push_in',
@@ -60,7 +60,7 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: '镜头运动幅度',
+      description: 'Camera motion magnitude',
       min: 0.01,
       max: 1,
       default: 0.8
@@ -70,7 +70,7 @@ module.exports = {
       type: ParamType.ARRAY,
       elementType: ElementType.INPUT,
       required: false,
-      description: '复杂镜头运动参数,支持精确控制多个时间段',
+      description: 'Complex camera motion parameters, supports precise control of multiple time segments',
       items: {
         type: ParamType.OBJECT,
         properties: {
@@ -78,19 +78,19 @@ module.exports = {
             type: ParamType.NUMBER,
             elementType: ElementType.INPUT,
             required: true,
-            description: '镜头运动开始时间（秒）'
+            description: 'Camera motion start time (seconds)'
           },
           end_time: {
             type: ParamType.NUMBER,
             elementType: ElementType.INPUT,
             required: true,
-            description: '镜头运动结束时间（秒）,-1 表示到视频结束'
+            description: 'Camera motion end time (seconds), -1 means until video ends'
           },
           traj_type: {
             type: ParamType.ENUM,
             elementType: ElementType.SELECT,
             required: true,
-            description: '第一个镜头运动类型',
+            description: 'First camera motion type',
             options: [
               'static',
               'push_in',
@@ -108,7 +108,7 @@ module.exports = {
             type: ParamType.NUMBER,
             elementType: ElementType.SLIDER,
             required: false,
-            description: '第一个镜头运动幅度',
+            description: 'First camera motion magnitude',
             min: 0,
             max: 1,
             default: 0.8
@@ -117,7 +117,7 @@ module.exports = {
             type: ParamType.ENUM,
             elementType: ElementType.SELECT,
             required: false,
-            description: '第二个镜头运动类型（支持双镜头运动组合）',
+            description: 'Second camera motion type (supports dual camera motion combination)',
             options: [
               'static',
               'push_in',
@@ -135,7 +135,7 @@ module.exports = {
             type: ParamType.NUMBER,
             elementType: ElementType.SLIDER,
             required: false,
-            description: '第二个镜头运动幅度',
+            description: 'Second camera motion magnitude',
             min: 0,
             max: 1
           }
@@ -147,7 +147,7 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: false,
-      description: '返回结果的分辨率模式',
+      description: 'Resolution mode for returned results',
       options: ['std', 'pro'],
       default: 'std'
     }
