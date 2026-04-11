@@ -16,7 +16,7 @@ module.exports = {
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.PREMIUM, ModelTags.STABLE, ModelTags.RECOMMENDED],
     priority: 100,
-    provider: Providers.LTX,
+    provider: Providers.LIGHTRICKS,
     capabilities: {
       maxResolution: '4K',
       maxDuration: 20,
@@ -40,7 +40,7 @@ module.exports = {
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.FAST, ModelTags.STABLE],
     priority: 95,
-    provider: Providers.LTX,
+    provider: Providers.LIGHTRICKS,
     capabilities: {
       maxResolution: '4K',
       maxDuration: 20,
@@ -61,7 +61,7 @@ module.exports = {
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE],
     priority: 90,
-    provider: Providers.LTX,
+    provider: Providers.LIGHTRICKS,
     capabilities: {
       maxResolution: '4K',
       maxDuration: 20,
@@ -85,7 +85,7 @@ module.exports = {
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.FAST],
     priority: 85,
-    provider: Providers.LTX,
+    provider: Providers.LIGHTRICKS,
     capabilities: {
       maxResolution: '4K',
       maxDuration: 20,

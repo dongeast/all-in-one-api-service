@@ -3,10 +3,9 @@
  */
 
 const Providers = {
-  LTX: 'ltx',
-  VOLCENGINE: 'volcengine',
-  SKYREELS: 'skyreels',
-  MUREKA: 'mureka'
+  LIGHTRICKS: 'lightricks',
+  SKYWORK: 'skywork',
+  VOLCENGINE: 'volcengine'
 }
 
 /**
@@ -15,47 +14,41 @@ const Providers = {
  * 当不同 Provider 提供相同 ID 的模型时，优先使用优先级高的 Provider
  */
 const ProviderPriority = {
-  [Providers.LTX]: 100,
-  [Providers.VOLCENGINE]: 90,
-  [Providers.SKYREELS]: 80,
-  [Providers.MUREKA]: 70
+  [Providers.LIGHTRICKS]: 100,
+  [Providers.SKYWORK]: 90,
+  [Providers.VOLCENGINE]: 80
 }
 
 /**
  * Provider 元数据
  */
 const ProviderMeta = {
-  [Providers.LTX]: {
-    name: 'ltx',
-    displayName: 'LTX Studio',
-    description: 'LTX Studio',
+  [Providers.LIGHTRICKS]: {
+    name: 'lightricks',
+    displayName: 'Lightricks',
+    description: 'Lightricks - Creator of LTX Studio',
     region: 'global',
     website: 'https://ltx.video',
-    supportedTypes: ['video']
+    supportedTypes: ['video'],
+    logo: 'lightricks.svg'
+  },
+  [Providers.SKYWORK]: {
+    name: 'skywork',
+    displayName: 'Skywork AI',
+    description: 'Skywork AI - Creator of Skyreels and Mureka',
+    region: 'global',
+    website: 'https://skyreels.ai',
+    supportedTypes: ['video', 'audio', 'music'],
+    logo: 'skywork.svg'
   },
   [Providers.VOLCENGINE]: {
     name: 'volcengine',
-    displayName: 'Bytedance Seed AI',
-    description: 'Bytedance Seed AI',
+    displayName: 'Volcengine Seed AI',
+    description: 'Bytedance Volcengine Seed AI',
     region: 'china',
     website: 'https://www.volcengine.com',
-    supportedTypes: ['image', 'video', '3d']
-  },
-  [Providers.SKYREELS]: {
-    name: 'skyreels',
-    displayName: 'Skyreels AI',
-    description: 'Skyreels AI',
-    region: 'global',
-    website: 'https://skyreels.ai',
-    supportedTypes: ['video', 'avatar']
-  },
-  [Providers.MUREKA]: {
-    name: 'mureka',
-    displayName: 'Mureka AI',
-    description: 'Mureka AI',
-    region: 'global',
-    website: 'https://mureka.ai',
-    supportedTypes: ['audio', 'music']
+    supportedTypes: ['image', 'video', '3d'],
+    logo: 'volcengine.svg'
   }
 }
 

@@ -16,10 +16,15 @@ module.exports = {
     },
 
     image: {
-      type: ParamType.STRING,
+      type: ParamType.ARRAY,
       elementType: ElementType.IMAGE_UPLOAD,
       required: false,
-      description: 'Input image information, supports URL or Base64 encoding, max 14 reference images'
+      description: 'Input image information, supports URL or Base64 encoding, up to 14 reference images',
+      maxItems: 14,
+      items: {
+        type: ParamType.STRING,
+        description: 'Image URL or Base64 encoded data'
+      }
     },
 
     size: {

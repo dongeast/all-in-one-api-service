@@ -39,7 +39,7 @@ module.exports = {
       query: 'query-3d-generation-task'
     },
     
-    models: ['doubao-seed3d-1-0'],
+    models: ['doubao-seed3d-1-0-250928'],
     tags: ['3d', 'generation'],
     priority: 100
   },
@@ -113,7 +113,7 @@ module.exports = {
       request: 'query-3d-generation-task-list'
     },
     
-    models: ['doubao-seed3d-1-0'],
+    models: ['doubao-seed3d-1-0-250928'],
     tags: ['3d', 'query', 'list'],
     priority: 100
   },
@@ -128,7 +128,7 @@ module.exports = {
       request: 'cancel-delete-3d-generation-task'
     },
     
-    models: ['doubao-seed3d-1-0'],
+    models: ['doubao-seed3d-1-0-250928'],
     tags: ['3d', 'cancel', 'delete'],
     priority: 100
   }

@@ -49,9 +49,9 @@ module.exports = {
 
     seed: {
       type: ParamType.NUMBER,
-      elementType: ElementType.DEFAULT,
+      elementType: ElementType.SLIDER,
       required: false,
-      description: 'Random seed for controlling generation randomness',
+      description: 'Random seed for controlling generation randomness (-1 for random)',
       min: -1,
       max: 2147483647,
       default: -1
@@ -59,10 +59,10 @@ module.exports = {
 
     watermark: {
       type: ParamType.BOOLEAN,
-      elementType: ElementType.DEFAULT,
+      elementType: ElementType.SWITCH,
       required: false,
-      description: 'Whether to add watermark',
-      default: false
+      description: 'Whether to add watermark to generated content',
+      default: true
     },
 
     response_format: {

@@ -247,15 +247,22 @@ export const APITypes: {
   LIP_SYNC: string
 }
 
-export const MediaTypes: {
-  TEXT: string
-  IMAGE: string
-  VIDEO: string
-  AUDIO: string
-  AUDIO_3D: string
+export interface MediaTypeValue {
+  value: string
+  display_flag: boolean
+  display_name: string
 }
 
-export const InputOutputTypes: Record<string, { input: string; output: string }>
+export const MediaTypes: {
+  TEXT: MediaTypeValue
+  IMAGE: MediaTypeValue
+  VIDEO: MediaTypeValue
+  AUDIO: MediaTypeValue
+  MODEL_3D: MediaTypeValue
+  FILE: MediaTypeValue
+}
+
+export const InputOutputTypes: Record<string, { input: MediaTypeValue; output: MediaTypeValue; display_name: string; display_flag?: boolean }>
 
 export const ModelTags: Record<string, string>
 export const APITags: Record<string, string>

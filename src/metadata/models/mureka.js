@@ -16,7 +16,7 @@ module.exports = {
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE, ModelTags.RECOMMENDED],
     priority: 100,
-    provider: Providers.MUREKA,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsSongGeneration: true,
       supportsInstrumentalGeneration: true,
@@ -33,7 +33,7 @@ module.exports = {
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE, ModelTags.RECOMMENDED],
     priority: 100,
-    provider: Providers.MUREKA,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsSongGeneration: true,
       supportsInstrumentalGeneration: true,
@@ -51,7 +51,7 @@ module.exports = {
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
     priority: 95,
-    provider: Providers.MUREKA,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsSongGeneration: true,
       supportsLyricsGeneration: true
@@ -68,7 +68,7 @@ module.exports = {
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
     priority: 90,
-    provider: Providers.MUREKA,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsSongGeneration: true,
       supportsInstrumentalGeneration: true
@@ -85,7 +85,7 @@ module.exports = {
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
     priority: 85,
-    provider: Providers.MUREKA,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsSongGeneration: true,
       supportsInstrumentalGeneration: true
@@ -102,7 +102,7 @@ module.exports = {
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
     priority: 100,
-    provider: Providers.MUREKA,
+    provider: Providers.SKYWORK,
     capabilities: {
       voices: ['Ethan', 'Victoria', 'Jake', 'Luna', 'Emma'],
       supportsPodcast: true
@@ -119,7 +119,7 @@ module.exports = {
     mediaType: MediaTypes.AUDIO,
     tags: [ModelTags.STABLE],
     priority: 100,
-    provider: Providers.MUREKA,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsVocalCloning: true
     }

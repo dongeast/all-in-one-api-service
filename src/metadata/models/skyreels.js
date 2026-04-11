@@ -16,7 +16,7 @@ module.exports = {
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE, ModelTags.RECOMMENDED],
     priority: 100,
-    provider: Providers.SKYREELS,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsTextToVideo: true,
       supportsImageToVideo: true,
@@ -36,7 +36,7 @@ module.exports = {
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.STABLE],
     priority: 95,
-    provider: Providers.SKYREELS,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsTextToVideo: true,
       supportsImageToVideo: true,
@@ -56,7 +56,7 @@ module.exports = {
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.STABLE],
     priority: 100,
-    provider: Providers.SKYREELS,
+    provider: Providers.SKYWORK,
     capabilities: {
       supportsLipSync: true,
       supportsSingleActorAvatar: true,

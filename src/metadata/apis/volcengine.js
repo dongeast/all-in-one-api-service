@@ -119,7 +119,7 @@ module.exports = {
     method: 'POST',
     type: 'async',
     paramSchema: require('../../params/providers/volcengine/3d/create-3d-generation-task'),
-    models: ['doubao-seed3d-1-0'],
+    models: ['doubao-seed3d-1-0-250928'],
     tags: ['3d', 'generation'],
     priority: 100
   },
@@ -133,7 +133,7 @@ module.exports = {
     method: 'GET',
     type: 'sync',
     paramSchema: require('../../params/providers/volcengine/3d/query-3d-generation-task'),
-    models: ['doubao-seed3d-1-0'],
+    models: ['doubao-seed3d-1-0-250928'],
     tags: ['3d', 'query', 'task'],
     priority: 100
   },
@@ -147,7 +147,7 @@ module.exports = {
     method: 'GET',
     type: 'sync',
     paramSchema: require('../../params/providers/volcengine/3d/query-3d-generation-task-list'),
-    models: ['doubao-seed3d-1-0'],
+    models: ['doubao-seed3d-1-0-250928'],
     tags: ['3d', 'query', 'list'],
     priority: 100
   },
@@ -161,7 +161,7 @@ module.exports = {
     method: 'POST',
     type: 'sync',
     paramSchema: require('../../params/providers/volcengine/3d/cancel-delete-3d-generation-task'),
-    models: ['doubao-seed3d-1-0'],
+    models: ['doubao-seed3d-1-0-250928'],
     tags: ['3d', 'cancel', 'delete'],
     priority: 100
   }

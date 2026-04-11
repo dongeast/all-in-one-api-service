@@ -207,7 +207,7 @@ module.exports = {
     logo: '',
     series: Series.SEED3D,
     type: APITypes.IMAGE_TO_3D,
-    mediaType: MediaTypes.AUDIO_3D,
+    mediaType: MediaTypes.MODEL_3D,
     tags: [ModelTags.STABLE],
     priority: 100,
     provider: Providers.VOLCENGINE,
