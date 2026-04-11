@@ -67,7 +67,7 @@ module.exports = {
 
     response_format: {
       type: ParamType.ENUM,
-      elementType: ElementType.RADIO,
+      elementType: ElementType.DEFAULT,
       required: false,
       description: 'Response format',
       options: ['url', 'b64_json'],

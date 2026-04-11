@@ -57,10 +57,15 @@ class BaseRegistry {
         const values = Array.isArray(fieldValue) ? fieldValue : [fieldValue]
         
         values.forEach(value => {
-          if (!indexMap.has(value)) {
-            indexMap.set(value, new Set())
+          // 提取索引键：如果值是对象且有 id 属性，使用 id；否则使用值本身
+          const indexKey = (typeof value === 'object' && value !== null && value.id) 
+            ? value.id 
+            : value
+          
+          if (!indexMap.has(indexKey)) {
+            indexMap.set(indexKey, new Set())
           }
-          indexMap.get(value).add(id)
+          indexMap.get(indexKey).add(id)
         })
       }
     })

@@ -82,7 +82,7 @@ module.exports = {
 
     output_format: {
       type: ParamType.ENUM,
-      elementType: ElementType.RADIO,
+      elementType: ElementType.DEFAULT,
       required: false,
       description: 'Output image file format',
       options: ['png', 'jpeg'],

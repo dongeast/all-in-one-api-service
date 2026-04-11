@@ -531,11 +531,15 @@ class FunctionManager {
     this.ensureInitialized()
 
     const apis = this.apiRegistry.getAll()
-      .filter(api =>
-        api.models &&
-        api.models.includes(model) &&
-        api.apiType === apiType
-      )
+      .filter(api => {
+        // 提取 apiType 的 id 进行比较
+        const apiTypeId = (typeof api.apiType === 'object' && api.apiType !== null) 
+          ? api.apiType.id 
+          : api.apiType
+        return api.models &&
+          api.models.includes(model) &&
+          apiTypeId === apiType
+      })
       .sort((a, b) => (b.priority || 0) - (a.priority || 0))
 
     if (apis.length === 0) return null
@@ -618,10 +622,14 @@ class FunctionManager {
             result.providers = [targetModel.provider]
             
             const apis = this.apiRegistry.getAll()
-              .filter(api => 
-                api.apiType === apiType &&
-                api.models && api.models.includes(model)
-              )
+              .filter(api => {
+                // 提取 apiType 的 id 进行比较
+                const apiTypeId = (typeof api.apiType === 'object' && api.apiType !== null) 
+                  ? api.apiType.id 
+                  : api.apiType
+                return apiTypeId === apiType &&
+                  api.models && api.models.includes(model)
+              })
             
             if (provider) {
               const filteredAPIs = apis.filter(api => api.provider === provider)
@@ -633,12 +641,16 @@ class FunctionManager {
           }
         } else {
           const apis = this.apiRegistry.getAll()
-            .filter(api => 
-              api.apiType === apiType &&
+            .filter(api => {
+              // 提取 apiType 的 id 进行比较
+              const apiTypeId = (typeof api.apiType === 'object' && api.apiType !== null) 
+                ? api.apiType.id 
+                : api.apiType
+              return apiTypeId === apiType &&
               api.models && api.models.some(mName => 
                 filteredModels.some(m => m.name === mName)
               )
-            )
+            })
           result.functions = apis.map(api => api.name)
         }
       } else {
@@ -647,30 +659,89 @@ class FunctionManager {
         result.providers = Array.from(providerSet)
         
         const apis = this.apiRegistry.getAll()
-          .filter(api => 
-            api.apiType === apiType &&
-            api.models && api.models.some(mName => 
+          .filter(api => {
+            // 提取 apiType 的 id 进行比较
+            const apiTypeId = (typeof api.apiType === 'object' && api.apiType !== null) 
+              ? api.apiType.id 
+              : api.apiType
+            return apiTypeId === apiType &&
+              api.models && api.models.some(mName => 
               models.some(m => m.name === mName)
             )
-          )
+          })
         result.functions = apis.map(api => api.name)
       }
     } else {
       result.apiTypes = Object.values(APITypes)
       
       const allModels = this.modelRegistry.getAll()
-      const seriesSet = new Set()
-      const providerSet = new Set()
+      let filteredModels = allModels
       
-      allModels.forEach(m => {
-        seriesSet.add(m.series)
-        providerSet.add(m.provider)
-      })
+      // 系列列表：根据选择情况决定
+      if (apiType) {
+        // 只有选择了 apiType 才筛选系列
+        if (series) {
+          result.series = [series]
+        } else {
+          const seriesSet = new Set()
+          allModels.forEach(m => seriesSet.add(m.series))
+          result.series = Array.from(seriesSet)
+        }
+      } else {
+        // 没有选择 apiType 时，返回所有系列
+        const seriesSet = new Set()
+        allModels.forEach(m => seriesSet.add(m.series))
+        result.series = Array.from(seriesSet)
+      }
       
-      result.series = Array.from(seriesSet)
-      result.models = allModels.map(m => m.name)
-      result.providers = Array.from(providerSet)
-      result.functions = functionRegistry.getAll().map(f => f.name)
+      // 如果选择了系列，筛选模型
+      if (series) {
+        filteredModels = filteredModels.filter(m => m.series === series)
+      }
+      
+      // 如果选择了模型，进一步筛选
+      if (model) {
+        const targetModel = filteredModels.find(m => m.name === model)
+        if (targetModel) {
+          filteredModels = [targetModel]
+          result.models = [model]
+        } else {
+          filteredModels = []
+          result.models = []
+        }
+      } else {
+        result.models = filteredModels.map(m => m.name)
+      }
+      
+      // 如果选择了服务商，进一步筛选
+      if (provider) {
+        filteredModels = filteredModels.filter(m => m.provider === provider)
+        result.providers = [provider]
+      } else {
+        const providerSet = new Set()
+        filteredModels.forEach(m => providerSet.add(m.provider))
+        result.providers = Array.from(providerSet)
+      }
+      
+      // 获取对应的 functions
+      if (model && filteredModels.length > 0) {
+        const apis = this.apiRegistry.getAll()
+          .filter(api => 
+            api.models && api.models.includes(model) &&
+            (!provider || api.provider === provider)
+          )
+        result.functions = apis.map(api => api.name)
+      } else if (series && filteredModels.length > 0) {
+        const apis = this.apiRegistry.getAll()
+          .filter(api => 
+            api.models && api.models.some(mName => 
+              filteredModels.some(m => m.name === mName)
+            )
+          )
+        result.functions = apis.map(api => api.name)
+      } else {
+        result.functions = functionRegistry.getAll().map(f => f.name)
+      }
     }
 
     return result

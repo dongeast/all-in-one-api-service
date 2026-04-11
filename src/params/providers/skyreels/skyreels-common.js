@@ -35,7 +35,7 @@ module.exports = {
 
     mode: {
       type: ParamType.ENUM,
-      elementType: ElementType.SELECT,
+      elementType: ElementType.RADIO,
       required: false,
       description: 'Quality/performance mode',
       options: ['fast', 'std', 'pro'],
