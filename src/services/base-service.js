@@ -373,9 +373,14 @@ class BaseService {
    */
   async parseErrorResponse(response) {
     try {
-      return await response.json()
+      const text = await response.text()
+      try {
+        return JSON.parse(text)
+      } catch {
+        return { message: text }
+      }
     } catch {
-      return { message: await response.text() }
+      return { message: 'Unknown error' }
     }
   }
 
