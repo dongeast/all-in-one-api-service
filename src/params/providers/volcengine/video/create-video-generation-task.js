@@ -34,7 +34,7 @@ module.exports = {
 
     service_tier: {
       type: ParamType.ENUM,
-      elementType: ElementType.RADIO,
+      elementType: ElementType.DEFAULT,
       required: false,
       description: 'Service tier type',
       options: ['default', 'flex'],
