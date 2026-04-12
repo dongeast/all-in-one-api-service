@@ -24,6 +24,29 @@ class FunctionManager {
   }
 
   /**
+   * 检查 API 的 apiType 是否匹配给定的类型
+   * @param {string|object|Array} apiType - API 的 apiType（可以是字符串、对象或数组）
+   * @param {string} targetApiType - 目标 apiType id
+   * @returns {boolean} 是否匹配
+   */
+  matchesApiType(apiType, targetApiType) {
+    if (Array.isArray(apiType)) {
+      return apiType.some(type => {
+        if (typeof type === 'object' && type !== null) {
+          return type.id === targetApiType
+        }
+        return type === targetApiType
+      })
+    }
+    
+    if (typeof apiType === 'object' && apiType !== null) {
+      return apiType.id === targetApiType
+    }
+    
+    return apiType === targetApiType
+  }
+
+  /**
    * 初始化 FunctionManager
    */
   initialize() {
@@ -419,84 +442,7 @@ class FunctionManager {
     return functionRegistry.getByCategory(category, options)
   }
 
-  /**
-   * 获取 Function 详情
-   * @param {string} functionName - Function 名称
-   * @returns {object|null} Function 详情
-   */
-  getFunctionDetail(functionName) {
-    return functionRegistry.get(functionName)
-  }
 
-  /**
-   * 根据类型和模型获取最佳 Function
-   * @param {string} type - Function 类型
-   * @param {string} model - 模型名称
-   * @param {object} options - 查询选项
-   * @returns {object|null} 最佳 Function
-   */
-  getBestFunction(type, model, options = {}) {
-    return functionRegistry.getBestFunction(type, model, options)
-  }
-
-  /**
-   * 获取所有 Function
-   * @returns {Array} Function 列表
-   */
-  getAllFunctions() {
-    return functionRegistry.getAll()
-  }
-
-  /**
-   * 检查 Function 是否存在
-   * @param {string} functionName - Function 名称
-   * @returns {boolean} 是否存在
-   */
-  hasFunction(functionName) {
-    return functionRegistry.has(functionName)
-  }
-
-  /**
-   * 根据 API 名称获取对应的 Function
-   * @param {string} apiName - API 名称
-   * @returns {object|null} Function 详情
-   */
-  getFunctionByAPI(apiName) {
-    return functionRegistry.getByAPI(apiName)
-  }
-
-  /**
-   * 获取 Function 关联的所有 API
-   * @param {string} functionName - Function 名称
-   * @returns {object|null} API 映射
-   */
-  getFunctionRelatedAPIs(functionName) {
-    return functionRegistry.getRelatedAPIs(functionName)
-  }
-
-  /**
-   * 获取所有支持的 Function 类型
-   * @returns {Array} 类型列表
-   */
-  getSupportedFunctionTypes() {
-    return functionRegistry.getSupportedTypes()
-  }
-
-  /**
-   * 获取所有支持的 Function 分类
-   * @returns {Array} 分类列表
-   */
-  getSupportedFunctionCategories() {
-    return functionRegistry.getSupportedCategories()
-  }
-
-  /**
-   * 获取 Function 统计信息
-   * @returns {object} 统计信息
-   */
-  getFunctionStats() {
-    return functionRegistry.getStats()
-  }
 
   /**
    * 根据API类型获取支持的系列列表
@@ -532,13 +478,9 @@ class FunctionManager {
 
     const apis = this.apiRegistry.getAll()
       .filter(api => {
-        // 提取 apiType 的 id 进行比较
-        const apiTypeId = (typeof api.apiType === 'object' && api.apiType !== null) 
-          ? api.apiType.id 
-          : api.apiType
         return api.models &&
           api.models.includes(model) &&
-          apiTypeId === apiType
+          this.matchesApiType(api.apiType, apiType)
       })
       .sort((a, b) => (b.priority || 0) - (a.priority || 0))
 
@@ -623,11 +565,7 @@ class FunctionManager {
             
             const apis = this.apiRegistry.getAll()
               .filter(api => {
-                // 提取 apiType 的 id 进行比较
-                const apiTypeId = (typeof api.apiType === 'object' && api.apiType !== null) 
-                  ? api.apiType.id 
-                  : api.apiType
-                return apiTypeId === apiType &&
+                return this.matchesApiType(api.apiType, apiType) &&
                   api.models && api.models.includes(model)
               })
             
@@ -642,11 +580,7 @@ class FunctionManager {
         } else {
           const apis = this.apiRegistry.getAll()
             .filter(api => {
-              // 提取 apiType 的 id 进行比较
-              const apiTypeId = (typeof api.apiType === 'object' && api.apiType !== null) 
-                ? api.apiType.id 
-                : api.apiType
-              return apiTypeId === apiType &&
+              return this.matchesApiType(api.apiType, apiType) &&
               api.models && api.models.some(mName => 
                 filteredModels.some(m => m.name === mName)
               )
@@ -660,11 +594,7 @@ class FunctionManager {
         
         const apis = this.apiRegistry.getAll()
           .filter(api => {
-            // 提取 apiType 的 id 进行比较
-            const apiTypeId = (typeof api.apiType === 'object' && api.apiType !== null) 
-              ? api.apiType.id 
-              : api.apiType
-            return apiTypeId === apiType &&
+            return this.matchesApiType(api.apiType, apiType) &&
               api.models && api.models.some(mName => 
               models.some(m => m.name === mName)
             )

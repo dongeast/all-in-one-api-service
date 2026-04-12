@@ -71,7 +71,7 @@ module.exports = {
 
     camera_motion: {
       type: ParamType.ENUM,
-      elementType: 'camera-motion',
+      elementType: ElementType.CAMERA_MOTION,
       required: false,
       description: 'Camera motion effect',
       options: [
@@ -97,7 +97,8 @@ module.exports = {
 
     audio_uri: {
       type: ParamType.STRING,
-      elementType: ElementType.UPLOAD,
+      elementType: ElementType.AUDIO_UPLOAD,
+      maxItems: 1,
       required: false,
       description: 'Audio file URI to use as the video soundtrack'
     },

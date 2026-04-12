@@ -55,7 +55,7 @@ module.exports = {
       elementType: ElementType.SWITCH,
       required: false,
       description: 'Whether to enable automatic prompt optimization',
-      default: true
+      default: false
     }
   },
 

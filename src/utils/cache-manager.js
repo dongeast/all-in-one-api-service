@@ -199,29 +199,42 @@ class CacheManager {
   }
 
   /**
+   * 根据条件淘汰缓存项
+   * @param {string} namespace - 命名空间
+   * @param {Function} compareFn - 比较函数，返回要淘汰的key
+   * @param {string} strategyName - 策略名称（用于日志）
+   */
+  evictByStrategy(namespace, compareFn, strategyName) {
+    const cache = this.caches.get(namespace)
+    if (!cache) return
+
+    const keyToEvict = compareFn(cache.items)
+    
+    if (keyToEvict) {
+      cache.items.delete(keyToEvict)
+      cache.stats.evictions++
+      this.globalStats.evictions++
+      logger.debug(`Evicted ${strategyName} cache entry: ${keyToEvict}`)
+    }
+  }
+
+  /**
    * 淘汰最旧的缓存项
    * @param {string} namespace - 命名空间
    */
   evictOldest(namespace) {
-    const cache = this.caches.get(namespace)
-    if (!cache) return
+    this.evictByStrategy(namespace, (items) => {
+      let oldestKey = null
+      let oldestTimestamp = Infinity
 
-    let oldestKey = null
-    let oldestTimestamp = Infinity
-
-    for (const [key, item] of cache.items.entries()) {
-      if (item.timestamp < oldestTimestamp) {
-        oldestTimestamp = item.timestamp
-        oldestKey = key
+      for (const [key, item] of items.entries()) {
+        if (item.timestamp < oldestTimestamp) {
+          oldestTimestamp = item.timestamp
+          oldestKey = key
+        }
       }
-    }
-
-    if (oldestKey) {
-      cache.items.delete(oldestKey)
-      cache.stats.evictions++
-      this.globalStats.evictions++
-      logger.debug(`Evicted oldest cache entry: ${oldestKey}`)
-    }
+      return oldestKey
+    }, 'oldest')
   }
 
   /**
@@ -229,25 +242,18 @@ class CacheManager {
    * @param {string} namespace - 命名空间
    */
   evictLRU(namespace) {
-    const cache = this.caches.get(namespace)
-    if (!cache) return
+    this.evictByStrategy(namespace, (items) => {
+      let lruKey = null
+      let minAccess = Infinity
 
-    let lruKey = null
-    let minAccess = Infinity
-
-    for (const [key, item] of cache.items.entries()) {
-      if (item.accessCount < minAccess) {
-        minAccess = item.accessCount
-        lruKey = key
+      for (const [key, item] of items.entries()) {
+        if (item.accessCount < minAccess) {
+          minAccess = item.accessCount
+          lruKey = key
+        }
       }
-    }
-
-    if (lruKey) {
-      cache.items.delete(lruKey)
-      cache.stats.evictions++
-      this.globalStats.evictions++
-      logger.debug(`Evicted LRU cache entry: ${lruKey}`)
-    }
+      return lruKey
+    }, 'LRU')
   }
 
   /**

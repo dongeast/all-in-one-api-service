@@ -5,7 +5,7 @@
 const MediaTypes = {
   TEXT: {
     value: 'Text Generator',
-    display_flag: true,
+    display_flag: false,
     display_name: 'Text'
   },
   IMAGE: {
@@ -20,12 +20,12 @@ const MediaTypes = {
   },
   AUDIO: {
     value: 'Audio Generator',
-    display_flag: true,
+    display_flag: false,
     display_name: 'Audio'
   },
   MODEL_3D: {
     value: '3D Model Generator',
-    display_flag: true,
+    display_flag: false,
     display_name: '3D Model'
   },
   FILE: {

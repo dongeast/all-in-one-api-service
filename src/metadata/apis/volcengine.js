@@ -29,7 +29,7 @@ module.exports = {
   'create-video-generation-task': {
     name: 'create-video-generation-task',
     provider: 'volcengine',
-    apiType: APITypes.TEXT_TO_VIDEO,
+    apiType: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
     category: 'video',
     endpoint: '/video/generation/submit',
     method: 'POST',

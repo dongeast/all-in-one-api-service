@@ -28,7 +28,10 @@ const ElementType = {
   SWITCH: 'switch',
   RATIO: 'ratio',
   RESOLUTION: 'resolution',
-  IMAGE_UPLOAD: 'image-upload'
+  IMAGE_UPLOAD: 'image-upload',
+  AUDIO_UPLOAD: 'audio-upload',
+  CAMERA_MOTION: 'camera-motion',
+  THREE_D_CONTENT: '3d-content',
 }
 
 module.exports = {

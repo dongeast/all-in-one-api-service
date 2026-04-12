@@ -49,7 +49,7 @@ module.exports = {
 
     seed: {
       type: ParamType.NUMBER,
-      elementType: ElementType.SLIDER,
+      elementType: ElementType.DEFAULT,
       required: false,
       description: 'Random seed for controlling generation randomness (-1 for random)',
       min: -1,
@@ -62,7 +62,7 @@ module.exports = {
       elementType: ElementType.SWITCH,
       required: false,
       description: 'Whether to add watermark to generated content',
-      default: true
+      default: false
     },
 
     response_format: {

@@ -147,6 +147,50 @@ function validateEnum(value, schema, language) {
 }
 
 /**
+ * 验证联合类型数组项
+ * @param {any} item - 数组项
+ * @param {object} schema - items schema (包含 oneOf)
+ * @param {string} language - 语言代码
+ * @returns {ValidationResult} 验证结果
+ */
+function validateUnionArrayItem(item, schema, language) {
+  const errors = []
+
+  if (!schema.oneOf || !Array.isArray(schema.oneOf)) {
+    return new ValidationResult(false, [t('validation.unionArraySchema', { language })])
+  }
+
+  const itemType = item?.type
+  if (!itemType) {
+    return new ValidationResult(false, [t('validation.unionArrayItemTypeMissing', { language })])
+  }
+
+  const matchedSchema = schema.oneOf.find(s => s.type === itemType)
+  if (!matchedSchema) {
+    const validTypes = schema.oneOf.map(s => s.type).join(', ')
+    return new ValidationResult(false, [t('validation.unionArrayItemTypeInvalid', {
+      language, type: itemType, validTypes
+    })])
+  }
+
+  if (matchedSchema.fields) {
+    for (const [fieldName, fieldDef] of Object.entries(matchedSchema.fields)) {
+      const fieldValue = item[fieldName]
+      if (fieldValue !== undefined) {
+        const fieldResult = validate(fieldValue, fieldDef, language)
+        if (!fieldResult.valid) {
+          errors.push(...fieldResult.errors)
+        }
+      } else if (fieldDef.required) {
+        errors.push(t('validation.requiredParamMissing', { language, param: fieldName }))
+      }
+    }
+  }
+
+  return new ValidationResult(errors.length === 0, errors)
+}
+
+/**
  * 验证数组类型
  * @param {any} value - 值
  * @param {object} schema - 参数模式
@@ -169,15 +213,40 @@ function validateArray(value, schema, language) {
     errors.push(t('validation.arrayMaxItems', { language, max: schema.maxItems }))
   }
 
-  if (schema.itemSchema) {
-    for (let i = 0; i < value.length; i++) {
-      const itemResult = validate(value[i], schema.itemSchema, language)
-      if (!itemResult.valid) {
-        errors.push(t('validation.arrayItemInvalid', { 
-          language, 
-          index: i, 
-          error: itemResult.errors.join(', ') 
-        }))
+  if (schema.items) {
+    if (schema.items.oneOf) {
+      for (let i = 0; i < value.length; i++) {
+        const itemResult = validateUnionArrayItem(value[i], schema.items, language)
+        if (!itemResult.valid) {
+          errors.push(t('validation.arrayItemInvalid', {
+            language, index: i, error: itemResult.errors.join(', ')
+          }))
+        }
+      }
+
+      const requiredTypes = schema.items.oneOf
+        .filter(s => s.required)
+        .map(s => s.type)
+
+      for (const requiredType of requiredTypes) {
+        const hasRequired = value.some(item => item.type === requiredType)
+        if (!hasRequired) {
+          const typeConfig = schema.items.oneOf.find(s => s.type === requiredType)
+          errors.push(t('validation.unionArrayRequiredTypeMissing', {
+            language, type: typeConfig?.label || requiredType
+          }))
+        }
+      }
+    } else if (schema.itemSchema) {
+      for (let i = 0; i < value.length; i++) {
+        const itemResult = validate(value[i], schema.itemSchema, language)
+        if (!itemResult.valid) {
+          errors.push(t('validation.arrayItemInvalid', {
+            language,
+            index: i,
+            error: itemResult.errors.join(', ')
+          }))
+        }
       }
     }
   }
@@ -486,6 +555,7 @@ module.exports = {
   validateBoolean,
   validateEnum,
   validateArray,
+  validateUnionArrayItem,
   validateObject,
   validateParams,
   checkDependencies,

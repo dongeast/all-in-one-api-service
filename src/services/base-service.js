@@ -138,6 +138,14 @@ class BaseService {
       return
     }
 
+    if (!this.getApiKey() && !this.config.skipConfigLoad) {
+      const { getConfigManager } = require('../config')
+      const configManager = getConfigManager()
+      const providerConfig = await configManager.getProviderConfig(this.providerName)
+      
+      this.config = BaseService.mergeConfig(providerConfig, this.config)
+    }
+
     if (!this.getApiKey()) {
       throw new Error(`API key is required for ${this.providerName} service`)
     }
@@ -174,6 +182,41 @@ class BaseService {
   }
 
   /**
+   * 执行带超时控制的请求
+   * @param {string} url - 请求URL
+   * @param {object} fetchOptions - fetch选项
+   * @param {object} options - 请求选项
+   * @returns {Promise<any>} 响应结果
+   */
+  async executeWithTimeout(url, fetchOptions, options = {}) {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      options.timeout || this.config.timeout
+    )
+
+    try {
+      const fetch = getFetch()
+      const response = await fetch(url, {
+        ...fetchOptions,
+        signal: controller.signal
+      })
+
+      clearTimeout(timeoutId)
+
+      if (!response.ok) {
+        const errorData = await this.parseErrorResponse(response)
+        throw this.createError(response.status, errorData)
+      }
+
+      return await this.parseResponse(response)
+    } catch (error) {
+      clearTimeout(timeoutId)
+      throw error
+    }
+  }
+
+  /**
    * 调用API端点
    * @param {string} endpoint - API端点
    * @param {object} params - 请求参数
@@ -192,35 +235,11 @@ class BaseService {
       params: this.sanitizeParams(params)
     })
 
-    const executeRequest = async () => {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(
-        () => controller.abort(),
-        options.timeout || this.config.timeout
-      )
-
-      try {
-        const fetch = getFetch()
-        const response = await fetch(url, {
-          method: options.method || 'POST',
-          headers,
-          body: options.method === 'GET' ? undefined : body,
-          signal: controller.signal
-        })
-
-        clearTimeout(timeoutId)
-
-        if (!response.ok) {
-          const errorData = await this.parseErrorResponse(response)
-          throw this.createError(response.status, errorData)
-        }
-
-        return await this.parseResponse(response)
-      } catch (error) {
-        clearTimeout(timeoutId)
-        throw error
-      }
-    }
+    const executeRequest = () => this.executeWithTimeout(url, {
+      method: options.method || 'POST',
+      headers,
+      body: options.method === 'GET' ? undefined : body
+    }, options)
 
     return retry(executeRequest, {
       maxRetries: options.retryCount || this.config.retryCount,
@@ -248,35 +267,11 @@ class BaseService {
       endpoint
     })
 
-    const executeRequest = async () => {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(
-        () => controller.abort(),
-        options.timeout || this.config.timeout
-      )
-
-      try {
-        const fetch = getFetch()
-        const response = await fetch(url, {
-          method: 'POST',
-          headers,
-          body: formData,
-          signal: controller.signal
-        })
-
-        clearTimeout(timeoutId)
-
-        if (!response.ok) {
-          const errorData = await this.parseErrorResponse(response)
-          throw this.createError(response.status, errorData)
-        }
-
-        return await this.parseResponse(response)
-      } catch (error) {
-        clearTimeout(timeoutId)
-        throw error
-      }
-    }
+    const executeRequest = () => this.executeWithTimeout(url, {
+      method: 'POST',
+      headers,
+      body: formData
+    }, options)
 
     return retry(executeRequest, {
       maxRetries: options.retryCount || this.config.retryCount,
@@ -434,8 +429,33 @@ class BaseService {
     return {
       name: this.providerName,
       baseURL: this.getBaseURL(),
-      initialized: this.initialized
+      initialized: this.initialized,
+      models: this.config.models
     }
+  }
+
+  /**
+   * 获取可用模型列表
+   * @param {string} type - 模型类型
+   * @returns {string[]} 模型列表
+   */
+  getAvailableModels(type) {
+    if (this.config.models && this.config.models[type]) {
+      return this.config.models[type].options || []
+    }
+    return []
+  }
+
+  /**
+   * 获取默认模型
+   * @param {string} type - 模型类型
+   * @returns {string} 默认模型
+   */
+  getDefaultModel(type) {
+    if (this.config.models && this.config.models[type]) {
+      return this.config.models[type].default
+    }
+    return null
   }
 
   /**

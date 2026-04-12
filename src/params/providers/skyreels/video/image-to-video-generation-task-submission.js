@@ -11,7 +11,8 @@ module.exports = {
 
     first_frame_image: {
       type: ParamType.STRING,
-      elementType: ElementType.UPLOAD,
+      elementType: ElementType.IMAGE_UPLOAD,
+      maxItems: 1,
       required: true,
       description: 'Video first frame image',
       format: 'uri'
@@ -19,7 +20,8 @@ module.exports = {
 
     end_frame_image: {
       type: ParamType.STRING,
-      elementType: ElementType.UPLOAD,
+      elementType: ElementType.IMAGE_UPLOAD,
+      maxItems: 1,
       required: false,
       description: 'Video last frame image',
       format: 'uri'
@@ -43,14 +45,15 @@ module.exports = {
           },
           image_url: {
             type: ParamType.STRING,
-            elementType: ElementType.UPLOAD,
+            elementType: ElementType.IMAGE_UPLOAD,
+            maxItems: 1,
             required: true,
             description: 'Image URL',
             format: 'uri'
           },
           time_stamp: {
             type: ParamType.NUMBER,
-            elementType: ElementType.INPUT,
+            elementType: ElementType.DEFAULT,
             required: false,
             description: 'Target timestamp, -1 means unspecified',
             default: -1

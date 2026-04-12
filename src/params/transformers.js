@@ -223,6 +223,46 @@ function toAPIFormat(params, schema, mapping = {}) {
   return result
 }
 
+/**
+ * 转换火山引擎3D生成任务参数
+ * 将 subdivisionlevel 和 fileformat 转换为 content 数组中的 text 项
+ * @param {object} params - 参数对象
+ * @returns {object} 转换后的参数对象
+ */
+function transformVolcengine3DParams(params) {
+  const { content, subdivisionlevel, fileformat, ...rest } = params
+  
+  if (!content || !Array.isArray(content)) {
+    return params
+  }
+  
+  const newContent = [...content]
+  
+  if (subdivisionlevel || fileformat) {
+    const textParts = []
+    
+    if (subdivisionlevel) {
+      textParts.push(`--subdivisionlevel ${subdivisionlevel}`)
+    }
+    
+    if (fileformat) {
+      textParts.push(`--fileformat ${fileformat}`)
+    }
+    
+    if (textParts.length > 0) {
+      newContent.push({
+        type: 'text',
+        text: textParts.join(' ')
+      })
+    }
+  }
+  
+  return {
+    ...rest,
+    content: newContent
+  }
+}
+
 module.exports = {
   transform,
   transformString,
@@ -231,5 +271,6 @@ module.exports = {
   transformArray,
   transformObject,
   transformParams,
-  toAPIFormat
+  toAPIFormat,
+  transformVolcengine3DParams
 }

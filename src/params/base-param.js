@@ -25,6 +25,7 @@ class BaseParam {
     this.modelCapabilities = schema.modelCapabilities || null
     this.compositeConstraints = schema.compositeConstraints || null
     this.mutuallyExclusive = schema.mutuallyExclusive || null
+    this.transformFn = schema.transform || null
   }
 
   /**
@@ -66,7 +67,13 @@ class BaseParam {
    * @returns {object} 转换后的参数
    */
   transform(params) {
-    return transformParams(params, this.schema)
+    let result = transformParams(params, this.schema)
+    
+    if (this.transformFn && typeof this.transformFn === 'function') {
+      result = this.transformFn(result)
+    }
+    
+    return result
   }
 
   /**

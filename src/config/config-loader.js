@@ -182,24 +182,22 @@ class ConfigLoader {
    * @returns {boolean} 是否存在
    */
   hasConfig(type) {
-    let configPath
-    switch (type) {
-    case 'global':
-      configPath = path.join(this.globalPath, this.configDir, 'config.json')
-      break
-    case 'global-local':
-      configPath = path.join(this.globalPath, this.configDir, 'config.local.json')
-      break
-    case 'project':
-      configPath = path.join(this.projectPath, this.configDir, 'config.json')
-      break
-    case 'project-local':
-      configPath = path.join(this.projectPath, this.configDir, 'config.local.json')
-      break
-    default:
-      return false
+    const configPaths = {
+      'global': ['globalPath', 'configDir', 'config.json'],
+      'global-local': ['globalPath', 'configDir', 'config.local.json'],
+      'project': ['projectPath', 'configDir', 'config.json'],
+      'project-local': ['projectPath', 'configDir', 'config.local.json']
     }
-    return fs.existsSync(configPath)
+    
+    const pathParts = configPaths[type]
+    if (!pathParts) return false
+    
+    const resolvedPath = path.join(
+      pathParts[0] === 'globalPath' ? this.globalPath : this.projectPath,
+      this.configDir,
+      pathParts[2]
+    )
+    return fs.existsSync(resolvedPath)
   }
 }
 

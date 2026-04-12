@@ -310,16 +310,17 @@ class MetadataManager {
   }
 
   /**
-   * 翻译 API 元数据
+   * 通用翻译方法
    * @param {object} metadata - 原始元数据
    * @param {string} language - 语言代码
+   * @param {string} type - 类型 ('apis' 或 'models')
    * @returns {object} 翻译后的元数据
    */
-  translateAPIMetadata(metadata, language) {
+  translateMetadata(metadata, language, type) {
     const provider = metadata.provider
-    const apiName = metadata.name
+    const name = metadata.name
 
-    const translation = this.translations[language]?.metadata?.apis?.[provider]?.[apiName]
+    const translation = this.translations[language]?.metadata?.[type]?.[provider]?.[name]
 
     if (!translation) {
       return metadata
@@ -333,26 +334,23 @@ class MetadataManager {
   }
 
   /**
+   * 翻译 API 元数据
+   * @param {object} metadata - 原始元数据
+   * @param {string} language - 语言代码
+   * @returns {object} 翻译后的元数据
+   */
+  translateAPIMetadata(metadata, language) {
+    return this.translateMetadata(metadata, language, 'apis')
+  }
+
+  /**
    * 翻译 Model 元数据
    * @param {object} metadata - 原始元数据
    * @param {string} language - 语言代码
    * @returns {object} 翻译后的元数据
    */
   translateModelMetadata(metadata, language) {
-    const provider = metadata.provider
-    const modelName = metadata.name
-
-    const translation = this.translations[language]?.metadata?.models?.[provider]?.[modelName]
-
-    if (!translation) {
-      return metadata
-    }
-
-    return {
-      ...metadata,
-      displayName: translation.displayName || metadata.displayName,
-      description: translation.description || metadata.description
-    }
+    return this.translateMetadata(metadata, language, 'models')
   }
 
   /**
