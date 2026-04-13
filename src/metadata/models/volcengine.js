@@ -7,7 +7,7 @@ const { ModelTags } = require('../../constants/tags')
 
 module.exports = {
   'doubao-seedream-5-0-260128': {
-    name: 'Seedream-5.0-lite',
+    name: 'doubao-seedream-5-0-260128',
     displayName: 'Seedream 5.0 Lite',
     description: 'Volcengine lightweight image generation model, supports 2K-3K resolution',
     logo: '',
@@ -27,7 +27,7 @@ module.exports = {
   },
 
   'doubao-seedream-4-5-251128': {
-    name: 'Seedream-4.5',
+    name: 'doubao-seedream-4-5-251128',
     displayName: 'Seedream 4.5',
     description: 'Volcengine high-quality image generation model, supports 2K-4K resolution',
     logo: '',
@@ -45,7 +45,7 @@ module.exports = {
   },
 
   'doubao-seedream-4-0-250828': {
-    name: 'Seedream-4.0',
+    name: 'doubao-seedream-4-0-250828',
     displayName: 'Seedream 4.0',
     description: 'Volcengine image generation model, supports 1K-4K resolution',
     logo: '',
@@ -63,7 +63,7 @@ module.exports = {
   },
 
   'doubao-seedream-3-0-t2i-250415': {
-    name: 'Seedream-3.0-t2i',
+    name: 'doubao-seedream-3-0-t2i-250415',
     displayName: 'Seedream 3.0 T2I',
     description: 'Volcengine text-to-image model',
     logo: '',
@@ -80,7 +80,7 @@ module.exports = {
   },
 
   'doubao-seedance-2-0-260128': {
-    name: 'Seedance-2-0',
+    name: 'doubao-seedance-2-0-260128',
     displayName: 'Seedance 2.0',
     description: 'Volcengine latest video generation model, supports multi-modal reference',
     logo: '',
@@ -102,7 +102,7 @@ module.exports = {
   },
 
   'doubao-seedance-2-0-fast-260128': {
-    name: 'Seedance-2-0-fast',
+    name: 'doubao-seedance-2-0-fast-260128',
     displayName: 'Seedance 2.0 Fast',
     description: 'Volcengine fast video generation model',
     logo: '',
@@ -123,7 +123,7 @@ module.exports = {
   },
 
   'doubao-seedance-1-5-pro-251215': {
-    name: 'Seedance-1-5-pro',
+    name: 'doubao-seedance-1-5-pro-251215',
     displayName: 'Seedance 1.5 Pro',
     description: 'Volcengine professional video generation model',
     logo: '',
@@ -143,7 +143,7 @@ module.exports = {
   },
 
   'doubao-seedance-1-0-pro-250528': {
-    name: 'Seedance-1-0-pro',
+    name: 'doubao-seedance-1-0-pro-250528',
     displayName: 'Seedance 1.0 Pro',
     description: 'Volcengine video generation model',
     logo: '',
@@ -162,7 +162,7 @@ module.exports = {
   },
 
   'doubao-seedance-1-0-pro-fast-251015': {
-    name: 'Seedance-1-0-pro-fast',
+    name: 'doubao-seedance-1-0-pro-fast-251015',
     displayName: 'Seedance 1.0 Pro Fast',
     description: 'Volcengine fast video generation model',
     logo: '',
@@ -181,7 +181,7 @@ module.exports = {
   },
 
   'doubao-seedance-1-0-lite-t2v-250428': {
-    name: 'Seedance-1-0-lite',
+    name: 'doubao-seedance-1-0-lite-t2v-250428',
     displayName: 'Seedance 1.0 Lite',
     description: 'Volcengine lightweight video generation model',
     logo: '',
