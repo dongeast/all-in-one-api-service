@@ -4,7 +4,7 @@
  */
 
 module.exports = {
-  'doubao-seedream-5.0-lite': {
+  'doubao-seedream-5-0-260128': {
     aspectRatios: ['1:1', '16:9', '9:16', '4:3', '3:4', '21:9'],
     
     compositeConstraints: [
@@ -48,7 +48,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedream-4.5': {
+  'doubao-seedream-4-5-251128': {
     aspectRatios: ['1:1', '16:9', '9:16', '4:3', '3:4', '21:9'],
     
     compositeConstraints: [
@@ -92,7 +92,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedream-4.0': {
+  'doubao-seedream-4-0-250828': {
     aspectRatios: ['1:1', '16:9', '9:16', '4:3', '3:4', '21:9'],
     
     compositeConstraints: [
@@ -139,7 +139,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedream-3.0-t2i': {
+  'doubao-seedream-3-0-t2i-250415': {
     aspectRatios: ['1:1', '16:9', '9:16', '4:3', '3:4'],
     
     sizeRange: {
@@ -160,7 +160,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-2-0': {
+  'doubao-seedance-2-0-260128': {
     aspectRatios: ['16:9', '4:3', '1:1', '3:4', '9:16', '21:9', 'adaptive'],
     resolutions: ['480p', '720p', '1080p'],
     
@@ -178,7 +178,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-2-0-fast': {
+  'doubao-seedance-2-0-fast-260128': {
     aspectRatios: ['16:9', '4:3', '1:1', '3:4', '9:16', '21:9', 'adaptive'],
     resolutions: ['480p', '720p', '1080p'],
     
@@ -197,7 +197,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-1-5-pro': {
+  'doubao-seedance-1-5-pro-251215': {
     aspectRatios: ['16:9', '4:3', '1:1', '3:4', '9:16', '21:9'],
     resolutions: ['480p', '720p', '1080p'],
     
@@ -214,7 +214,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-1-0-pro': {
+  'doubao-seedance-1-0-pro-250528': {
     aspectRatios: ['16:9', '4:3', '1:1', '3:4', '9:16'],
     resolutions: ['480p', '720p', '1080p'],
     
@@ -228,7 +228,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-1-0-pro-fast': {
+  'doubao-seedance-1-0-pro-fast-251015': {
     aspectRatios: ['16:9', '4:3', '1:1', '3:4', '9:16'],
     resolutions: ['480p', '720p', '1080p'],
     
@@ -243,7 +243,7 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-1-0-lite': {
+  'doubao-seedance-1-0-lite-t2v-250428': {
     aspectRatios: ['16:9', '4:3', '1:1', '3:4', '9:16'],
     resolutions: ['480p', '720p'],
     

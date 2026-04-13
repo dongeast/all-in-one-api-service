@@ -17,12 +17,12 @@ module.exports = {
     },
     
     models: [
-      'doubao-seedance-2-0',
-      'doubao-seedance-2-0-fast',
-      'doubao-seedance-1-5-pro',
-      'doubao-seedance-1-0-pro',
-      'doubao-seedance-1-0-pro-fast',
-      'doubao-seedance-1-0-lite'
+      'doubao-seedance-2-0-260128',
+      'doubao-seedance-2-0-fast-260128',
+      'doubao-seedance-1-5-pro-251215',
+      'doubao-seedance-1-0-pro-250528',
+      'doubao-seedance-1-0-pro-fast-251015',
+      'doubao-seedance-1-0-lite-t2v-250428'
     ],
     tags: ['video', 'generation', 'text-to-video', 'image-to-video'],
     priority: 100
@@ -70,12 +70,12 @@ module.exports = {
     },
     
     models: [
-      'doubao-seedance-2-0',
-      'doubao-seedance-2-0-fast',
-      'doubao-seedance-1-5-pro',
-      'doubao-seedance-1-0-pro',
-      'doubao-seedance-1-0-pro-fast',
-      'doubao-seedance-1-0-lite'
+      'doubao-seedance-2-0-260128',
+      'doubao-seedance-2-0-fast-260128',
+      'doubao-seedance-1-5-pro-251215',
+      'doubao-seedance-1-0-pro-250528',
+      'doubao-seedance-1-0-pro-fast-251015',
+      'doubao-seedance-1-0-lite-t2v-250428'
     ],
     tags: ['video', 'query', 'list'],
     priority: 100
@@ -92,12 +92,12 @@ module.exports = {
     },
     
     models: [
-      'doubao-seedance-2-0',
-      'doubao-seedance-2-0-fast',
-      'doubao-seedance-1-5-pro',
-      'doubao-seedance-1-0-pro',
-      'doubao-seedance-1-0-pro-fast',
-      'doubao-seedance-1-0-lite'
+      'doubao-seedance-2-0-260128',
+      'doubao-seedance-2-0-fast-260128',
+      'doubao-seedance-1-5-pro-251215',
+      'doubao-seedance-1-0-pro-250528',
+      'doubao-seedance-1-0-pro-fast-251015',
+      'doubao-seedance-1-0-lite-t2v-250428'
     ],
     tags: ['video', 'cancel', 'delete'],
     priority: 100

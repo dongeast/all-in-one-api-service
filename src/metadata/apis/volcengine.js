@@ -17,10 +17,10 @@ module.exports = {
     paramSchema: require('../../params/providers/volcengine/image/generate-image'),
     models: [
       'doubao-seedit-1-0',
-      'doubao-seedream-5.0-lite',
-      'doubao-seedream-4.5',
-      'doubao-seedream-4.0',
-      'doubao-seedream-3.0-t2i'
+      'doubao-seedream-5-0-260128',
+      'doubao-seedream-4-5-251128',
+      'doubao-seedream-4-0-250828',
+      'doubao-seedream-3-0-t2i-250415'
     ],
     tags: ['image', 'generation', 'text-to-image'],
     priority: 100
@@ -36,12 +36,12 @@ module.exports = {
     type: 'async',
     paramSchema: require('../../params/providers/volcengine/video/create-video-generation-task'),
     models: [
-      'doubao-seedance-2-0',
-      'doubao-seedance-2-0-fast',
-      'doubao-seedance-1-5-pro',
-      'doubao-seedance-1-0-pro',
-      'doubao-seedance-1-0-pro-fast',
-      'doubao-seedance-1-0-lite'
+      'doubao-seedance-2-0-260128',
+      'doubao-seedance-2-0-fast-260128',
+      'doubao-seedance-1-5-pro-251215',
+      'doubao-seedance-1-0-pro-250528',
+      'doubao-seedance-1-0-pro-fast-251015',
+      'doubao-seedance-1-0-lite-t2v-250428'
     ],
     tags: ['video', 'generation', 'text-to-video', 'image-to-video'],
     priority: 100
@@ -57,12 +57,12 @@ module.exports = {
     type: 'sync',
     paramSchema: require('../../params/providers/volcengine/video/query-video-generation-task'),
     models: [
-      'doubao-seedance-2-0',
-      'doubao-seedance-2-0-fast',
-      'doubao-seedance-1-5-pro',
-      'doubao-seedance-1-0-pro',
-      'doubao-seedance-1-0-pro-fast',
-      'doubao-seedance-1-0-lite'
+      'doubao-seedance-2-0-260128',
+      'doubao-seedance-2-0-fast-260128',
+      'doubao-seedance-1-5-pro-251215',
+      'doubao-seedance-1-0-pro-250528',
+      'doubao-seedance-1-0-pro-fast-251015',
+      'doubao-seedance-1-0-lite-t2v-250428'
     ],
     tags: ['video', 'query', 'task'],
     priority: 100
@@ -78,12 +78,12 @@ module.exports = {
     type: 'sync',
     paramSchema: require('../../params/providers/volcengine/video/query-video-generation-task-list'),
     models: [
-      'doubao-seedance-2-0',
-      'doubao-seedance-2-0-fast',
-      'doubao-seedance-1-5-pro',
-      'doubao-seedance-1-0-pro',
-      'doubao-seedance-1-0-pro-fast',
-      'doubao-seedance-1-0-lite'
+      'doubao-seedance-2-0-260128',
+      'doubao-seedance-2-0-fast-260128',
+      'doubao-seedance-1-5-pro-251215',
+      'doubao-seedance-1-0-pro-250528',
+      'doubao-seedance-1-0-pro-fast-251015',
+      'doubao-seedance-1-0-lite-t2v-250428'
     ],
     tags: ['video', 'query', 'list'],
     priority: 100
@@ -99,12 +99,12 @@ module.exports = {
     type: 'sync',
     paramSchema: require('../../params/providers/volcengine/video/cancel-delete-video-generation-task'),
     models: [
-      'doubao-seedance-2-0',
-      'doubao-seedance-2-0-fast',
-      'doubao-seedance-1-5-pro',
-      'doubao-seedance-1-0-pro',
-      'doubao-seedance-1-0-pro-fast',
-      'doubao-seedance-1-0-lite'
+      'doubao-seedance-2-0-260128',
+      'doubao-seedance-2-0-fast-260128',
+      'doubao-seedance-1-5-pro-251215',
+      'doubao-seedance-1-0-pro-250528',
+      'doubao-seedance-1-0-pro-fast-251015',
+      'doubao-seedance-1-0-lite-t2v-250428'
     ],
     tags: ['video', 'cancel', 'delete'],
     priority: 100

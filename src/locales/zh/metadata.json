@@ -257,43 +257,43 @@
       }
     },
     "volcengine": {
-      "doubao-seedream-5.0-lite": {
+      "doubao-seedream-5-0-260128": {
         "displayName": "豆包 Seedream 5.0 Lite",
         "description": "火山引擎轻量级图像生成模型，支持2K-3K分辨率"
       },
-      "doubao-seedream-4.5": {
+      "doubao-seedream-4-5-251128": {
         "displayName": "豆包 Seedream 4.5",
         "description": "火山引擎高质量图像生成模型，支持2K-4K分辨率"
       },
-      "doubao-seedream-4.0": {
+      "doubao-seedream-4-0-250828": {
         "displayName": "豆包 Seedream 4.0",
         "description": "火山引擎图像生成模型，支持1K-4K分辨率"
       },
-      "doubao-seedream-3.0-t2i": {
+      "doubao-seedream-3-0-t2i-250415": {
         "displayName": "豆包 Seedream 3.0 T2I",
         "description": "火山引擎文生图模型"
       },
-      "doubao-seedance-2-0": {
+      "doubao-seedance-2-0-260128": {
         "displayName": "豆包 Seedance 2.0",
         "description": "火山引擎最新视频生成模型，支持多模态参考"
       },
-      "doubao-seedance-2-0-fast": {
+      "doubao-seedance-2-0-fast-260128": {
         "displayName": "豆包 Seedance 2.0 Fast",
         "description": "火山引擎快速视频生成模型"
       },
-      "doubao-seedance-1-5-pro": {
+      "doubao-seedance-1-5-pro-251215": {
         "displayName": "豆包 Seedance 1.5 Pro",
         "description": "火山引擎专业版视频生成模型"
       },
-      "doubao-seedance-1-0-pro": {
+      "doubao-seedance-1-0-pro-250528": {
         "displayName": "豆包 Seedance 1.0 Pro",
         "description": "火山引擎视频生成模型"
       },
-      "doubao-seedance-1-0-pro-fast": {
+      "doubao-seedance-1-0-pro-fast-251015": {
         "displayName": "豆包 Seedance 1.0 Pro Fast",
         "description": "火山引擎快速视频生成模型"
       },
-      "doubao-seedance-1-0-lite": {
+      "doubao-seedance-1-0-lite-t2v-250428": {
         "displayName": "豆包 Seedance 1.0 Lite",
         "description": "火山引擎轻量级视频生成模型"
       },
