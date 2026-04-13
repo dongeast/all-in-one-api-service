@@ -6,9 +6,9 @@ const { APITypes, MediaTypes, Providers, Series } = require('../../constants')
 const { ModelTags } = require('../../constants/tags')
 
 module.exports = {
-  'doubao-seedream-5.0-lite': {
-    name: 'doubao-seedream-5.0-lite',
-    displayName: 'Doubao Seedream 5.0 Lite',
+  'doubao-seedream-5-0-260128': {
+    name: 'Seedream-5.0-lite',
+    displayName: 'Seedream 5.0 Lite',
     description: 'Volcengine lightweight image generation model, supports 2K-3K resolution',
     logo: '',
     series: Series.SEEDREAM,
@@ -26,9 +26,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedream-4.5': {
-    name: 'doubao-seedream-4.5',
-    displayName: 'Doubao Seedream 4.5',
+  'doubao-seedream-4-5-251128': {
+    name: 'Seedream-4.5',
+    displayName: 'Seedream 4.5',
     description: 'Volcengine high-quality image generation model, supports 2K-4K resolution',
     logo: '',
     series: Series.SEEDREAM,
@@ -44,9 +44,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedream-4.0': {
-    name: 'doubao-seedream-4.0',
-    displayName: 'Doubao Seedream 4.0',
+  'doubao-seedream-4-0-250828': {
+    name: 'Seedream-4.0',
+    displayName: 'Seedream 4.0',
     description: 'Volcengine image generation model, supports 1K-4K resolution',
     logo: '',
     series: Series.SEEDREAM,
@@ -62,9 +62,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedream-3.0-t2i': {
-    name: 'doubao-seedream-3.0-t2i',
-    displayName: 'Doubao Seedream 3.0 T2I',
+  'doubao-seedream-3-0-t2i-250415': {
+    name: 'Seedream-3.0-t2i',
+    displayName: 'Seedream 3.0 T2I',
     description: 'Volcengine text-to-image model',
     logo: '',
     series: Series.SEEDREAM,
@@ -79,9 +79,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-2-0': {
-    name: 'doubao-seedance-2-0',
-    displayName: 'Doubao Seedance 2.0',
+  'doubao-seedance-2-0-260128': {
+    name: 'Seedance-2-0',
+    displayName: 'Seedance 2.0',
     description: 'Volcengine latest video generation model, supports multi-modal reference',
     logo: '',
     series: Series.SEEDANCE,
@@ -101,9 +101,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-2-0-fast': {
-    name: 'doubao-seedance-2-0-fast',
-    displayName: 'Doubao Seedance 2.0 Fast',
+  'doubao-seedance-2-0-fast-260128': {
+    name: 'Seedance-2-0-fast',
+    displayName: 'Seedance 2.0 Fast',
     description: 'Volcengine fast video generation model',
     logo: '',
     series: Series.SEEDANCE,
@@ -122,9 +122,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-1-5-pro': {
-    name: 'doubao-seedance-1-5-pro',
-    displayName: 'Doubao Seedance 1.5 Pro',
+  'doubao-seedance-1-5-pro-251215': {
+    name: 'Seedance-1-5-pro',
+    displayName: 'Seedance 1.5 Pro',
     description: 'Volcengine professional video generation model',
     logo: '',
     series: Series.SEEDANCE,
@@ -142,9 +142,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-1-0-pro': {
-    name: 'doubao-seedance-1-0-pro',
-    displayName: 'Doubao Seedance 1.0 Pro',
+  'doubao-seedance-1-0-pro-250528': {
+    name: 'Seedance-1-0-pro',
+    displayName: 'Seedance 1.0 Pro',
     description: 'Volcengine video generation model',
     logo: '',
     series: Series.SEEDANCE,
@@ -161,9 +161,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-1-0-pro-fast': {
-    name: 'doubao-seedance-1-0-pro-fast',
-    displayName: 'Doubao Seedance 1.0 Pro Fast',
+  'doubao-seedance-1-0-pro-fast-251015': {
+    name: 'Seedance-1-0-pro-fast',
+    displayName: 'Seedance 1.0 Pro Fast',
     description: 'Volcengine fast video generation model',
     logo: '',
     series: Series.SEEDANCE,
@@ -180,9 +180,9 @@ module.exports = {
     }
   },
 
-  'doubao-seedance-1-0-lite': {
-    name: 'doubao-seedance-1-0-lite',
-    displayName: 'Doubao Seedance 1.0 Lite',
+  'doubao-seedance-1-0-lite-t2v-250428': {
+    name: 'Seedance-1-0-lite',
+    displayName: 'Seedance 1.0 Lite',
     description: 'Volcengine lightweight video generation model',
     logo: '',
     series: Series.SEEDANCE,
