@@ -32,6 +32,9 @@ const ElementType = {
   AUDIO_UPLOAD: 'audio-upload',
   CAMERA_MOTION: 'camera-motion',
   THREE_D_CONTENT: '3d-content',
+  MID_FRAME_ARRAY: 'mid-frame-array',
+  REF_IMAGE_ARRAY: 'ref-image-array',
+  REF_VIDEOS_ARRAY: 'ref-videos-array',
 }
 
 module.exports = {

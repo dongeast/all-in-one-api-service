@@ -21,8 +21,15 @@ module.exports = {
     code: skyreelsCommon.output.code,
     status: skyreelsCommon.output.status,
     trace_id: skyreelsCommon.output.trace_id,
-    video_url: skyreelsCommon.output.video_url,
-    duration: skyreelsCommon.output.duration_output,
-    resolution: skyreelsCommon.output.resolution
+    data: {
+      type: 'object',
+      description: 'Contains video data on success, null for other statuses',
+      path: 'data',
+      fields: {
+        video_url: skyreelsCommon.output.video_url,
+        duration: skyreelsCommon.output.duration_output,
+        resolution: skyreelsCommon.output.resolution
+      }
+    }
   }
 }

@@ -16,6 +16,8 @@ const imageToVideoGenerationTaskSubmission = require('./image-to-video-generatio
 const imageToVideoGenerationTaskQuery = require('./image-to-video-generation-task-query')
 const omniReferenceTaskSubmission = require('./omni-reference-task-submission')
 const omniReferenceTaskQuery = require('./omni-reference-task-query')
+// const referenceImageArrayTaskSubmission = require('./reference-image-array-task-submission')
+// const refVideosTaskSubmission = require('./ref-videos-task-submission')
 
 module.exports = {
   referenceToVideoTaskSubmission,
@@ -31,5 +33,7 @@ module.exports = {
   imageToVideoGenerationTaskSubmission,
   imageToVideoGenerationTaskQuery,
   omniReferenceTaskSubmission,
-  omniReferenceTaskQuery
+  omniReferenceTaskQuery,
+  // referenceImageArrayTaskSubmission,
+  // refVideosTaskSubmission
 }

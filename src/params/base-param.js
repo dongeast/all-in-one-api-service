@@ -64,10 +64,11 @@ class BaseParam {
   /**
    * 转换参数值
    * @param {object} params - 参数对象
+   * @param {string} model - 模型名称（可选）
    * @returns {object} 转换后的参数
    */
-  transform(params) {
-    let result = transformParams(params, this.schema)
+  transform(params, model) {
+    let result = transformParams(params, this.schema, model)
     
     if (this.transformFn && typeof this.transformFn === 'function') {
       result = this.transformFn(result)

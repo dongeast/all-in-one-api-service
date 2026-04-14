@@ -18,45 +18,60 @@ module.exports = {
       default: 5
     },
 
+    resolution: {
+      type: ParamType.ENUM,
+      elementType: ElementType.RESOLUTION,
+      required: false,
+      description: 'Output video resolution. Supports 480p, 720p, and 1080p.',
+      options: ['480p', '720p', '1080p'],
+      default: '1080p'
+    },
+
     ref_images: {
       type: ParamType.ARRAY,
-      elementType: ElementType.INPUT,
+      elementType: ElementType.REF_IMAGE_ARRAY,
       required: false,
-      description: 'Reference image list',
-      items: {
+      description: 'Reference image list for video generation',
+      maxItems: 5,
+      minItems: 0,
+      itemSchema: {
         type: ParamType.OBJECT,
         properties: {
           tag: {
             type: ParamType.STRING,
-            elementType: ElementType.INPUT,
+            elementType: ElementType.DEFAULT,
             required: true,
-            description: 'Reference image identifier, must start with @',
-            pattern: '^@'
+            description: 'Reference image identifier, must start with @ and appear in the prompt (e.g., @image1, @image2)',
+            pattern: '^@[a-zA-Z_][a-zA-Z0-9_]*$'
           },
           type: {
             type: ParamType.ENUM,
-            elementType: ElementType.SELECT,
+            elementType: ElementType.DEFAULT,
             required: true,
             description: 'Image reference type',
-            options: ['grid', 'image']
+            options: ['image'],
+            default: 'image'
           },
           image_urls: {
             type: ParamType.ARRAY,
-            elementType: ElementType.INPUT,
+            elementType: ElementType.IMAGE_UPLOAD,
             required: true,
-            description: 'Image URL list',
+            description: 'List of image URLs (supports jpg/jpeg, png, gif, bpm)',
+            maxItems: 5,
+            minItems: 1,
             items: {
               type: ParamType.STRING,
-              elementType: ElementType.UPLOAD,
+              elementType: ElementType.IMAGE_UPLOAD,
               format: 'uri'
             }
           },
           audio_url: {
             type: ParamType.STRING,
-            elementType: ElementType.UPLOAD,
+            elementType: ElementType.DEFAULT,
             required: false,
-            description: 'Corresponding voice tone URL',
-            format: 'uri'
+            description: 'Corresponding voice timbre URL (max 15 seconds, only for type image)',
+            format: 'uri',
+            default: ''
           }
         }
       }
@@ -64,36 +79,40 @@ module.exports = {
 
     ref_videos: {
       type: ParamType.ARRAY,
-      elementType: ElementType.INPUT,
+      elementType: ElementType.REF_VIDEOS_ARRAY,
       required: false,
-      description: 'Reference video configuration list',
-      items: {
+      description: 'Reference video configurations (max 10s, supports MP4/MOV)',
+      maxItems: 1,
+      minItems: 0,
+      itemSchema: {
         type: ParamType.OBJECT,
         properties: {
           tag: {
             type: ParamType.STRING,
-            elementType: ElementType.INPUT,
+            elementType: ElementType.DEFAULT,
             required: true,
-            description: 'Video reference identifier, must start with @',
-            pattern: '^@'
+            description: 'Video reference identifier, must start with @ (e.g., @video1)',
+            pattern: '^@[a-zA-Z_][a-zA-Z0-9_]*$'
           },
           type: {
             type: ParamType.ENUM,
-            elementType: ElementType.SELECT,
+            elementType: ElementType.DEFAULT,
             required: true,
-            description: 'Video reference type',
-            options: ['reference', 'extend']
+            description: 'Video reference type: reference (for motion reference, includes audio by default), extend (for video extension, supports sound)',
+            options: ['reference', 'extend'],
+            default: 'reference'
           },
           video_url: {
             type: ParamType.STRING,
             elementType: ElementType.UPLOAD,
             required: true,
-            description: 'Video URL, supports MP4/MOV format, max 10 seconds',
+            description: 'Video URL (MP4, MOV, max 10s)',
             format: 'uri'
           }
         }
       }
     },
+
 
     sound: skyreelsCommon.input.sound,
     prompt_optimizer: skyreelsCommon.input.prompt_optimizer,

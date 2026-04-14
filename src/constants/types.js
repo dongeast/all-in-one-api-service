@@ -97,6 +97,12 @@ const InputOutputTypes = {
     display_name: 'Video Extension',
     display_flag: true
   },
+  VIDEO_REFERENCE: {
+    input: MediaTypes.VIDEO,
+    output: MediaTypes.VIDEO,
+    display_name: 'Video Reference',
+    display_flag: true
+  },
 
   // 音频生成类
   TEXT_TO_AUDIO: {
@@ -229,14 +235,14 @@ const APITypes = {
     inputOutput: InputOutputTypes.IMAGE_EDITING,
     description: 'Edit and modify images',
     display_name: 'Image Editing',
-    display_flag: true
+    display_flag: false
   },
   IMAGE_UPSCALING: {
     id: 'image_upscaling',
     inputOutput: InputOutputTypes.IMAGE_UPSCALING,
     description: 'Enhance image resolution and quality',
     display_name: 'Image Upscaling',
-    display_flag: true
+    display_flag: false
   },
 
   TEXT_TO_VIDEO: {
@@ -258,13 +264,20 @@ const APITypes = {
     inputOutput: InputOutputTypes.AUDIO_TO_VIDEO,
     description: 'Generate video from audio content',
     display_name: 'Audio to Video',
-    display_flag: true
+    display_flag: false
   },
   VIDEO_EDITING: {
     id: 'video_editing',
     inputOutput: InputOutputTypes.VIDEO_EDITING,
     description: 'Edit and modify videos',
     display_name: 'Video Editing',
+    display_flag: false
+  },
+  VIDEO_REFERENCE: {
+    id: 'video_reference',
+    inputOutput: InputOutputTypes.VIDEO_REFERENCE,
+    description: 'Reference images and videos',
+    display_name: 'Video Reference',
     display_flag: true
   },
   VIDEO_EXTENSION: {
@@ -272,7 +285,7 @@ const APITypes = {
     inputOutput: InputOutputTypes.VIDEO_EXTENSION,
     description: 'Extend video duration',
     display_name: 'Video Extension',
-    display_flag: true
+    display_flag: false
   },
 
   TEXT_TO_AUDIO: {
@@ -280,56 +293,56 @@ const APITypes = {
     inputOutput: InputOutputTypes.TEXT_TO_AUDIO,
     description: 'Generate audio from text description',
     display_name: 'Text to Audio',
-    display_flag: true
+    display_flag: false
   },
   TEXT_TO_SPEECH: {
     id: 'text_to_speech',
     inputOutput: InputOutputTypes.TEXT_TO_SPEECH,
     description: 'Convert text to speech',
     display_name: 'Text to Speech',
-    display_flag: true
+    display_flag: false
   },
   SPEECH_TO_TEXT: {
     id: 'speech_to_text',
     inputOutput: InputOutputTypes.SPEECH_TO_TEXT,
     description: 'Convert speech to text',
     display_name: 'Speech to Text',
-    display_flag: true
+    display_flag: false
   },
   AUDIO_GENERATION: {
     id: 'audio_generation',
     inputOutput: InputOutputTypes.AUDIO_GENERATION,
     description: 'Generate various types of audio',
     display_name: 'Audio Generation',
-    display_flag: true
+    display_flag: false
   },
   MUSIC_GENERATION: {
     id: 'music_generation',
     inputOutput: InputOutputTypes.MUSIC_GENERATION,
     description: 'Generate music from description',
     display_name: 'Music Generation',
-    display_flag: true
+    display_flag: false
   },
   SONG_GENERATION: {
     id: 'song_generation',
     inputOutput: InputOutputTypes.SONG_GENERATION,
     description: 'Generate complete songs',
     display_name: 'Song Generation',
-    display_flag: true
+    display_flag: false
   },
   INSTRUMENTAL_GENERATION: {
     id: 'instrumental_generation',
     inputOutput: InputOutputTypes.INSTRUMENTAL_GENERATION,
     description: 'Generate instrumental accompaniment',
     display_name: 'Instrumental Generation',
-    display_flag: true
+    display_flag: false
   },
   VOCAL_CLONING: {
     id: 'vocal_cloning',
     inputOutput: InputOutputTypes.VOCAL_CLONING,
     description: 'Clone specific voice characteristics',
     display_name: 'Vocal Cloning',
-    display_flag: true
+    display_flag: false
   },
 
   TEXT_GENERATION: {
@@ -337,14 +350,14 @@ const APITypes = {
     inputOutput: InputOutputTypes.TEXT_GENERATION,
     description: 'Generate text content',
     display_name: 'Text Generation',
-    display_flag: true
+    display_flag: false
   },
   TEXT_EDITING: {
     id: 'text_editing',
     inputOutput: InputOutputTypes.TEXT_EDITING,
     description: 'Edit and modify text',
     display_name: 'Text Editing',
-    display_flag: true
+    display_flag: false
   },
 
   IMAGE_TO_3D: {
@@ -352,14 +365,14 @@ const APITypes = {
     inputOutput: InputOutputTypes.IMAGE_TO_3D,
     description: 'Generate 3D model from image',
     display_name: 'Image to 3D',
-    display_flag: true
+    display_flag: false
   },
   TEXT_TO_3D: {
     id: 'text_to_3d',
     inputOutput: InputOutputTypes.TEXT_TO_3D,
     description: 'Generate 3D model from text description',
     display_name: 'Text to 3D',
-    display_flag: true
+    display_flag: false
   },
 
   TASK_QUERY: {
@@ -382,14 +395,14 @@ const APITypes = {
     inputOutput: InputOutputTypes.AVATAR_GENERATION,
     description: 'Generate digital avatar',
     display_name: 'Avatar Generation',
-    display_flag: true
+    display_flag: false
   },
   LIP_SYNC: {
     id: 'lip_sync',
     inputOutput: InputOutputTypes.LIP_SYNC,
     description: 'Synchronize video lip movements with audio',
     display_name: 'Lip Sync',
-    display_flag: true
+    display_flag: false
   }
 }
 

@@ -24,7 +24,8 @@ module.exports = {
       items: {
         type: ParamType.STRING,
         description: 'Image URL or Base64 encoded data'
-      }
+      },
+      supportedModels: ['doubao-seedream-5-0-260128', 'doubao-seedream-4-5-251128', 'doubao-seedream-4-0-250828']
     },
 
     size: {
@@ -46,7 +47,10 @@ module.exports = {
       default: '2048x2048'
     },
 
-    seed: volcengineCommon.input.seed,
+    seed: {
+      ...volcengineCommon.input.seed,
+      supportedModels: ['doubao-seedream-3-0-t2i-250415']
+    },
 
     sequential_image_generation: {
       type: ParamType.ENUM,
@@ -54,25 +58,19 @@ module.exports = {
       required: false,
       description: 'Whether to enable continuous image generation',
       options: ['auto', 'disabled'],
-      default: 'disabled'
+      default: 'disabled',
+      supportedModels: ['doubao-seedream-5-0-260128', 'doubao-seedream-4-5-251128', 'doubao-seedream-4-0-250828']
     },
 
     sequential_image_generation_options: {
       type: ParamType.OBJECT,
-      elementType: ElementType.DEFAULT,  // 隐藏，不在前端显示
+      elementType: ElementType.DEFAULT,
       required: false,
       description: 'Continuous image generation configuration',
       default: {
-        max_images: 15  // 默认最多生成15张
-      }
-    },
-
-    stream: {
-      type: ParamType.BOOLEAN,
-      elementType: ElementType.DEFAULT,
-      required: false,
-      description: 'Whether to enable streaming output mode',
-      default: false
+        max_images: 15
+      },
+      supportedModels: ['doubao-seedream-5-0-260128', 'doubao-seedream-4-5-251128', 'doubao-seedream-4-0-250828']
     },
 
     guidance_scale: {
@@ -82,7 +80,8 @@ module.exports = {
       description: 'Consistency between model output and prompt',
       min: 1,
       max: 10,
-      default: 2.5
+      default: 2.5,
+      supportedModels: ['doubao-seedream-3-0-t2i-250415']
     },
 
     output_format: {
@@ -91,7 +90,8 @@ module.exports = {
       required: false,
       description: 'Output image file format',
       options: ['png', 'jpeg'],
-      default: 'jpeg'
+      default: 'jpeg',
+      supportedModels: ['doubao-seedream-5-0-260128']
     },
 
     response_format: volcengineCommon.input.response_format,
@@ -102,7 +102,8 @@ module.exports = {
       type: ParamType.OBJECT,
       elementType: ElementType.DEFAULT,
       required: false,
-      description: 'Prompt optimization configuration'
+      description: 'Prompt optimization configuration',
+      supportedModels: ['doubao-seedream-5-0-260128', 'doubao-seedream-4-5-251128', 'doubao-seedream-4-0-250828']
     }
   },
 

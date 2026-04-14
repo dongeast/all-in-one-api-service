@@ -174,28 +174,61 @@ function transform(value, schema) {
 }
 
 /**
+ * 过滤不支持的参数
+ * @param {object} params - 参数对象
+ * @param {object} schema - 参数模式定义
+ * @param {string} model - 模型名称
+ * @returns {object} 过滤后的参数
+ */
+function filterUnsupportedParams(params, schema, model) {
+  if (!schema || !schema.input || !model) {
+    return params
+  }
+
+  const filtered = {}
+  
+  for (const [key, value] of Object.entries(params)) {
+    const fieldSchema = schema.input[key]
+    
+    if (!fieldSchema || !fieldSchema.supportedModels) {
+      filtered[key] = value
+      continue
+    }
+    
+    if (fieldSchema.supportedModels.includes(model)) {
+      filtered[key] = value
+    }
+  }
+  
+  return filtered
+}
+
+/**
  * 转换参数对象
  * @param {object} params - 参数对象
  * @param {object} schema - 参数模式定义
+ * @param {string} model - 模型名称（可选）
  * @returns {object} 转换后的参数对象
  */
-function transformParams(params, schema) {
+function transformParams(params, schema, model) {
   if (!schema || !schema.input) {
     return params
   }
+
+  const filteredParams = model ? filterUnsupportedParams(params, schema, model) : params
 
   const result = {}
   const inputSchema = schema.input
 
   for (const [key, fieldSchema] of Object.entries(inputSchema)) {
-    if (params[key] !== undefined) {
-      result[key] = transform(params[key], fieldSchema)
-    } else if (fieldSchema.default !== undefined) {
+    if (filteredParams[key] !== undefined) {
+      result[key] = transform(filteredParams[key], fieldSchema)
+    } else if (fieldSchema.default !== undefined && (!fieldSchema.supportedModels || !model || fieldSchema.supportedModels.includes(model))) {
       result[key] = fieldSchema.default
     }
   }
 
-  for (const [key, value] of Object.entries(params)) {
+  for (const [key, value] of Object.entries(filteredParams)) {
     if (result[key] === undefined) {
       result[key] = value
     }
@@ -270,6 +303,7 @@ module.exports = {
   transformBoolean,
   transformArray,
   transformObject,
+  filterUnsupportedParams,
   transformParams,
   toAPIFormat,
   transformVolcengine3DParams

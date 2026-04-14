@@ -33,11 +33,18 @@ function extractField(response, fieldSchema) {
  * 提取嵌套对象
  * @param {any} response - 原始响应
  * @param {object} fieldSchema - 字段模式
- * @returns {object} 提取的对象
+ * @returns {object|null} 提取的对象或 null
  */
 function extractNestedObject(response, fieldSchema) {
   if (!fieldSchema.fields) {
     return extractField(response, fieldSchema)
+  }
+
+  if (fieldSchema.path) {
+    const parentValue = getValueByPath(response, fieldSchema.path, fieldSchema.default)
+    if (parentValue === null || parentValue === undefined) {
+      return parentValue
+    }
   }
 
   const result = {}

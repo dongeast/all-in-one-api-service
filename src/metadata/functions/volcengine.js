@@ -54,7 +54,13 @@ module.exports = {
       request: 'generate-image'
     },
     
-    models: ['doubao-seedit-1-0'],
+    models: [
+      'doubao-seedit-1-0',
+      'doubao-seedream-5-0-260128',
+      'doubao-seedream-4-5-251128',
+      'doubao-seedream-4-0-250828',
+      'doubao-seedream-3-0-t2i-250415'
+    ],
     tags: ['image', 'generation', 'text-to-image'],
     priority: 100
   },

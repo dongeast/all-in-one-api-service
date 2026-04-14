@@ -7,6 +7,7 @@
 const { generateId } = require('../utils/helpers')
 const { createLogger } = require('../utils/logger')
 const apiRegistry = require('../registry/api-registry')
+const { APIDefinition } = require('../apis')
 
 /**
  * Function 基类
@@ -22,6 +23,7 @@ class BaseFunction {
     this.metadata = metadata
     this.logger = service.logger || createLogger({ level: 'INFO' })
     this.functionName = metadata.name
+    this.apiDefinitionCache = new Map()
   }
 
   /**
@@ -33,9 +35,55 @@ class BaseFunction {
   }
 
   /**
+   * 规范化 API 返回结果
+   * 确保所有 API 返回统一的结构格式
+   * @param {object} rawResult - API 原始响应
+   * @param {boolean} isAsync - 是否异步 API
+   * @returns {object} 规范化后的结果
+   */
+  normalizeResult(rawResult, isAsync) {
+    if (!rawResult) {
+      return {
+        success: false,
+        isAsync,
+        taskId: null,
+        data: null,
+        error: { message: 'No result returned', code: 'NO_RESULT' },
+        metadata: {}
+      }
+    }
+
+    if (rawResult.success !== undefined && rawResult.isAsync !== undefined) {
+      return rawResult
+    }
+
+    const success = rawResult.success !== false && 
+                    rawResult.status !== 'failed' && 
+                    rawResult.status !== 'error' &&
+                    !rawResult.error
+
+    const taskId = isAsync ? (rawResult.data?.id || rawResult.id || rawResult.taskId || null) : null
+
+    return {
+      success,
+      isAsync,
+      taskId,
+      data: rawResult.data || rawResult,
+      error: rawResult.error || null,
+      metadata: {
+        model: rawResult.model,
+        created: rawResult.created || rawResult.created_at,
+        status: rawResult.status,
+        usage: rawResult.usage,
+        ...rawResult.metadata
+      }
+    }
+  }
+
+  /**
    * 获取API定义
    * @param {string} apiType - API类型（'request' 或 'query'）
-   * @returns {object|null} API定义
+   * @returns {APIDefinition|null} API定义实例
    */
   getAPIDefinition(apiType) {
     const apiName = this.metadata.apis?.[apiType]
@@ -44,7 +92,27 @@ class BaseFunction {
     }
 
     if (typeof apiName === 'string') {
-      return apiRegistry.get(apiName)
+      if (this.apiDefinitionCache.has(apiName)) {
+        return this.apiDefinitionCache.get(apiName)
+      }
+
+      const apiMetadata = apiRegistry.get(apiName)
+      if (!apiMetadata) {
+        return null
+      }
+
+      const apiDefinition = new APIDefinition({
+        name: apiMetadata.name,
+        endpoint: apiMetadata.endpoint,
+        method: apiMetadata.method || 'POST',
+        paramSchema: apiMetadata.paramSchema,
+        modelName: apiMetadata.models?.[0] || 'unknown',
+        isAsync: this.isAsync(),
+        outputMapping: apiMetadata.outputMapping || null
+      })
+
+      this.apiDefinitionCache.set(apiName, apiDefinition)
+      return apiDefinition
     }
 
     return null
@@ -75,7 +143,10 @@ class BaseFunction {
         throw new Error(`Endpoint not defined for API ${apiDefinition.name}`)
       }
 
-      const result = await this.service.call(endpoint, params, { ...options, method })
+      const transformedParams = apiDefinition.transformParams(params)
+      const apiParams = apiDefinition.prepareAPIParams(transformedParams)
+
+      const result = await this.service.call(endpoint, apiParams, { ...options, method })
 
       this.logger.debug(`[${requestId}] Function request completed`, {
         duration: Date.now() - startTime,
@@ -196,33 +267,43 @@ class BaseFunction {
 
   /**
    * 执行完整流程（自动处理同步/异步）
+   * 同步 API：直接返回结果
+   * 异步 API：立即返回 taskId，除非显式设置 waitForCompletion: true
    * @param {object} params - 输入参数
    * @param {object} options - 执行选项
+   * @param {boolean} options.waitForCompletion - 是否等待异步任务完成（默认 false）
    * @returns {Promise<object>} 最终结果
    */
   async execute(params = {}, options = {}) {
     const requestResult = await this.request(params, options)
 
     if (!requestResult.success) {
-      return requestResult
+      return this.normalizeResult(requestResult, this.isAsync())
     }
 
     if (!this.isAsync()) {
-      return requestResult
+      return this.normalizeResult(requestResult, false)
     }
 
-    const taskId = requestResult.data.id
+    const taskId = requestResult.data?.id || requestResult.id
     if (!taskId) {
       throw new Error('Async function did not return task ID')
     }
 
-    const waitOptions = {
-      pollInterval: options.pollInterval || 2000,
-      maxAttempts: options.maxAttempts || 100,
-      onProgress: options.onProgress
+    if (options.waitForCompletion) {
+      const waitOptions = {
+        pollInterval: options.pollInterval || 2000,
+        maxAttempts: options.maxAttempts || 100,
+        onProgress: options.onProgress
+      }
+      const finalResult = await this.waitForCompletion(taskId, waitOptions)
+      return this.normalizeResult(finalResult, true)
     }
 
-    return await this.waitForCompletion(taskId, waitOptions)
+    return this.normalizeResult({
+      ...requestResult,
+      taskId
+    }, true)
   }
 
   /**
@@ -250,7 +331,10 @@ class BaseFunction {
         throw new Error(`Endpoint not defined for API ${apiDefinition.name}`)
       }
 
-      yield* this.service.callStream(endpoint, params, { ...options, method })
+      const transformedParams = apiDefinition.transformParams(params)
+      const apiParams = apiDefinition.prepareAPIParams(transformedParams)
+
+      yield* this.service.callStream(endpoint, apiParams, { ...options, method })
 
       this.logger.debug(`[${requestId}] Stream completed`, {
         duration: Date.now() - startTime

@@ -14,8 +14,8 @@ module.exports = {
       options: ['skyreels-v3', 'skyreels-v4']
     },
     avatar: {
-      default: 'skyreels-v3',
-      options: ['skyreels-v3']
+      default: 'skyreels-avatar',
+      options: ['skyreels-avatar']
     }
   },
   rateLimit: {

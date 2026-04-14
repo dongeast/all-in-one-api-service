@@ -16,7 +16,7 @@ module.exports = {
       query: 'text-to-video-generation-task-query'
     },
     
-    models: ['skyreels-v3', 'skyreels-v4'],
+    models: ['skyreels-v4'],
     tags: ['video', 'generation', 'text-to-video'],
     priority: 100
   },
@@ -32,7 +32,7 @@ module.exports = {
       query: 'image-to-video-generation-task-query'
     },
     
-    models: ['skyreels-v3', 'skyreels-v4'],
+    models: ['skyreels-v4'],
     tags: ['video', 'generation', 'image-to-video'],
     priority: 100
   },
@@ -112,7 +112,7 @@ module.exports = {
       query: 'reference-to-video-task-query'
     },
     
-    models: ['skyreels-v3', 'skyreels-v4'],
+    models: ['skyreels-v3'],
     tags: ['video', 'generation'],
     priority: 100
   },
@@ -128,7 +128,7 @@ module.exports = {
       query: 'omni-reference-task-query'
     },
     
-    models: ['skyreels-v3', 'skyreels-v4'],
+    models: ['skyreels-v4'],
     tags: ['video', 'generation'],
     priority: 100
   },
@@ -144,7 +144,7 @@ module.exports = {
       query: 'single-shot-video-extension-task-query'
     },
     
-    models: ['skyreels-v3', 'skyreels-v4'],
+    models: ['skyreels-v3'],
     tags: ['video', 'extension'],
     priority: 100
   },
@@ -160,7 +160,7 @@ module.exports = {
       query: 'shot-switching-video-extension-task-query'
     },
     
-    models: ['skyreels-v3', 'skyreels-v4'],
+    models: ['skyreels-v3'],
     tags: ['video', 'extension'],
     priority: 100
   },
@@ -176,7 +176,7 @@ module.exports = {
       query: 'video-restyling-task-query'
     },
     
-    models: ['skyreels-v3', 'skyreels-v4'],
+    models: ['skyreels-v3'],
     tags: ['video', 'restyling'],
     priority: 100
   }

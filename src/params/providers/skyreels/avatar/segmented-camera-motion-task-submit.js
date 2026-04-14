@@ -71,7 +71,7 @@ module.exports = {
       elementType: ElementType.INPUT,
       required: false,
       description: 'Complex camera motion parameters, supports precise control of multiple time segments',
-      items: {
+      itemSchema: {
         type: ParamType.OBJECT,
         properties: {
           start_time: {

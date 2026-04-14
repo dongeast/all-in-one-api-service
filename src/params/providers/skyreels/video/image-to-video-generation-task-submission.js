@@ -29,19 +29,21 @@ module.exports = {
 
     mid_frame_images: {
       type: ParamType.ARRAY,
-      elementType: ElementType.INPUT,
+      elementType: ElementType.MID_FRAME_ARRAY,
       required: false,
-      description: 'Video middle frame image list',
+      description: 'Video middle frame image list (tag auto-generated)',
       maxItems: 6,
-      items: {
+      minItems: 0,
+      maxSizeMB: 10,
+      itemSchema: {
         type: ParamType.OBJECT,
         properties: {
           tag: {
             type: ParamType.STRING,
-            elementType: ElementType.INPUT,
+            elementType: ElementType.DEFAULT,
             required: true,
-            description: 'Reference image identifier, must start with @',
-            pattern: '^@'
+            description: 'Auto-generated tag identifier (e.g., @image1, @image2)',
+            pattern: '^@image\\d+$'
           },
           image_url: {
             type: ParamType.STRING,
@@ -67,6 +69,15 @@ module.exports = {
       min: 3,
       max: 15,
       default: 5
+    },
+
+    resolution: {
+      type: ParamType.ENUM,
+      elementType: ElementType.RESOLUTION,
+      required: false,
+      description: 'Output video resolution. Supports 480p, 720p, and 1080p.',
+      options: ['480p', '720p', '1080p'],
+      default: '1080p'
     },
 
     sound: skyreelsCommon.input.sound,

@@ -93,12 +93,13 @@ class ParamProcessor {
   /**
    * 转换参数
    * @param {object} params - 参数对象
+   * @param {string} model - 模型名称（可选）
    * @returns {object} 转换后的参数
    */
-  async transform(params) {
+  async transform(params, model) {
     const processedParams = await this.executeHooks('beforeTransform', params)
     
-    const result = transformParams(processedParams, this.schema)
+    const result = transformParams(processedParams, this.schema, model)
     
     await this.executeHooks('afterTransform', result)
     
@@ -138,7 +139,7 @@ class ParamProcessor {
       }
     }
     
-    const transformedParams = await this.transform(params)
+    const transformedParams = await this.transform(params, params.model)
     
     return {
       success: true,

@@ -9,10 +9,10 @@ module.exports = {
   'skyreels-v4': {
     name: 'skyreels-v4',
     displayName: 'Skyreels V4',
-    description: 'Skyreels latest video generation model, supports text and image to video',
+    description: 'Skyreels latest video generation model, supports text-to-video, image-to-video and omni-reference',
     logo: '',
     series: Series.SKYREELS,
-    type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
+    type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO, APITypes.VIDEO_REFERENCE],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.HIGH_QUALITY, ModelTags.STABLE, ModelTags.RECOMMENDED],
     priority: 100,
@@ -20,8 +20,6 @@ module.exports = {
     capabilities: {
       supportsTextToVideo: true,
       supportsImageToVideo: true,
-      supportsVideoRestyling: true,
-      supportsVideoExtension: true,
       supportsOmniReference: true
     }
   },
@@ -29,20 +27,18 @@ module.exports = {
   'skyreels-v3': {
     name: 'skyreels-v3',
     displayName: 'Skyreels V3',
-    description: 'Skyreels video generation model, supports text and image to video',
+    description: 'Skyreels video generation model, supports reference-to-video, video-restyling and video-extension',
     logo: '',
     series: Series.SKYREELS,
-    type: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
+    type: [APITypes.VIDEO_EDITING, APITypes.VIDEO_EXTENSION],
     mediaType: MediaTypes.VIDEO,
     tags: [ModelTags.STABLE],
     priority: 95,
     provider: Providers.SKYWORK,
     capabilities: {
-      supportsTextToVideo: true,
-      supportsImageToVideo: true,
+      supportsReferenceToVideo: true,
       supportsVideoRestyling: true,
-      supportsVideoExtension: true,
-      supportsOmniReference: true
+      supportsVideoExtension: true
     }
   },
 

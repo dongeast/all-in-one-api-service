@@ -112,7 +112,7 @@ class APIDefinition {
    * @returns {object} 转换后的参数
    */
   transformParams(params) {
-    return this.param.transform(params)
+    return this.param.transform(params, params.model)
   }
 
   /**

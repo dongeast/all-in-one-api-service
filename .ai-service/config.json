@@ -3,19 +3,17 @@
   "defaultProvider": "openai",
   "providers": {
     "skyreels": {
-      "realApiKey": "sk_1iunxgnf2n4egk228xc5fa8u71htwjihi",
-      "apiKey": "sk_1iunxgnf2n4egk228xc5fa8u71htwjihi",
+      "apiKey": "xxxxx",
       "baseURL": "https://api-gateway.skyreels.ai/api/v1",
       "timeout": 120000
     },
     "ltx": {
-      "realApiKey": "ltxv_LbxYNFEdpEtOIPJoQq0XENsPb7BFaddlfZ8u9_RQteDKjGBwL1Q1q6Jwp9lbBypd-9hT268yYuEC6U0T_WyGZIU9eWDs_FqnLQPj-aBZTw19GK6Ll_vuoxISK4GF_yQCMJ06dLNq7hX8WCdwTCrizHIb1HbJ4LnDvWStg2tMeoPJNJ3cybyR",
-      "apiKey": "ltxv_LbxYNFEdpEtOIPJoQq0XENsPb7BFaddlfZ8u9_RQteDKjGBwL1Q1q6Jwp9lbBypd-9hT268yYuEC6U0T_WyGZIU9eWDs_FqnLQPj-aBZTw19GK6Ll_vuoxISK4GF_yQCMJ06dLNq7hX8WCdwTCrizHIb1HbJ4LnDvWStg2tMeoPJNJ3cybyR",
+      "apiKey": "xxxxx",
       "baseURL": "https://api.ltx.video",
       "timeout": 300000
     },
     "volcengine": {
-      "apiKey": "1c540d55-b972-4caa-a65f-44e450c4ea5c",
+      "apiKey": "xxxxx",
       "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
       "timeout": 120000
     },

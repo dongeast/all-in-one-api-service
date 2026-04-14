@@ -17,6 +17,14 @@ module.exports = {
     },
 
     aspect_ratio: skyreelsCommon.input.aspect_ratio,
+    resolution: {
+      type: ParamType.ENUM,
+      elementType: ElementType.RESOLUTION,
+      required: false,
+      description: 'Output video resolution. Supports 480p, 720p, and 1080p.',
+      options: ['480p', '720p', '1080p'],
+      default: '1080p'
+    },
     sound: skyreelsCommon.input.sound,
     prompt_optimizer: skyreelsCommon.input.prompt_optimizer,
     mode: skyreelsCommon.input.mode

@@ -1770,7 +1770,7 @@ module.exports = {
     query: 'query-video-generation-task'      // 查询任务状态
   },
   
-  models: ['doubao-seedance-2-0', ...],
+  models: ['doubao-seedance-2-0-260128', ...],
   tags: ['video', 'generation'],
   priority: 90
 }
