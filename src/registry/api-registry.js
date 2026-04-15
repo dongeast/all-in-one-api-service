@@ -232,6 +232,53 @@ class APIRegistry extends BaseRegistry {
     const param = new BaseParam(api.paramSchema)
     return param.validate(params)
   }
+
+  /**
+   * 获取API的参数配置（支持多语言）
+   * @param {string} apiName - API名称
+   * @param {object} context - 参数上下文
+   * @param {object} options - 选项（包含 provider 和 language）
+   * @returns {object|null} 参数配置
+   */
+  getAPIParams(apiName, context = {}, options = {}) {
+    // 首先确保翻译资源已加载
+    require('../locales')
+
+    const api = this.get(apiName)
+    if (!api) return null
+
+    const APIDefinition = require('../apis/api-definition')
+    const apiDefinition = new APIDefinition({
+      name: api.name,
+      endpoint: api.endpoint,
+      method: api.method || 'POST',
+      paramSchema: api.paramSchema,
+      modelName: api.models?.[0] || 'unknown',
+      isAsync: false,
+      outputMapping: api.outputMapping || null
+    })
+
+    // 合并 provider：优先使用 options 中的，否则使用 API 元数据中的
+    const mergedOptions = {
+      ...options,
+      provider: options.provider || api.provider
+    }
+
+    // 获取参数配置
+    const paramConfig = apiDefinition.getParamConfig(context, mergedOptions)
+
+    // 添加多语言翻译
+    if (paramConfig && paramConfig.parameters) {
+      const { addTranslationsToParams } = require('../utils/param-i18n')
+      paramConfig.parameters = addTranslationsToParams(
+        paramConfig.parameters,
+        mergedOptions.provider,
+        mergedOptions.language
+      )
+    }
+
+    return paramConfig
+  }
 }
 
 const apiRegistry = new APIRegistry()

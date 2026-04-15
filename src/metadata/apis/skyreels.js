@@ -8,7 +8,7 @@ const { APITypes } = require('../../constants')
 module.exports = {
   'text-to-video-generation-task-submission': {
     name: 'text-to-video-generation-task-submission',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.TEXT_TO_VIDEO,
     category: 'video',
     endpoint: '/api/v1/video/text2video/submit',
@@ -22,7 +22,7 @@ module.exports = {
 
   'text-to-video-generation-task-query': {
     name: 'text-to-video-generation-task-query',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.TASK_QUERY,
     category: 'video',
     endpoint: '/api/v1/video/text2video/task/{task_id}',
@@ -36,7 +36,7 @@ module.exports = {
 
   'image-to-video-generation-task-submission': {
     name: 'image-to-video-generation-task-submission',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.IMAGE_TO_VIDEO,
     category: 'video',
     endpoint: '/api/v1/video/image2video/submit',
@@ -50,7 +50,7 @@ module.exports = {
 
   'image-to-video-generation-task-query': {
     name: 'image-to-video-generation-task-query',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.TASK_QUERY,
     category: 'video',
     endpoint: '/api/v1/video/image2video/task/{task_id}',
@@ -64,7 +64,7 @@ module.exports = {
 
   'lip-sync-task-submit': {
     name: 'lip-sync-task-submit',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.LIP_SYNC,
     category: 'avatar',
     endpoint: '/api/v1/video/retalking/submit',
@@ -78,7 +78,7 @@ module.exports = {
 
   'lip-sync-task-query': {
     name: 'lip-sync-task-query',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.TASK_QUERY,
     category: 'avatar',
     endpoint: '/api/v1/video/retalking/task/{task_id}',
@@ -92,7 +92,7 @@ module.exports = {
 
   'single-actor-avatar-task-submission': {
     name: 'single-actor-avatar-task-submission',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.AVATAR_GENERATION,
     category: 'avatar',
     endpoint: '/api/v1/video/audio2video/single/submit',
@@ -106,7 +106,7 @@ module.exports = {
 
   'single-actor-avatar-task-query': {
     name: 'single-actor-avatar-task-query',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.TASK_QUERY,
     category: 'avatar',
     endpoint: '/api/v1/video/audio2video/single/task/{task_id}',
@@ -120,7 +120,7 @@ module.exports = {
 
   'multi-actor-avatar-task-submission': {
     name: 'multi-actor-avatar-task-submission',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.AVATAR_GENERATION,
     category: 'avatar',
     endpoint: '/api/v1/video/audio2video/multi/submit',
@@ -134,7 +134,7 @@ module.exports = {
 
   'multi-actor-avatar-task-query': {
     name: 'multi-actor-avatar-task-query',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.TASK_QUERY,
     category: 'avatar',
     endpoint: '/api/v1/video/audio2video/multi/task/{task_id}',
@@ -148,7 +148,7 @@ module.exports = {
 
   'segmented-camera-motion-task-submit': {
     name: 'segmented-camera-motion-task-submit',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.AVATAR_GENERATION,
     category: 'avatar',
     endpoint: '/api/v1/video/audio2video/camera/submit',
@@ -162,7 +162,7 @@ module.exports = {
 
   'segmented-camera-motion-task-query': {
     name: 'segmented-camera-motion-task-query',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.TASK_QUERY,
     category: 'avatar',
     endpoint: '/api/v1/video/audio2video/camera/task/{task_id}',
@@ -176,7 +176,7 @@ module.exports = {
 
   'reference-to-video-task-submission': {
     name: 'reference-to-video-task-submission',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.VIDEO_EDITING,
     category: 'video',
     endpoint: '/api/v1/video/multiobject/submit',
@@ -190,7 +190,7 @@ module.exports = {
 
   'reference-to-video-task-query': {
     name: 'reference-to-video-task-query',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.TASK_QUERY,
     category: 'video',
     endpoint: '/api/v1/video/multiobject/task/{task_id}',
@@ -204,7 +204,7 @@ module.exports = {
 
   'omni-reference-task-submission': {
     name: 'omni-reference-task-submission',
-    provider: 'skyreels',
+    provider: 'skywork',
     apiType: APITypes.VIDEO_REFERENCE,
     category: 'video',
     endpoint: '/api/v1/video/omni-video/submit',

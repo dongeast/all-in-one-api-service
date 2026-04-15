@@ -4,6 +4,12 @@
  */
 
 const ConstraintEngine = require('./constraint-engine')
+const { 
+  getParamLabel, 
+  getParamDescription, 
+  getParamPlaceholder,
+  getParamUnit 
+} = require('../utils/param-i18n')
 
 /**
  * 参数配置管理器类
@@ -21,10 +27,12 @@ class ParamConfigManager {
    * @param {object} context - 当前上下文
    * @param {object} modelCapabilities - 模型能力定义（可选）
    * @param {Array} compositeConstraints - 复合约束定义（可选）
+   * @param {object} options - 额外选项（包含 provider 和 language）
    * @returns {object} 参数配置
    */
-  getParamConfig(schema, context = {}, modelCapabilities = null, _compositeConstraints = null) {
-    const parameters = this.buildParameters(schema, context, modelCapabilities, _compositeConstraints)
+  getParamConfig(schema, context = {}, modelCapabilities = null, _compositeConstraints = null, options = {}) {
+    const { provider, language } = options
+    const parameters = this.buildParameters(schema, context, modelCapabilities, _compositeConstraints, provider, language)
     const state = this.analyzeState(parameters, context)
     
     return {
@@ -45,9 +53,11 @@ class ParamConfigManager {
    * @param {object} context - 当前上下文
    * @param {object} modelCapabilities - 模型能力定义
    * @param {Array} compositeConstraints - 复合约束定义
+   * @param {string} provider - 提供商名称
+   * @param {string} language - 语言代码
    * @returns {Array} 参数列表
    */
-  buildParameters(schema, context, modelCapabilities, compositeConstraints) {
+  buildParameters(schema, context, modelCapabilities, compositeConstraints, provider, language) {
     const params = []
     
     if (!schema || !schema.input) {
@@ -62,6 +72,10 @@ class ParamConfigManager {
         description: fieldSchema.description || '',
         default: fieldSchema.default,
         
+        label: provider ? getParamLabel(provider, name, language, fieldSchema.label) : (fieldSchema.label || name),
+        placeholder: provider ? getParamPlaceholder(provider, name, language, fieldSchema.placeholder) : fieldSchema.placeholder,
+        unit: provider ? getParamUnit(provider, name, language) : fieldSchema.unit,
+        
         // 传递完整的字段定义
         elementType: fieldSchema.elementType,
         items: fieldSchema.items,
@@ -73,7 +87,6 @@ class ParamConfigManager {
         maxItems: fieldSchema.maxItems,
         maxSizeMB: fieldSchema.maxSizeMB,
         accept: fieldSchema.accept,
-        placeholder: fieldSchema.placeholder,
         hint: fieldSchema.hint,
         pattern: fieldSchema.pattern,
         format: fieldSchema.format,
@@ -84,6 +97,10 @@ class ParamConfigManager {
         visible: true,
         enabled: this.isEnabled(name, context, schema, modelCapabilities, compositeConstraints),
         constraintSource: this.getConstraintSource(name, schema, modelCapabilities, compositeConstraints)
+      }
+      
+      if (provider && !param.description) {
+        param.description = getParamDescription(provider, name, language, fieldSchema.description)
       }
       
       const allDependenciesMet = this.areDependenciesMet(name, context, schema, modelCapabilities, compositeConstraints)

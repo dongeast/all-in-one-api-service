@@ -1,85 +1,352 @@
 {
   "common": {
-    "prompt": "Prompt text",
-    "model": "Model name",
-    "timeout": "Timeout (milliseconds)",
-    "retryCount": "Retry count"
+    "prompt": {
+      "label": "Prompt",
+      "description": "Prompt text",
+      "placeholder": "Enter your prompt here"
+    },
+    "model": {
+      "label": "Model",
+      "description": "Model name"
+    },
+    "timeout": {
+      "label": "Timeout",
+      "description": "Timeout (milliseconds)",
+      "placeholder": "30000"
+    },
+    "retryCount": {
+      "label": "Retry Count",
+      "description": "Retry count",
+      "placeholder": "3"
+    }
   },
   "mureka": {
-    "lyrics": "Lyrics content",
-    "n": "Generation count",
-    "prompt": "Music style prompt",
-    "reference_id": "Reference music ID (via files/upload API)",
-    "vocal_id": "Vocal ID (via files/upload API)",
-    "melody_id": "Melody ID (via files/upload API)",
-    "stream": "Enable streaming playback",
-    "id": "Task ID",
-    "created_at": "Creation timestamp",
-    "finished_at": "Completion timestamp",
-    "status": "Task status",
-    "failed_reason": "Failure reason",
-    "choices": "Generation result list",
-    "extend_from": "Extend from audio ID",
-    "audio_file_id": "Audio file ID",
-    "title": "Title",
-    "tags": "Tags",
-    "instrumental_id": "Instrumental ID",
-    "voice_id": "Voice ID",
-    "text": "Text content",
-    "voice_name": "Voice name",
-    "voice_type": "Voice type",
-    "speed": "Speech speed",
-    "pitch": "Speech pitch",
-    "volume": "Volume",
-    "file": "File",
-    "filename": "Filename",
-    "part_number": "Part number",
-    "upload_id": "Upload ID",
-    "parts": "Parts"
+    "lyrics": {
+      "label": "Lyrics",
+      "description": "Lyrics content",
+      "placeholder": "Enter lyrics here"
+    },
+    "n": {
+      "label": "Generation Count",
+      "description": "Number of generations"
+    },
+    "prompt": {
+      "label": "Music Style",
+      "description": "Music style prompt",
+      "placeholder": "e.g., pop, rock, jazz"
+    },
+    "reference_id": {
+      "label": "Reference Music",
+      "description": "Reference music ID (via files/upload API)"
+    },
+    "vocal_id": {
+      "label": "Vocal",
+      "description": "Vocal ID (via files/upload API)"
+    },
+    "melody_id": {
+      "label": "Melody",
+      "description": "Melody ID (via files/upload API)"
+    },
+    "stream": {
+      "label": "Stream Playback",
+      "description": "Enable streaming playback"
+    },
+    "id": {
+      "label": "Task ID",
+      "description": "Task ID"
+    },
+    "created_at": {
+      "label": "Created At",
+      "description": "Creation timestamp"
+    },
+    "finished_at": {
+      "label": "Finished At",
+      "description": "Completion timestamp"
+    },
+    "status": {
+      "label": "Status",
+      "description": "Task status"
+    },
+    "failed_reason": {
+      "label": "Failed Reason",
+      "description": "Failure reason"
+    },
+    "choices": {
+      "label": "Results",
+      "description": "Generation result list"
+    },
+    "extend_from": {
+      "label": "Extend From",
+      "description": "Extend from audio ID"
+    },
+    "audio_file_id": {
+      "label": "Audio File",
+      "description": "Audio file ID"
+    },
+    "title": {
+      "label": "Title",
+      "description": "Title",
+      "placeholder": "Enter title"
+    },
+    "tags": {
+      "label": "Tags",
+      "description": "Tags",
+      "placeholder": "Enter tags"
+    },
+    "instrumental_id": {
+      "label": "Instrumental",
+      "description": "Instrumental ID"
+    },
+    "voice_id": {
+      "label": "Voice",
+      "description": "Voice ID"
+    },
+    "text": {
+      "label": "Text",
+      "description": "Text content",
+      "placeholder": "Enter text here"
+    },
+    "voice_name": {
+      "label": "Voice Name",
+      "description": "Voice name"
+    },
+    "voice_type": {
+      "label": "Voice Type",
+      "description": "Voice type"
+    },
+    "speed": {
+      "label": "Speed",
+      "description": "Speech speed"
+    },
+    "pitch": {
+      "label": "Pitch",
+      "description": "Speech pitch"
+    },
+    "volume": {
+      "label": "Volume",
+      "description": "Volume"
+    },
+    "file": {
+      "label": "File",
+      "description": "File"
+    },
+    "filename": {
+      "label": "Filename",
+      "description": "Filename"
+    },
+    "part_number": {
+      "label": "Part Number",
+      "description": "Part number"
+    },
+    "upload_id": {
+      "label": "Upload ID",
+      "description": "Upload ID"
+    },
+    "parts": {
+      "label": "Parts",
+      "description": "Parts list"
+    }
   },
   "volcengine": {
-    "prompt": "Prompt text",
-    "negative_prompt": "Negative prompt",
-    "width": "Width",
-    "height": "Height",
-    "fps": "Frame rate",
-    "duration": "Duration",
-    "resolution": "Resolution",
-    "seed": "Random seed",
-    "model": "Model name",
-    "task_id": "Task ID",
-    "action": "Action",
-    "image_url": "Image URL",
-    "video_url": "Video URL"
+    "prompt": {
+      "label": "Prompt",
+      "description": "Prompt text for generation",
+      "placeholder": "Enter your prompt here"
+    },
+    "negative_prompt": {
+      "label": "Negative Prompt",
+      "description": "Negative prompt to avoid unwanted content",
+      "placeholder": "Enter negative prompt"
+    },
+    "width": {
+      "label": "Width",
+      "description": "Width in pixels"
+    },
+    "height": {
+      "label": "Height",
+      "description": "Height in pixels"
+    },
+    "fps": {
+      "label": "Frame Rate",
+      "description": "Frames per second",
+      "unit": "fps"
+    },
+    "duration": {
+      "label": "Duration",
+      "description": "Video duration in seconds",
+      "unit": "seconds"
+    },
+    "resolution": {
+      "label": "Resolution",
+      "description": "Video resolution"
+    },
+    "seed": {
+      "label": "Seed",
+      "description": "Random seed for reproducibility"
+    },
+    "model": {
+      "label": "Model",
+      "description": "Model name"
+    },
+    "task_id": {
+      "label": "Task ID",
+      "description": "Task ID"
+    },
+    "action": {
+      "label": "Action",
+      "description": "Action to perform"
+    },
+    "image_url": {
+      "label": "Image URL",
+      "description": "Image URL",
+      "placeholder": "https://example.com/image.jpg"
+    },
+    "video_url": {
+      "label": "Video URL",
+      "description": "Video URL",
+      "placeholder": "https://example.com/video.mp4"
+    }
   },
   "ltx": {
-    "prompt": "Prompt text",
-    "negative_prompt": "Negative prompt",
-    "image_url": "Image URL",
-    "audio_url": "Audio URL",
-    "video_url": "Video URL",
-    "width": "Width",
-    "height": "Height",
-    "fps": "Frame rate",
-    "duration": "Duration",
-    "seed": "Random seed",
-    "model": "Model name"
+    "prompt": {
+      "label": "Prompt",
+      "description": "Prompt text for generation",
+      "placeholder": "Enter your prompt here"
+    },
+    "negative_prompt": {
+      "label": "Negative Prompt",
+      "description": "Negative prompt to avoid unwanted content",
+      "placeholder": "Enter negative prompt"
+    },
+    "image_url": {
+      "label": "Image URL",
+      "description": "Image URL",
+      "placeholder": "https://example.com/image.jpg"
+    },
+    "audio_url": {
+      "label": "Audio URL",
+      "description": "Audio URL",
+      "placeholder": "https://example.com/audio.mp3"
+    },
+    "video_url": {
+      "label": "Video URL",
+      "description": "Video URL",
+      "placeholder": "https://example.com/video.mp4"
+    },
+    "width": {
+      "label": "Width",
+      "description": "Width in pixels"
+    },
+    "height": {
+      "label": "Height",
+      "description": "Height in pixels"
+    },
+    "fps": {
+      "label": "Frame Rate",
+      "description": "Frames per second",
+      "unit": "fps"
+    },
+    "duration": {
+      "label": "Duration",
+      "description": "Video duration in seconds",
+      "unit": "seconds"
+    },
+    "seed": {
+      "label": "Seed",
+      "description": "Random seed for reproducibility"
+    },
+    "model": {
+      "label": "Model",
+      "description": "Model name"
+    }
   },
   "skyreels": {
-    "prompt": "Prompt text",
-    "negative_prompt": "Negative prompt",
-    "image_url": "Image URL",
-    "video_url": "Video URL",
-    "audio_url": "Audio URL",
-    "width": "Width",
-    "height": "Height",
-    "fps": "Frame rate",
-    "duration": "Duration",
-    "seed": "Random seed",
-    "model": "Model name",
-    "task_id": "Task ID",
-    "actor_id": "Actor ID",
-    "avatar_video_url": "Avatar video URL",
-    "audio_text": "Audio text"
+    "prompt": {
+      "label": "Prompt",
+      "description": "Prompt text for generation",
+      "placeholder": "Enter your prompt here"
+    },
+    "negative_prompt": {
+      "label": "Negative Prompt",
+      "description": "Negative prompt to avoid unwanted content",
+      "placeholder": "Enter negative prompt"
+    },
+    "image_url": {
+      "label": "Image URL",
+      "description": "Image URL",
+      "placeholder": "https://example.com/image.jpg"
+    },
+    "video_url": {
+      "label": "Video URL",
+      "description": "Video URL",
+      "placeholder": "https://example.com/video.mp4"
+    },
+    "audio_url": {
+      "label": "Audio URL",
+      "description": "Audio URL",
+      "placeholder": "https://example.com/audio.mp3"
+    },
+    "width": {
+      "label": "Width",
+      "description": "Width in pixels"
+    },
+    "height": {
+      "label": "Height",
+      "description": "Height in pixels"
+    },
+    "fps": {
+      "label": "Frame Rate",
+      "description": "Frames per second",
+      "unit": "fps"
+    },
+    "duration": {
+      "label": "Duration",
+      "description": "Video duration in seconds",
+      "unit": "seconds"
+    },
+    "seed": {
+      "label": "Seed",
+      "description": "Random seed for reproducibility"
+    },
+    "model": {
+      "label": "Model",
+      "description": "Model name"
+    },
+    "task_id": {
+      "label": "Task ID",
+      "description": "Task ID"
+    },
+    "actor_id": {
+      "label": "Actor ID",
+      "description": "Actor ID"
+    },
+    "avatar_video_url": {
+      "label": "Avatar Video URL",
+      "description": "Avatar video URL"
+    },
+    "audio_text": {
+      "label": "Audio Text",
+      "description": "Audio text for lip sync"
+    },
+    "aspect_ratio": {
+      "label": "Aspect Ratio",
+      "description": "Video aspect ratio"
+    },
+    "sound": {
+      "label": "Sound",
+      "description": "Whether to include sound effects"
+    },
+    "prompt_optimizer": {
+      "label": "Prompt Optimizer",
+      "description": "Whether to enable automatic prompt optimization"
+    },
+    "mode": {
+      "label": "Mode",
+      "description": "Generation mode"
+    },
+    "resolution": {
+      "label": "Resolution",
+      "description": "Output video resolution, supports 480p, 720p, and 1080p"
+    }
   }
 }

@@ -136,9 +136,10 @@ class APIDefinition {
   /**
    * 获取参数配置（统一接口）
    * @param {object} context - 当前参数上下文
+   * @param {object} options - 额外选项（包含 provider 和 language）
    * @returns {object} 参数配置
    */
-  getParamConfig(context = {}) {
+  getParamConfig(context = {}, options = {}) {
     const ParamConfigManager = require('../params/param-config-manager')
     const configManager = new ParamConfigManager()
     const schema = this.getParamSchema()
@@ -148,7 +149,9 @@ class APIDefinition {
     return configManager.getParamConfig(
       schema,
       context,
-      this.param.modelCapabilities
+      this.param.modelCapabilities,
+      null,
+      options
     )
   }
 

@@ -10,10 +10,12 @@ import Utils from './src/utils/index.js'
 import Functions from './src/functions/index.js'
 import Constants from './src/constants/index.js'
 import Registry from './src/registry/index.js'
+import Credits from './src/credits/index.js'
 
 import { setLanguage, getLanguage, t } from './src/utils/i18n.js'
 import { metadataManager } from './src/utils/metadata-manager.js'
 import { functionManager } from './src/functions/function-manager.js'
+import { creditCalculator, CreditCalculator } from './src/credits/credit-calculator.esm.js'
 
 const {
   APITypes,
@@ -104,7 +106,10 @@ export {
   queryFunctions,
   getFunctionDetail,
   getBestFunctionInstance,
-  functionManager
+  functionManager,
+  Credits,
+  creditCalculator,
+  CreditCalculator
 }
 
 export default {
@@ -157,5 +162,8 @@ export default {
   queryFunctions,
   getFunctionDetail,
   getBestFunctionInstance,
-  functionManager
+  functionManager,
+  Credits,
+  creditCalculator,
+  CreditCalculator
 }

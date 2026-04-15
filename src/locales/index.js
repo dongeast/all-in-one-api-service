@@ -3,10 +3,22 @@
  * 负责加载所有语言的翻译资源
  */
 
-const path = require('path')
-const fs = require('fs')
 const { i18n } = require('../utils/i18n')
 const { Languages } = require('../constants/languages')
+
+const zhCommon = require('./zh/common.json')
+const zhDocs = require('./zh/docs.json')
+const zhErrors = require('./zh/errors.json')
+const zhFunctions = require('./zh/functions.json')
+const zhMetadata = require('./zh/metadata.json')
+const zhParams = require('./zh/params.json')
+
+const enCommon = require('./en/common.json')
+const enDocs = require('./en/docs.json')
+const enErrors = require('./en/errors.json')
+const enFunctions = require('./en/functions.json')
+const enMetadata = require('./en/metadata.json')
+const enParams = require('./en/params.json')
 
 /**
  * 加载指定语言的翻译资源
@@ -14,29 +26,29 @@ const { Languages } = require('../constants/languages')
  * @returns {object} 翻译资源对象
  */
 function loadLanguageResources(language) {
-  const resources = {}
-  const localePath = path.join(__dirname, language)
-  
-  if (!fs.existsSync(localePath)) {
-    return resources
-  }
-  
-  const files = fs.readdirSync(localePath)
-  
-  files.forEach(file => {
-    if (file.endsWith('.json')) {
-      const filePath = path.join(localePath, file)
-      try {
-        const content = fs.readFileSync(filePath, 'utf-8')
-        const fileContent = JSON.parse(content)
-        Object.assign(resources, fileContent)
-      } catch (error) {
-        console.warn(`Failed to load translation file: ${filePath}`, error.message)
-      }
+  switch (language) {
+  case Languages.ZH:
+  case Languages.ZH_CN:
+    return {
+      ...zhCommon,
+      ...zhDocs,
+      ...zhErrors,
+      ...zhFunctions,
+      ...zhMetadata,
+      ...zhParams
     }
-  })
-  
-  return resources
+  case Languages.EN:
+    return {
+      ...enCommon,
+      ...enDocs,
+      ...enErrors,
+      ...enFunctions,
+      ...enMetadata,
+      ...enParams
+    }
+  default:
+    return {}
+  }
 }
 
 /**

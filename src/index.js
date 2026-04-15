@@ -18,6 +18,7 @@ const { setLanguage, getLanguage, t } = require('./utils/i18n')
 const { metadataManager } = require('./utils/metadata-manager')
 const { functionManager, FunctionManager } = require('./functions/function-manager')
 const { CacheManager, CacheItem, cacheManager } = require('./utils/cache-manager')
+const { creditCalculator, CreditCalculator } = require('./credits/credit-calculator')
 
 const {
   APITypes,
@@ -113,5 +114,8 @@ module.exports = {
   
   CacheManager,
   CacheItem,
-  cacheManager
+  cacheManager,
+  
+  creditCalculator,
+  CreditCalculator
 }
