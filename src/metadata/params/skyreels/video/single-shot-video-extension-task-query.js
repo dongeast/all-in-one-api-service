@@ -1,0 +1,64 @@
+/**
+ * Single-shot Video Extension Task Query 参数定义
+ */
+
+const { ParamType, ElementType } = require('../../common')
+
+module.exports = {
+  input: {
+    task_id: {
+      type: ParamType.STRING,
+      elementType: ElementType.INPUT,
+      required: true,
+      description: 'Task ID'
+    }
+  },
+
+  output: {
+    task_id: {
+      type: 'string',
+      description: 'Task ID',
+      path: 'task_id'
+    },
+    msg: {
+      type: 'string',
+      description: 'Message description',
+      path: 'msg'
+    },
+    code: {
+      type: 'number',
+      description: 'Status code',
+      path: 'code'
+    },
+    status: {
+      type: 'string',
+      description: 'Task status',
+      path: 'status'
+    },
+    trace_id: {
+      type: 'string',
+      description: 'Request trace ID',
+      path: 'trace_id'
+    },
+    video_url: {
+      type: 'string',
+      description: 'Video URL',
+      path: 'data.video_url'
+    },
+    duration: {
+      type: 'number',
+      description: 'Video duration (seconds)',
+      path: 'data.duration'
+    },
+    resolution: {
+      type: 'string',
+      description: 'Video resolution',
+      path: 'data.resolution'
+    },
+    cost_credits: {
+      type: 'number',
+      description: 'Credits consumed',
+      path: 'data.cost_credits'
+    }
+  }
+}

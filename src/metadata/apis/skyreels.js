@@ -1,316 +1,226 @@
 /**
  * Skyreels 接口元数据定义
- * 作为唯一的API定义源，包含所有API调用信息
+ * 仅维护 API 的必要信息
  */
 
-const { APITypes } = require('../../constants')
+const { APITypes, Providers, MediaTypes, HttpMethod } = require('../../constants')
 
-module.exports = {
-  'text-to-video-generation-task-submission': {
-    name: 'text-to-video-generation-task-submission',
-    provider: 'skywork',
+const APIs = {
+  API_V1_VIDEO_TEXT2VIDEO_SUBMIT: 'skyreels-api-v1-video-text2video-submit',
+  API_V1_VIDEO_TEXT2VIDEO_TASK: 'skyreels-api-v1-video-text2video-task',
+  API_V1_VIDEO_IMAGE2VIDEO_SUBMIT: 'skyreels-api-v1-video-image2video-submit',
+  API_V1_VIDEO_IMAGE2VIDEO_TASK: 'skyreels-api-v1-video-image2video-task',
+  API_V1_VIDEO_RETALKING_SUBMIT: 'skyreels-api-v1-video-retalking-submit',
+  API_V1_VIDEO_RETALKING_TASK: 'skyreels-api-v1-video-retalking-task',
+  API_V1_VIDEO_AUDIO2VIDEO_SINGLE_SUBMIT: 'skyreels-api-v1-video-audio2video-single-submit',
+  API_V1_VIDEO_AUDIO2VIDEO_SINGLE_TASK: 'skyreels-api-v1-video-audio2video-single-task',
+  API_V1_VIDEO_AUDIO2VIDEO_MULTI_SUBMIT: 'skyreels-api-v1-video-audio2video-multi-submit',
+  API_V1_VIDEO_AUDIO2VIDEO_MULTI_TASK: 'skyreels-api-v1-video-audio2video-multi-task',
+  API_V1_VIDEO_AUDIO2VIDEO_CAMERA_SUBMIT: 'skyreels-api-v1-video-audio2video-camera-submit',
+  API_V1_VIDEO_AUDIO2VIDEO_CAMERA_TASK: 'skyreels-api-v1-video-audio2video-camera-task',
+  API_V1_VIDEO_MULTIOBJECT_SUBMIT: 'skyreels-api-v1-video-multiobject-submit',
+  API_V1_VIDEO_MULTIOBJECT_TASK: 'skyreels-api-v1-video-multiobject-task',
+  API_V1_VIDEO_OMNI_VIDEO_SUBMIT: 'skyreels-api-v1-video-omni-video-submit',
+  API_V1_VIDEO_OMNI_VIDEO_TASK: 'skyreels-api-v1-video-omni-video-task',
+  API_V1_VIDEO_EXTENSION_SUBMIT: 'skyreels-api-v1-video-extension-submit',
+  API_V1_VIDEO_EXTENSION_TASK: 'skyreels-api-v1-video-extension-task',
+  API_V1_VIDEO_EXTENSION_CUTSHOT_SUBMIT: 'skyreels-api-v1-video-extension-cutshot-submit',
+  API_V1_VIDEO_EXTENSION_CUTSHOT_TASK: 'skyreels-api-v1-video-extension-cutshot-task',
+  API_V1_VIDEO_STYLETRANSFER_SUBMIT: 'skyreels-api-v1-video-styletransfer-submit',
+  API_V1_VIDEO_STYLETRANSFER_TASK: 'skyreels-api-v1-video-styletransfer-task'
+}
+
+const APIsMeta = {
+  [APIs.API_V1_VIDEO_TEXT2VIDEO_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TEXT_TO_VIDEO,
-    category: 'video',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/text2video/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/video/text-to-video-generation-task-submission'),
-    models: ['skyreels-v4'],
-    tags: ['video', 'generation', 'text-to-video'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/video/text-to-video-generation-task-submission'),
     priority: 100
   },
-
-  'text-to-video-generation-task-query': {
-    name: 'text-to-video-generation-task-query',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_TEXT2VIDEO_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/api/v1/video/text2video/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/video/text-to-video-generation-task-query'),
-    models: ['skyreels-v4'],
-    tags: ['video', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/video/text-to-video-generation-task-query'),
     priority: 100
   },
-
-  'image-to-video-generation-task-submission': {
-    name: 'image-to-video-generation-task-submission',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_IMAGE2VIDEO_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.IMAGE_TO_VIDEO,
-    category: 'video',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/image2video/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/video/image-to-video-generation-task-submission'),
-    models: ['skyreels-v4'],
-    tags: ['video', 'generation', 'image-to-video'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/video/image-to-video-generation-task-submission'),
     priority: 100
   },
-
-  'image-to-video-generation-task-query': {
-    name: 'image-to-video-generation-task-query',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_IMAGE2VIDEO_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/api/v1/video/image2video/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/video/image-to-video-generation-task-query'),
-    models: ['skyreels-v4'],
-    tags: ['video', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/video/image-to-video-generation-task-query'),
     priority: 100
   },
-
-  'lip-sync-task-submit': {
-    name: 'lip-sync-task-submit',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_RETALKING_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.LIP_SYNC,
-    category: 'avatar',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/retalking/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/avatar/lip-sync-task-submit'),
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar', 'lip-sync'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/avatar/lip-sync-task-submit'),
     priority: 100
   },
-
-  'lip-sync-task-query': {
-    name: 'lip-sync-task-query',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_RETALKING_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'avatar',
     endpoint: '/api/v1/video/retalking/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/avatar/lip-sync-task-query'),
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar', 'lip-sync'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/avatar/lip-sync-task-query'),
     priority: 100
   },
-
-  'single-actor-avatar-task-submission': {
-    name: 'single-actor-avatar-task-submission',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_AUDIO2VIDEO_SINGLE_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.AVATAR_GENERATION,
-    category: 'avatar',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/audio2video/single/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/avatar/single-actor-avatar-task-submission'),
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/avatar/single-actor-avatar-task-submission'),
     priority: 100
   },
-
-  'single-actor-avatar-task-query': {
-    name: 'single-actor-avatar-task-query',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_AUDIO2VIDEO_SINGLE_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'avatar',
     endpoint: '/api/v1/video/audio2video/single/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/avatar/single-actor-avatar-task-query'),
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/avatar/single-actor-avatar-task-query'),
     priority: 100
   },
-
-  'multi-actor-avatar-task-submission': {
-    name: 'multi-actor-avatar-task-submission',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_AUDIO2VIDEO_MULTI_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.AVATAR_GENERATION,
-    category: 'avatar',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/audio2video/multi/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/avatar/multi-actor-avatar-task-submission'),
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/avatar/multi-actor-avatar-task-submission'),
     priority: 100
   },
-
-  'multi-actor-avatar-task-query': {
-    name: 'multi-actor-avatar-task-query',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_AUDIO2VIDEO_MULTI_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'avatar',
     endpoint: '/api/v1/video/audio2video/multi/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/avatar/multi-actor-avatar-task-query'),
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/avatar/multi-actor-avatar-task-query'),
     priority: 100
   },
-
-  'segmented-camera-motion-task-submit': {
-    name: 'segmented-camera-motion-task-submit',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_AUDIO2VIDEO_CAMERA_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.AVATAR_GENERATION,
-    category: 'avatar',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/audio2video/camera/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/avatar/segmented-camera-motion-task-submit'),
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar', 'camera-motion'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/avatar/segmented-camera-motion-task-submit'),
     priority: 100
   },
-
-  'segmented-camera-motion-task-query': {
-    name: 'segmented-camera-motion-task-query',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_AUDIO2VIDEO_CAMERA_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'avatar',
     endpoint: '/api/v1/video/audio2video/camera/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/avatar/segmented-camera-motion-task-query'),
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar', 'camera-motion'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/avatar/segmented-camera-motion-task-query'),
     priority: 100
   },
-
-  'reference-to-video-task-submission': {
-    name: 'reference-to-video-task-submission',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_MULTIOBJECT_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.VIDEO_EDITING,
-    category: 'video',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/multiobject/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/video/reference-to-video-task-submission'),
-    models: ['skyreels-v3'],
-    tags: ['video', 'generation'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/video/reference-to-video-task-submission'),
     priority: 100
   },
-
-  'reference-to-video-task-query': {
-    name: 'reference-to-video-task-query',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_MULTIOBJECT_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/api/v1/video/multiobject/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/video/reference-to-video-task-query'),
-    models: ['skyreels-v3'],
-    tags: ['video', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/video/reference-to-video-task-query'),
     priority: 100
   },
-
-  'omni-reference-task-submission': {
-    name: 'omni-reference-task-submission',
-    provider: 'skywork',
+  [APIs.API_V1_VIDEO_OMNI_VIDEO_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.VIDEO_REFERENCE,
-    category: 'video',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/omni-video/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/video/omni-reference-task-submission'),
-    models: ['skyreels-v4'],
-    tags: ['video', 'generation'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/video/omni-reference-task-submission'),
     priority: 100
   },
-
-  'omni-reference-task-query': {
-    name: 'omni-reference-task-query',
-    provider: 'skyreels',
+  [APIs.API_V1_VIDEO_OMNI_VIDEO_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/api/v1/video/omni-video/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/video/omni-reference-task-query'),
-    models: ['skyreels-v4'],
-    tags: ['video', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/video/omni-reference-task-query'),
     priority: 100
   },
-
-  'single-shot-video-extension-task-submission': {
-    name: 'single-shot-video-extension-task-submission',
-    provider: 'skyreels',
+  [APIs.API_V1_VIDEO_EXTENSION_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.VIDEO_EXTENSION,
-    category: 'video',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/extension/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/video/single-shot-video-extension-task-submission'),
-    models: ['skyreels-v3'],
-    tags: ['video', 'extension'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/video/single-shot-video-extension-task-submission'),
     priority: 100
   },
-
-  'single-shot-video-extension-task-query': {
-    name: 'single-shot-video-extension-task-query',
-    provider: 'skyreels',
+  [APIs.API_V1_VIDEO_EXTENSION_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/api/v1/video/extension/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/video/single-shot-video-extension-task-query'),
-    models: ['skyreels-v3'],
-    tags: ['video', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/video/single-shot-video-extension-task-query'),
     priority: 100
   },
-
-  'shot-switching-video-extension-task-submission': {
-    name: 'shot-switching-video-extension-task-submission',
-    provider: 'skyreels',
+  [APIs.API_V1_VIDEO_EXTENSION_CUTSHOT_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.VIDEO_EXTENSION,
-    category: 'video',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/extension/cutshot/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/video/shot-switching-video-extension-task-submission'),
-    models: ['skyreels-v3'],
-    tags: ['video', 'extension'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/video/shot-switching-video-extension-task-submission'),
     priority: 100
   },
-
-  'shot-switching-video-extension-task-query': {
-    name: 'shot-switching-video-extension-task-query',
-    provider: 'skyreels',
+  [APIs.API_V1_VIDEO_EXTENSION_CUTSHOT_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/api/v1/video/extension/cutshot/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/video/shot-switching-video-extension-task-query'),
-    models: ['skyreels-v3'],
-    tags: ['video', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/video/shot-switching-video-extension-task-query'),
     priority: 100
   },
-
-  'video-restyling-task-submission': {
-    name: 'video-restyling-task-submission',
-    provider: 'skyreels',
+  [APIs.API_V1_VIDEO_STYLETRANSFER_SUBMIT]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.VIDEO_EDITING,
-    category: 'video',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/api/v1/video/styletransfer/submit',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/skyreels/video/video-restyling-task-submission'),
-    models: ['skyreels-v3'],
-    tags: ['video', 'restyling'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/skyreels/video/video-restyling-task-submission'),
     priority: 100
   },
-
-  'video-restyling-task-query': {
-    name: 'video-restyling-task-query',
-    provider: 'skyreels',
+  [APIs.API_V1_VIDEO_STYLETRANSFER_TASK]: {
+    provider: Providers.SKYREELS,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/api/v1/video/styletransfer/task/{task_id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/skyreels/video/video-restyling-task-query'),
-    models: ['skyreels-v3'],
-    tags: ['video', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/skyreels/video/video-restyling-task-query'),
     priority: 100
   }
+}
+
+module.exports = {
+  APIs,
+  APIsMeta
 }

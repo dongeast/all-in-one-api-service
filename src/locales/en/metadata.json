@@ -187,6 +187,48 @@
         "displayName": "Generate Image",
         "description": "Generate image from text"
       }
+    },
+    "vidu": {
+      "reference-to-image": {
+        "displayName": "Reference to Image",
+        "description": "Generate image from reference images"
+      },
+      "text-to-video": {
+        "displayName": "Text to Video",
+        "description": "Generate video from text description"
+      },
+      "image-to-video": {
+        "displayName": "Image to Video",
+        "description": "Generate video from image"
+      },
+      "reference-to-video": {
+        "displayName": "Reference to Video",
+        "description": "Generate video from reference subjects"
+      },
+      "start-end-to-video": {
+        "displayName": "Start End to Video",
+        "description": "Generate video from start and end frames"
+      },
+      "multiframe": {
+        "displayName": "Multiframe",
+        "description": "Generate video with multiple key frames"
+      },
+      "template": {
+        "displayName": "Template",
+        "description": "Generate video from scene template"
+      },
+      "template-story": {
+        "displayName": "Template Story",
+        "description": "Generate video from story template"
+      },
+      "query-task": {
+        "displayName": "Query Task",
+        "description": "Query task status"
+      },
+      "cancel-task": {
+        "displayName": "Cancel Task",
+        "description": "Cancel a task"
+      }
     }
   },
   "models": {
@@ -313,6 +355,56 @@
         "displayName": "Volcengine Image V1",
         "description": "Volcengine image generation model"
       }
+    },
+    "vidu": {
+      "viduq3-mix": {
+        "displayName": "Vidu Q3 Mix",
+        "description": "Strong picture quality, smart scene cutting, audio-video sync, good dynamics, best balance"
+      },
+      "viduq3": {
+        "displayName": "Vidu Q3",
+        "description": "Smart scene cutting, audio-video sync, better multi-camera consistency"
+      },
+      "viduq3-turbo": {
+        "displayName": "Vidu Q3 Turbo",
+        "description": "Smart scene cutting, audio-video sync, fastest generation, best cost-performance"
+      },
+      "viduq3-pro": {
+        "displayName": "Vidu Q3 Pro",
+        "description": "Smart scene cutting, audio-video sync, better multi-camera consistency"
+      },
+      "viduq3-pro-fast": {
+        "displayName": "Vidu Q3 Pro Fast",
+        "description": "High-quality audio-video, faster generation, good cost-performance"
+      },
+      "viduq2-pro": {
+        "displayName": "Vidu Q2 Pro",
+        "description": "Supports reference video, video editing, video replacement"
+      },
+      "viduq2-pro-fast": {
+        "displayName": "Vidu Q2 Pro Fast",
+        "description": "Lowest price, stable quality, 2-3x faster than viduq2-turbo"
+      },
+      "viduq2-turbo": {
+        "displayName": "Vidu Q2 Turbo",
+        "description": "New model, good quality, fast generation"
+      },
+      "viduq2": {
+        "displayName": "Vidu Q2",
+        "description": "Good dynamics, rich details"
+      },
+      "viduq1": {
+        "displayName": "Vidu Q1",
+        "description": "Clear picture, smooth transitions, stable camera movement"
+      },
+      "viduq1-classic": {
+        "displayName": "Vidu Q1 Classic",
+        "description": "Clear picture, richer transitions and camera movement"
+      },
+      "vidu2.0": {
+        "displayName": "Vidu 2.0",
+        "description": "Fast generation"
+      }
     }
   },
   "functions": {
@@ -403,6 +495,234 @@
         "displayName": "Generate Image",
         "description": "Generate image from text"
       }
+    },
+    "vidu": {
+      "reference-to-image": {
+        "displayName": "Reference to Image",
+        "description": "Generate image from reference images"
+      },
+      "text-to-video": {
+        "displayName": "Text to Video",
+        "description": "Generate video from text description"
+      },
+      "image-to-video": {
+        "displayName": "Image to Video",
+        "description": "Generate video from image"
+      },
+      "reference-to-video": {
+        "displayName": "Reference to Video",
+        "description": "Generate video from reference subjects"
+      },
+      "start-end-to-video": {
+        "displayName": "Start End to Video",
+        "description": "Generate video from start and end frames"
+      },
+      "multiframe": {
+        "displayName": "Multiframe",
+        "description": "Generate video with multiple key frames"
+      },
+      "template": {
+        "displayName": "Template",
+        "description": "Generate video from scene template"
+      },
+      "template-story": {
+        "displayName": "Template Story",
+        "description": "Generate video from story template"
+      },
+      "query-task": {
+        "displayName": "Query Task",
+        "description": "Query task status"
+      },
+      "cancel-task": {
+        "displayName": "Cancel Task",
+        "description": "Cancel a task"
+      }
+    }
+  },
+  "series": {
+    "ltx": {
+      "displayName": "LTX Series",
+      "description": "LTX video generation model series"
+    },
+    "skyreels": {
+      "displayName": "SkyReels Series",
+      "description": "SkyReels video generation model series"
+    },
+    "mureka": {
+      "displayName": "Mureka Series",
+      "description": "Mureka music generation model series"
+    },
+    "seedance": {
+      "displayName": "Doubao Seedance Series",
+      "description": "Volcengine video generation model series"
+    },
+    "seedream": {
+      "displayName": "Doubao Seedream Series",
+      "description": "Volcengine image generation model series"
+    },
+    "seed3d": {
+      "displayName": "Doubao Seed3D Series",
+      "description": "Volcengine 3D model generation series"
+    },
+    "vidu": {
+      "displayName": "Vidu Series",
+      "description": "Vidu video generation model series"
+    },
+    "viduq1": {
+      "displayName": "Vidu Q1 Series",
+      "description": "Vidu Q1 video generation model series"
+    },
+    "viduq2": {
+      "displayName": "Vidu Q2 Series",
+      "description": "Vidu Q2 video generation model series"
+    },
+    "viduq3": {
+      "displayName": "Vidu Q3 Series",
+      "description": "Vidu Q3 video generation model series"
+    }
+  },
+  "scenes": {
+    "text_to_image": {
+      "displayName": "Text to Image",
+      "description": "Generate image from text description"
+    },
+    "image_to_image": {
+      "displayName": "Image to Image",
+      "description": "Convert input image to another style"
+    },
+    "image_editing": {
+      "displayName": "Image Editing",
+      "description": "Edit and modify images"
+    },
+    "image_upscaling": {
+      "displayName": "Image Upscaling",
+      "description": "Enhance image resolution and quality"
+    },
+    "text_to_video": {
+      "displayName": "Text to Video",
+      "description": "Generate video from text description"
+    },
+    "image_to_video": {
+      "displayName": "Image to Video",
+      "description": "Convert static image to dynamic video"
+    },
+    "audio_to_video": {
+      "displayName": "Audio to Video",
+      "description": "Generate video from audio content"
+    },
+    "video_editing": {
+      "displayName": "Video Editing",
+      "description": "Edit and modify videos"
+    },
+    "video_reference": {
+      "displayName": "Video Reference",
+      "description": "Reference images and videos"
+    },
+    "video_extension": {
+      "displayName": "Video Extension",
+      "description": "Extend video duration"
+    },
+    "text_to_audio": {
+      "displayName": "Text to Audio",
+      "description": "Generate audio from text description"
+    },
+    "text_to_speech": {
+      "displayName": "Text to Speech",
+      "description": "Convert text to speech"
+    },
+    "speech_to_text": {
+      "displayName": "Speech to Text",
+      "description": "Convert speech to text"
+    },
+    "audio_generation": {
+      "displayName": "Audio Generation",
+      "description": "Generate various types of audio"
+    },
+    "music_generation": {
+      "displayName": "Music Generation",
+      "description": "Generate music from description"
+    },
+    "song_generation": {
+      "displayName": "Song Generation",
+      "description": "Generate complete songs"
+    },
+    "instrumental_generation": {
+      "displayName": "Instrumental Generation",
+      "description": "Generate instrumental accompaniment"
+    },
+    "vocal_cloning": {
+      "displayName": "Vocal Cloning",
+      "description": "Clone specific voice characteristics"
+    },
+    "text_generation": {
+      "displayName": "Text Generation",
+      "description": "Generate text content"
+    },
+    "text_editing": {
+      "displayName": "Text Editing",
+      "description": "Edit and modify text"
+    },
+    "image_to_3d": {
+      "displayName": "Image to 3D",
+      "description": "Generate 3D model from image"
+    },
+    "text_to_3d": {
+      "displayName": "Text to 3D",
+      "description": "Generate 3D model from text description"
+    },
+    "avatar_generation": {
+      "displayName": "Avatar Generation",
+      "description": "Generate digital avatar"
+    },
+    "lip_sync": {
+      "displayName": "Lip Sync",
+      "description": "Synchronize video lip movements with audio"
+    },
+    "reference_to_image": {
+      "displayName": "Reference to Image",
+      "description": "Generate image from reference images"
+    },
+    "reference_to_video": {
+      "displayName": "Reference to Video",
+      "description": "Generate video from reference subjects"
+    },
+    "start_end_to_video": {
+      "displayName": "Start End to Video",
+      "description": "Generate video from start and end frames"
+    },
+    "multiframe": {
+      "displayName": "Multiframe",
+      "description": "Generate video with multiple key frames"
+    },
+    "template": {
+      "displayName": "Template",
+      "description": "Generate video from scene template"
+    },
+    "template_story": {
+      "displayName": "Template Story",
+      "description": "Generate video from story template"
+    }
+  },
+  "providers": {
+    "lightricks": {
+      "displayName": "Lightricks",
+      "description": "Lightricks - Creator of LTX Studio"
+    },
+    "skyreels": {
+      "displayName": "Skyreels AI",
+      "description": "Skyreels AI - Creator of Skyreels and Mureka"
+    },
+    "mureka": {
+      "displayName": "Mureka AI",
+      "description": "Mureka AI - Creator of Skyreels and Mureka"
+    },
+    "volcengine": {
+      "displayName": "Volcengine Seed AI",
+      "description": "Bytedance Volcengine Seed AI"
+    },
+    "vidu": {
+      "displayName": "Vidu AI",
+      "description": "Vidu AI Video Generation Platform"
     }
   }
 }

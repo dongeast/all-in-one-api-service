@@ -4,12 +4,12 @@
  */
 
 import { 
+  creditRegistry,
   CreditCalculationType, 
   DefaultBaseCredits,
-  ModelCreditMultipliers,
   ResolutionCreditMultipliers,
   DurationCreditFactor
-} from '../constants/credits.js'
+} from './credit-registry.js'
 import { createLogger } from '../utils/logger.js'
 
 const logger = createLogger({ level: 'INFO' })
@@ -311,22 +311,22 @@ class CreditCalculator {
     let baseCost = 5
     
     if (apiName.includes('video')) {
-      baseCost = DefaultBaseCredits.TEXT_TO_VIDEO
+      baseCost = creditRegistry.getDefaultCredits('text_to_video')
     } else if (apiName.includes('image')) {
-      baseCost = DefaultBaseCredits.TEXT_TO_IMAGE
+      baseCost = creditRegistry.getDefaultCredits('text_to_image')
     } else if (apiName.includes('audio')) {
-      baseCost = DefaultBaseCredits.TEXT_TO_AUDIO
+      baseCost = creditRegistry.getDefaultCredits('text_to_audio')
     } else if (apiName.includes('3d')) {
-      baseCost = DefaultBaseCredits.IMAGE_TO_3D
+      baseCost = creditRegistry.getDefaultCredits('image_to_3d')
     }
 
-    if (params.model && ModelCreditMultipliers[provider]) {
-      const multiplier = ModelCreditMultipliers[provider][params.model] || 1.0
+    if (params.model) {
+      const multiplier = creditRegistry.getModelMultiplier(provider, params.model)
       baseCost = baseCost * multiplier
     }
 
     if (params.duration) {
-      baseCost = baseCost + params.duration * DurationCreditFactor.VIDEO
+      baseCost = baseCost + params.duration * creditRegistry.getDurationFactor('VIDEO')
     }
 
     return {

@@ -1,56 +1,36 @@
 /**
- * 模型标签枚举
+ * 标签常量定义
  */
+
 const ModelTags = {
-  // 质量标签
-  HIGH_QUALITY: 'high_quality',
-  FAST: 'fast',
-  PREMIUM: 'premium',
-  LITE: 'lite',
-
-  // 功能标签
-  STREAMING: 'streaming',
-  HD: 'hd',
-  MULTI_MODAL: 'multi_modal',
-
-  // 状态标签
-  BETA: 'beta',
-  DEPRECATED: 'deprecated',
-  STABLE: 'stable',
-
-  // 业务标签
-  RECOMMENDED: 'recommended',
-  POPULAR: 'popular'
+  TEXT_TO_IMAGE: 'text_to_image',
+  IMAGE_TO_IMAGE: 'image_to_image',
+  TEXT_TO_VIDEO: 'text_to_video',
+  IMAGE_TO_VIDEO: 'image_to_video',
+  TEXT_TO_AUDIO: 'text_to_audio',
+  TEXT_TO_SPEECH: 'text_to_speech',
+  AUDIO_GENERATION: 'audio_generation',
+  MUSIC_GENERATION: 'music_generation',
+  SONG_GENERATION: 'song_generation',
+  IMAGE_TO_3D: 'image_to_3d',
+  TEXT_TO_3D: 'text_to_3d'
 }
 
-/**
- * 接口标签枚举
- */
 const APITags = {
-  // 功能标签
   ASYNC: 'async',
+  SYNC: 'sync',
   STREAMING: 'streaming',
   BATCH: 'batch',
-
-  // 性能标签
-  HIGH_THROUGHPUT: 'high_throughput',
-  LOW_LATENCY: 'low_latency',
-
-  // 状态标签
-  STABLE: 'stable',
-  BETA: 'beta',
-  DEPRECATED: 'deprecated'
+  PREMIUM: 'premium',
+  STANDARD: 'standard',
+  EXPERIMENTAL: 'experimental'
 }
 
-/**
- * Provider标签枚举
- */
 const ProviderTags = {
-  // 服务商特性
   OFFICIAL: 'official',
   THIRD_PARTY: 'third_party',
-  CHINA_REGION: 'china_region',
-  GLOBAL_REGION: 'global_region'
+  OPEN_SOURCE: 'open_source',
+  ENTERPRISE: 'enterprise'
 }
 
 module.exports = {

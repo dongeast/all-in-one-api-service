@@ -118,6 +118,37 @@ class FunctionRegistry extends BaseRegistry {
   }
 
   /**
+   * 检查 API 是否是请求 API
+   * @param {string} apiName - API 名称
+   * @returns {boolean} 是否是请求 API
+   */
+  isRequestAPI(apiName) {
+    const func = this.getByAPI(apiName)
+    if (!func) return false
+    return func.apis?.request === apiName
+  }
+
+  /**
+   * 检查 API 是否是查询 API
+   * @param {string} apiName - API 名称
+   * @returns {boolean} 是否是查询 API
+   */
+  isQueryAPI(apiName) {
+    const func = this.getByAPI(apiName)
+    if (!func) return false
+    return func.apis?.query === apiName
+  }
+
+  /**
+   * 根据 API 名称获取 Function 名称
+   * @param {string} apiName - API 名称
+   * @returns {string|null} Function 名称
+   */
+  getFunctionNameByAPI(apiName) {
+    return this.apiToFunctionIndex.get(apiName) || null
+  }
+
+  /**
    * 获取所有支持的类型
    * @returns {Array} 类型列表
    */

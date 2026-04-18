@@ -54,8 +54,9 @@ class FunctionManager {
       return
     }
 
-    this.apiRegistry = require('../registry/api-registry')
-    this.modelRegistry = require('../registry/model-registry')
+    const unifiedRegistry = require('../registry/unified-registry')
+    this.apiRegistry = unifiedRegistry.apiRegistry
+    this.modelRegistry = unifiedRegistry.modelRegistry
     this.initialized = true
     logger.info('FunctionManager initialized')
   }
@@ -100,9 +101,10 @@ class FunctionManager {
     const Services = require('../services')
     const providerServices = {
       mureka: Services.Mureka,
-      ltx: Services.LTX,
+      lightricks: Services.LTX,
       skyreels: Services.Skyreels,
-      volcengine: Services.Volcengine
+      volcengine: Services.Volcengine,
+      vidu: Services.Vidu
     }
 
     const ServiceClass = providerServices[provider]
@@ -190,7 +192,7 @@ class FunctionManager {
       totalModels: this.modelRegistry.size(),
       totalAPIs: this.apiRegistry.size(),
       totalFunctions: functionRegistry.size(),
-      providers: ['ltx', 'volcengine', 'skyreels', 'mureka'],
+      providers: ['ltx', 'volcengine', 'skyreels', 'mureka', 'vidu'],
       supportedTypes: this.getSupportedTypes().length,
       supportedMediaTypes: this.getSupportedMediaTypes().length
     }
@@ -538,10 +540,24 @@ class FunctionManager {
     if (apiType) {
       result.apiTypes = [apiType]
       
-      const models = this.modelRegistry.getByType(apiType)
+      // 从 Function 元数据中查找支持该 apiType 的 Function
+      let matchedFunctions = functionRegistry.getAll()
+        .filter(func => this.matchesApiType(func.apiType, apiType))
+      
+      // 收集模型名称
+      const modelNames = new Set()
+      matchedFunctions.forEach(func => {
+        if (func.models && func.models.length > 0) {
+          func.models.forEach(modelName => modelNames.add(modelName))
+        }
+      })
+      
+      let models = Array.from(modelNames)
+        .map(modelName => this.modelRegistry.get(modelName))
+        .filter(model => model !== null)
+      
       const seriesSet = new Set()
       const providerSet = new Set()
-      const functionSet = new Set()
 
       models.forEach(m => {
         seriesSet.add(m.series)
@@ -549,57 +565,48 @@ class FunctionManager {
       })
 
       if (series) {
-        const filteredModels = models.filter(m => m.series === series)
+        // 根据 series 过滤模型
+        models = models.filter(m => m.series === series)
         result.series = [series]
-        result.models = filteredModels.map(m => m.name)
+        result.models = models.map(m => m.name)
         
         const filteredProviderSet = new Set()
-        filteredModels.forEach(m => filteredProviderSet.add(m.provider))
+        models.forEach(m => filteredProviderSet.add(m.provider))
         result.providers = Array.from(filteredProviderSet)
 
+        // 根据 series 过滤 Function
+        matchedFunctions = matchedFunctions.filter(func => {
+          if (!func.models || func.models.length === 0) return false
+          return func.models.some(modelName => 
+            models.some(m => m.name === modelName)
+          )
+        })
+
         if (model) {
-          const targetModel = filteredModels.find(m => m.name === model)
+          const targetModel = models.find(m => m.name === model)
           if (targetModel) {
             result.models = [model]
             result.providers = [targetModel.provider]
             
-            const apis = this.apiRegistry.getAll()
-              .filter(api => {
-                return this.matchesApiType(api.apiType, apiType) &&
-                  api.models && api.models.includes(model)
-              })
-            
+            // 根据 model 过滤 Function
+            matchedFunctions = matchedFunctions.filter(func => {
+              return func.models && func.models.includes(model)
+            })
+
             if (provider) {
-              const filteredAPIs = apis.filter(api => api.provider === provider)
+              // 根据 provider 过滤 Function
+              matchedFunctions = matchedFunctions.filter(func => func.provider === provider)
               result.providers = [provider]
-              result.functions = filteredAPIs.map(api => api.name)
-            } else {
-              result.functions = apis.map(api => api.name)
             }
           }
-        } else {
-          const apis = this.apiRegistry.getAll()
-            .filter(api => {
-              return this.matchesApiType(api.apiType, apiType) &&
-              api.models && api.models.some(mName => 
-                filteredModels.some(m => m.name === mName)
-              )
-            })
-          result.functions = apis.map(api => api.name)
         }
+        
+        result.functions = matchedFunctions.map(func => func.name)
       } else {
         result.series = Array.from(seriesSet)
         result.models = models.map(m => m.name)
         result.providers = Array.from(providerSet)
-        
-        const apis = this.apiRegistry.getAll()
-          .filter(api => {
-            return this.matchesApiType(api.apiType, apiType) &&
-              api.models && api.models.some(mName => 
-              models.some(m => m.name === mName)
-            )
-          })
-        result.functions = apis.map(api => api.name)
+        result.functions = matchedFunctions.map(func => func.name)
       }
     } else {
       result.apiTypes = Object.values(APITypes)

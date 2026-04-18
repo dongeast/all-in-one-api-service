@@ -277,6 +277,128 @@
           }
         }
       }
+    },
+    "vidu": {
+      "reference-to-image": {
+        "displayName": "Reference to Image",
+        "description": "Generate image from reference images",
+        "methods": {
+          "request": {
+            "description": "Submit reference to image request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "text-to-video": {
+        "displayName": "Text to Video",
+        "description": "Generate video from text description",
+        "methods": {
+          "request": {
+            "description": "Submit text to video request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "image-to-video": {
+        "displayName": "Image to Video",
+        "description": "Generate video from image",
+        "methods": {
+          "request": {
+            "description": "Submit image to video request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "reference-to-video": {
+        "displayName": "Reference to Video",
+        "description": "Generate video from reference subjects",
+        "methods": {
+          "request": {
+            "description": "Submit reference to video request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "start-end-to-video": {
+        "displayName": "Start End to Video",
+        "description": "Generate video from start and end frames",
+        "methods": {
+          "request": {
+            "description": "Submit start end to video request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "multiframe": {
+        "displayName": "Multiframe",
+        "description": "Generate video with multiple key frames",
+        "methods": {
+          "request": {
+            "description": "Submit multiframe request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "template": {
+        "displayName": "Template",
+        "description": "Generate video from scene template",
+        "methods": {
+          "request": {
+            "description": "Submit template request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      },
+      "template-story": {
+        "displayName": "Template Story",
+        "description": "Generate video from story template",
+        "methods": {
+          "request": {
+            "description": "Submit template story request"
+          },
+          "response": {
+            "description": "Get task result"
+          },
+          "execute": {
+            "description": "Execute complete workflow"
+          }
+        }
+      }
     }
   }
 }

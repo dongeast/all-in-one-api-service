@@ -29,6 +29,13 @@
       "timeout": 120000,
       "retryCount": 3,
       "retryDelay": 2000
+    },
+    "vidu": {
+      "apiKey": "YOUR_VIDU_API_KEY",
+      "baseURL": "https://api.vidu.cn",
+      "timeout": 300000,
+      "retryCount": 3,
+      "retryDelay": 2000
     }
   },
   "logging": {

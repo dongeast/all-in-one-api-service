@@ -1,18 +1,45 @@
 /**
- * Jest 测试环境设置文件
+ * Jest 测试设置文件
+ * 在所有测试运行前执行
  */
 
-// 设置测试超时时间
-jest.setTimeout(10000)
-
-// 全局测试钩子
-beforeAll(() => {
-  // 测试开始前的初始化
-})
-
-afterAll(() => {
-  // 测试结束后的清理
-})
-
-// 模拟环境变量
 process.env['NODE_ENV'] = 'test'
+
+// 导入测试工具函数和常量到全局作用域
+const testUtils = require('./helpers/test-utils')
+const constants = require('../src/constants')
+Object.assign(global, testUtils, constants)
+
+global.console = {
+  ...console,
+  log: jest.fn(),
+  debug: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn()
+}
+
+expect.extend({
+  toBeValidRegistry(received) {
+    const pass = received && typeof received.register === 'function' && typeof received.get === 'function'
+    return {
+      pass,
+      message: () => pass
+        ? `expected ${received} not to be a valid registry`
+        : `expected ${received} to be a valid registry with register and get methods`
+    }
+  },
+  
+  toBeValidI18nManager(received) {
+    const pass = received && 
+      typeof received.t === 'function' && 
+      typeof received.registerResources === 'function' &&
+      typeof received.getLanguageFromRequest === 'function'
+    return {
+      pass,
+      message: () => pass
+        ? `expected ${received} not to be a valid I18nManager`
+        : `expected ${received} to be a valid I18nManager with t, registerResources, and getLanguageFromRequest methods`
+    }
+  }
+})

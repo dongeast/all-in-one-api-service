@@ -348,5 +348,157 @@
       "label": "分辨率",
       "description": "输出视频分辨率，支持 480p、720p 和 1080p"
     }
+  },
+  "vidu": {
+    "prompt": {
+      "label": "提示词",
+      "description": "生成文本描述",
+      "placeholder": "请输入提示词"
+    },
+    "model": {
+      "label": "模型",
+      "description": "生成使用的模型"
+    },
+    "duration": {
+      "label": "时长",
+      "description": "视频时长（秒）",
+      "unit": "秒"
+    },
+    "resolution": {
+      "label": "分辨率",
+      "description": "视频分辨率（360p, 540p, 720p, 1080p, 2K, 4K）"
+    },
+    "aspect_ratio": {
+      "label": "宽高比",
+      "description": "视频宽高比"
+    },
+    "seed": {
+      "label": "随机种子",
+      "description": "随机种子，0 表示随机"
+    },
+    "style": {
+      "label": "风格",
+      "description": "风格类型（general 通用, anime 动漫）"
+    },
+    "audio": {
+      "label": "音视频同步",
+      "description": "启用音视频同步"
+    },
+    "audio_type": {
+      "label": "音频类型",
+      "description": "启用音频时的音频类型"
+    },
+    "bgm": {
+      "label": "背景音乐",
+      "description": "添加背景音乐"
+    },
+    "movement_amplitude": {
+      "label": "运动幅度",
+      "description": "运动幅度（auto 自动, small 小, medium 中, large 大）"
+    },
+    "voice_id": {
+      "label": "音色ID",
+      "description": "视频音色ID"
+    },
+    "images": {
+      "label": "图片",
+      "description": "图片URL或base64编码图片"
+    },
+    "callback_url": {
+      "label": "回调地址",
+      "description": "任务状态通知回调地址"
+    },
+    "payload": {
+      "label": "透传参数",
+      "description": "透传参数"
+    },
+    "off_peak": {
+      "label": "闲时模式",
+      "description": "闲时模式（成本更低，48小时内完成）"
+    },
+    "watermark": {
+      "label": "水印",
+      "description": "添加水印"
+    },
+    "wm_position": {
+      "label": "水印位置",
+      "description": "水印位置"
+    },
+    "wm_url": {
+      "label": "水印URL",
+      "description": "水印图片URL"
+    },
+    "meta_data": {
+      "label": "元数据",
+      "description": "元数据标识符（JSON格式）"
+    },
+    "is_rec": {
+      "label": "推荐提示词",
+      "description": "使用推荐提示词"
+    },
+    "auto_subjects": {
+      "label": "智能主体库",
+      "description": "使用智能主体库"
+    },
+    "subjects": {
+      "label": "主体列表",
+      "description": "参考生视频主体列表"
+    },
+    "template": {
+      "label": "模板",
+      "description": "场景模板参数"
+    },
+    "story": {
+      "label": "故事",
+      "description": "故事模板参数"
+    },
+    "start_image": {
+      "label": "起始图片",
+      "description": "智能多帧起始帧图片"
+    },
+    "image_settings": {
+      "label": "图片设置",
+      "description": "智能多帧关键帧配置"
+    },
+    "area": {
+      "label": "地区",
+      "description": "异域公主特效参数"
+    },
+    "beast": {
+      "label": "神兽",
+      "description": "神兽伙伴特效参数"
+    },
+    "task_id": {
+      "label": "任务ID",
+      "description": "任务ID"
+    },
+    "state": {
+      "label": "状态",
+      "description": "处理状态"
+    },
+    "video_url": {
+      "label": "视频URL",
+      "description": "生成的视频URL"
+    },
+    "watermarked_url": {
+      "label": "带水印URL",
+      "description": "带水印视频URL"
+    },
+    "credits": {
+      "label": "积分",
+      "description": "消耗积分"
+    },
+    "created_at": {
+      "label": "创建时间",
+      "description": "任务创建时间"
+    },
+    "finished_at": {
+      "label": "完成时间",
+      "description": "任务完成时间"
+    },
+    "failed_reason": {
+      "label": "失败原因",
+      "description": "失败原因"
+    }
   }
 }

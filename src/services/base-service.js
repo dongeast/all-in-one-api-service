@@ -28,8 +28,128 @@ class BaseService {
     }
 
     this.initialized = false
+    this.metadataLoaded = false
+    this.metadata = null
     this.logger = config.logger || createLogger({ level: 'INFO' })
     this.providerName = this.constructor.name.replace('Service', '').toLowerCase()
+  }
+
+  /**
+   * 加载元数据
+   * @returns {void}
+   */
+  loadMetadata() {
+    if (this.metadataLoaded) {
+      return
+    }
+
+    try {
+      const { unifiedRegistry } = require('../registry')
+      
+      if (!unifiedRegistry.isInitialized()) {
+        this.logger.warn('UnifiedRegistry not initialized, skipping metadata load')
+        return
+      }
+
+      this.metadata = {
+        apis: unifiedRegistry.apiRegistry.getByProvider(this.providerName),
+        models: unifiedRegistry.modelRegistry.getByProvider(this.providerName),
+        functions: unifiedRegistry.functionRegistry.getByProvider(this.providerName)
+      }
+
+      this.metadataLoaded = true
+      this.logger.debug(`Loaded metadata for ${this.providerName}`, {
+        apis: this.metadata.apis.length,
+        models: this.metadata.models.length,
+        functions: this.metadata.functions.length
+      })
+    } catch (error) {
+      this.logger.warn(`Failed to load metadata for ${this.providerName}:`, error.message)
+    }
+  }
+
+  /**
+   * 获取 API 元数据
+   * @param {string} apiName - API 名称
+   * @returns {object|null} API 元数据
+   */
+  getAPIMetadata(apiName) {
+    if (!this.metadataLoaded) {
+      this.loadMetadata()
+    }
+
+    if (!this.metadata || !this.metadata.apis) {
+      return null
+    }
+
+    return this.metadata.apis.find(api => api.name === apiName) || null
+  }
+
+  /**
+   * 获取 Model 元数据
+   * @param {string} modelName - Model 名称
+   * @returns {object|null} Model 元数据
+   */
+  getModelMetadata(modelName) {
+    if (!this.metadataLoaded) {
+      this.loadMetadata()
+    }
+
+    if (!this.metadata || !this.metadata.models) {
+      return null
+    }
+
+    return this.metadata.models.find(model => model.name === modelName) || null
+  }
+
+  /**
+   * 获取所有 API 元数据
+   * @param {object} options - 过滤选项
+   * @returns {Array} API 元数据列表
+   */
+  getAllAPIs(options = {}) {
+    if (!this.metadataLoaded) {
+      this.loadMetadata()
+    }
+
+    if (!this.metadata || !this.metadata.apis) {
+      return []
+    }
+
+    let apis = this.metadata.apis
+
+    if (options.type) {
+      apis = apis.filter(api => api.type === options.type)
+    }
+
+    if (options.apiType) {
+      apis = apis.filter(api => api.apiType === options.apiType)
+    }
+
+    return apis
+  }
+
+  /**
+   * 获取所有 Model 元数据
+   * @param {object} options - 过滤选项
+   * @returns {Array} Model 元数据列表
+   */
+  getAllModels(options = {}) {
+    if (!this.metadataLoaded) {
+      this.loadMetadata()
+    }
+
+    if (!this.metadata || !this.metadata.models) {
+      return []
+    }
+
+    let models = this.metadata.models
+
+    if (options.type) {
+      models = models.filter(model => model.type === options.type)
+    }
+
+    return models
   }
 
   /**
@@ -149,6 +269,8 @@ class BaseService {
     if (!this.getApiKey()) {
       throw new Error(`API key is required for ${this.providerName} service`)
     }
+
+    this.loadMetadata()
 
     this.initialized = true
     this.logger.debug(`${this.providerName} service initialized`)
@@ -435,6 +557,10 @@ class BaseService {
       name: this.providerName,
       baseURL: this.getBaseURL(),
       initialized: this.initialized,
+      metadataLoaded: this.metadataLoaded,
+      apisCount: this.metadata?.apis?.length || 0,
+      modelsCount: this.metadata?.models?.length || 0,
+      functionsCount: this.metadata?.functions?.length || 0,
       models: this.config.models
     }
   }

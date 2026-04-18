@@ -2,15 +2,22 @@
  * 积分模块入口 (CommonJS)
  */
 
-const { creditCalculator, CreditCalculator } = require('./credit-calculator')
-const { CreditCalculationType, CreditFactors, CreditTier, DefaultBaseCredits, ModelCreditMultipliers } = require('../constants/credits')
+const { creditRegistry, CreditRegistry, CreditCalculationType, CreditFactors, DefaultBaseCredits } = require('./credit-registry')
+const { CreditCalculator, creditCalculator } = require('./credit-calculator')
 
 module.exports = {
+  CreditRegistry,
+  creditRegistry,
   CreditCalculator,
   creditCalculator,
   CreditCalculationType,
   CreditFactors,
-  CreditTier,
-  DefaultBaseCredits,
-  ModelCreditMultipliers
+  CreditTier: {
+    FREE: 'free',
+    BASIC: 'basic',
+    STANDARD: 'standard',
+    PREMIUM: 'premium',
+    ENTERPRISE: 'enterprise'
+  },
+  DefaultBaseCredits
 }

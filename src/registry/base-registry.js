@@ -76,7 +76,12 @@ class BaseRegistry {
    * @param {object} items - 项目元数据对象
    */
   registerAll(items) {
-    Object.values(items).forEach(item => this.register(item))
+    Object.entries(items).forEach(([key, item]) => {
+      if (!item[this.idField]) {
+        item[this.idField] = key
+      }
+      this.register(item)
+    })
   }
 
   /**
@@ -99,7 +104,11 @@ class BaseRegistry {
     const indexMap = this.indexes.get(field)
     if (!indexMap) return []
 
-    const itemIds = indexMap.get(value)
+    const indexKey = (typeof value === 'object' && value !== null && value.id) 
+      ? value.id 
+      : value
+
+    const itemIds = indexMap.get(indexKey)
     if (!itemIds) return []
 
     let items = Array.from(itemIds).map(id => this.items.get(id))
@@ -127,7 +136,10 @@ class BaseRegistry {
       const fieldIds = new Set()
 
       values.forEach(v => {
-        const ids = indexMap.get(v)
+        const indexKey = (typeof v === 'object' && v !== null && v.id) 
+          ? v.id 
+          : v
+        const ids = indexMap.get(indexKey)
         if (ids) {
           ids.forEach(id => fieldIds.add(id))
         }

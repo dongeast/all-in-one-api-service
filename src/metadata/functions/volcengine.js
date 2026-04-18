@@ -4,138 +4,128 @@
  * 只引用API名称，不定义endpoint和method
  */
 
-module.exports = {
-  'create-video-generation': {
+const { Providers, SyncType } = require('../../constants')
+const { APIs } = require('../apis/volcengine')
+const { Models } = require('../models/volcengine')
+
+const Functions = {
+  CREATE_VIDEO_GENERATION: 'create-video-generation',
+  CREATE_3D_GENERATION: 'create-3d-generation',
+  GENERATE_IMAGE: 'generate-image',
+  QUERY_VIDEO_GENERATION_TASK_LIST: 'query-video-generation-task-list',
+  CANCEL_DELETE_VIDEO_GENERATION_TASK: 'cancel-delete-video-generation-task',
+  QUERY_3D_GENERATION_TASK_LIST: 'query-3d-generation-task-list',
+  CANCEL_DELETE_3D_GENERATION_TASK: 'cancel-delete-3d-generation-task'
+}
+
+const FunctionsMeta = {
+  [Functions.CREATE_VIDEO_GENERATION]: {
     name: 'create-video-generation',
-    type: 'async',
-    provider: 'volcengine',
-    category: 'video',
-    
+    type: SyncType.ASYNC,
+    provider: Providers.VOLCENGINE,
     apis: {
-      request: 'create-video-generation-task',
-      query: 'query-video-generation-task'
+      request: APIs.CONTENTS_GENERATIONS_TASKS_VIDEO,
+      query: APIs.CONTENTS_GENERATIONS_TASK_VIDEO
     },
-    
     models: [
-      'doubao-seedance-2-0-260128',
-      'doubao-seedance-2-0-fast-260128',
-      'doubao-seedance-1-5-pro-251215',
-      'doubao-seedance-1-0-pro-250528',
-      'doubao-seedance-1-0-pro-fast-251015',
-      'doubao-seedance-1-0-lite-t2v-250428'
+      Models.DOUBAO_SEEDANCE_2_0_260128,
+      Models.DOUBAO_SEEDANCE_2_0_FAST_260128,
+      Models.DOUBAO_SEEDANCE_1_5_PRO_251215,
+      Models.DOUBAO_SEEDANCE_1_0_PRO_250528,
+      Models.DOUBAO_SEEDANCE_1_0_PRO_FAST_251015,
+      Models.DOUBAO_SEEDANCE_1_0_LITE_T2V_250428
     ],
-    tags: ['video', 'generation', 'text-to-video', 'image-to-video'],
     priority: 100
   },
   
-  'create-3d-generation': {
+  [Functions.CREATE_3D_GENERATION]: {
     name: 'create-3d-generation',
-    type: 'async',
-    provider: 'volcengine',
-    category: '3d',
-    
+    type: SyncType.ASYNC,
+    provider: Providers.VOLCENGINE,
     apis: {
-      request: 'create-3d-generation-task',
-      query: 'query-3d-generation-task'
+      request: APIs.CONTENTS_GENERATIONS_TASKS_3D,
+      query: APIs.CONTENTS_GENERATIONS_TASK_3D
     },
-    
-    models: ['doubao-seed3d-1-0-250928'],
-    tags: ['3d', 'generation'],
+    models: [Models.DOUBAO_SEED3D_1_0_250928],
     priority: 100
   },
   
-  'generate-image': {
+  [Functions.GENERATE_IMAGE]: {
     name: 'generate-image',
-    type: 'sync',
-    provider: 'volcengine',
-    category: 'image',
-    
+    type: SyncType.SYNC,
+    provider: Providers.VOLCENGINE,
     apis: {
-      request: 'generate-image'
+      request: APIs.IMAGES_GENERATIONS
     },
-    
     models: [
-      'doubao-seedit-1-0',
-      'doubao-seedream-5-0-260128',
-      'doubao-seedream-4-5-251128',
-      'doubao-seedream-4-0-250828',
-      'doubao-seedream-3-0-t2i-250415'
+      Models.DOUBAO_SEEDREAM_5_0_260128,
+      Models.DOUBAO_SEEDREAM_4_5_251128,
+      Models.DOUBAO_SEEDREAM_4_0_250828,
+      Models.DOUBAO_SEEDREAM_3_0_T2I_250415
     ],
-    tags: ['image', 'generation', 'text-to-image'],
     priority: 100
   },
   
-  'query-video-generation-task-list': {
+  [Functions.QUERY_VIDEO_GENERATION_TASK_LIST]: {
     name: 'query-video-generation-task-list',
-    type: 'sync',
-    provider: 'volcengine',
-    category: 'video',
-    
+    type: SyncType.SYNC,
+    provider: Providers.VOLCENGINE,
     apis: {
-      request: 'query-video-generation-task-list'
+      request: APIs.CONTENTS_GENERATIONS_TASKS_LIST_VIDEO
     },
-    
     models: [
-      'doubao-seedance-2-0-260128',
-      'doubao-seedance-2-0-fast-260128',
-      'doubao-seedance-1-5-pro-251215',
-      'doubao-seedance-1-0-pro-250528',
-      'doubao-seedance-1-0-pro-fast-251015',
-      'doubao-seedance-1-0-lite-t2v-250428'
+      Models.DOUBAO_SEEDANCE_2_0_260128,
+      Models.DOUBAO_SEEDANCE_2_0_FAST_260128,
+      Models.DOUBAO_SEEDANCE_1_5_PRO_251215,
+      Models.DOUBAO_SEEDANCE_1_0_PRO_250528,
+      Models.DOUBAO_SEEDANCE_1_0_PRO_FAST_251015,
+      Models.DOUBAO_SEEDANCE_1_0_LITE_T2V_250428
     ],
-    tags: ['video', 'query', 'list'],
     priority: 100
   },
   
-  'cancel-delete-video-generation-task': {
+  [Functions.CANCEL_DELETE_VIDEO_GENERATION_TASK]: {
     name: 'cancel-delete-video-generation-task',
-    type: 'sync',
-    provider: 'volcengine',
-    category: 'video',
-    
+    type: SyncType.SYNC,
+    provider: Providers.VOLCENGINE,
     apis: {
-      request: 'cancel-delete-video-generation-task'
+      request: APIs.CONTENTS_GENERATIONS_TASK_DELETE_VIDEO
     },
-    
     models: [
-      'doubao-seedance-2-0-260128',
-      'doubao-seedance-2-0-fast-260128',
-      'doubao-seedance-1-5-pro-251215',
-      'doubao-seedance-1-0-pro-250528',
-      'doubao-seedance-1-0-pro-fast-251015',
-      'doubao-seedance-1-0-lite-t2v-250428'
+      Models.DOUBAO_SEEDANCE_2_0_260128,
+      Models.DOUBAO_SEEDANCE_2_0_FAST_260128,
+      Models.DOUBAO_SEEDANCE_1_5_PRO_251215,
+      Models.DOUBAO_SEEDANCE_1_0_PRO_250528,
+      Models.DOUBAO_SEEDANCE_1_0_PRO_FAST_251015,
+      Models.DOUBAO_SEEDANCE_1_0_LITE_T2V_250428
     ],
-    tags: ['video', 'cancel', 'delete'],
     priority: 100
   },
   
-  'query-3d-generation-task-list': {
+  [Functions.QUERY_3D_GENERATION_TASK_LIST]: {
     name: 'query-3d-generation-task-list',
-    type: 'sync',
-    provider: 'volcengine',
-    category: '3d',
-    
+    type: SyncType.SYNC,
+    provider: Providers.VOLCENGINE,
     apis: {
-      request: 'query-3d-generation-task-list'
+      request: APIs.CONTENTS_GENERATIONS_TASKS_LIST_3D
     },
-    
-    models: ['doubao-seed3d-1-0-250928'],
-    tags: ['3d', 'query', 'list'],
+    models: [Models.DOUBAO_SEED3D_1_0_250928],
     priority: 100
   },
   
-  'cancel-delete-3d-generation-task': {
+  [Functions.CANCEL_DELETE_3D_GENERATION_TASK]: {
     name: 'cancel-delete-3d-generation-task',
-    type: 'sync',
-    provider: 'volcengine',
-    category: '3d',
-    
+    type: SyncType.SYNC,
+    provider: Providers.VOLCENGINE,
     apis: {
-      request: 'cancel-delete-3d-generation-task'
+      request: APIs.CONTENTS_GENERATIONS_TASK_DELETE_3D
     },
-    
-    models: ['doubao-seed3d-1-0-250928'],
-    tags: ['3d', 'cancel', 'delete'],
+    models: [Models.DOUBAO_SEED3D_1_0_250928],
     priority: 100
   }
+}
+
+module.exports = {
+  Functions,
+  FunctionsMeta
 }

@@ -3,7 +3,7 @@
  * 提供参数的 label、description、placeholder 等多语言翻译功能
  */
 
-const { t } = require('./i18n')
+const { i18nManager } = require('./i18n-manager')
 const { Providers } = require('../constants')
 
 /**
@@ -15,26 +15,9 @@ const { Providers } = require('../constants')
  * @returns {string} 参数标签
  */
 function getParamLabel(provider, paramName, language, fallback = null) {
-  // 规范化 provider 名称（例如 skywork -> skyreels）
-  const normalizedProvider = getProviderName(provider)
-
-  // params.json 的结构是 { skyreels: { prompt: { label: "..." } } }
-  // 所以键应该是 skyreels.prompt.label 而不是 params.skyreels.prompt.label
-  const key = `${normalizedProvider}.${paramName}.label`
-  const translated = t(key, { language })
-
-  if (translated !== key) {
-    return translated
-  }
-
-  const commonKey = `common.${paramName}.label`
-  const commonTranslated = t(commonKey, { language })
-
-  if (commonTranslated !== commonKey) {
-    return commonTranslated
-  }
-
-  return fallback || formatParamName(paramName)
+  const param = { name: paramName }
+  const translated = i18nManager.translateParam(param, provider, paramName, language)
+  return translated.label || fallback || i18nManager.formatParamName(paramName)
 }
 
 /**
@@ -46,22 +29,9 @@ function getParamLabel(provider, paramName, language, fallback = null) {
  * @returns {string} 参数描述
  */
 function getParamDescription(provider, paramName, language, fallback = null) {
-  const normalizedProvider = getProviderName(provider)
-  const key = `${normalizedProvider}.${paramName}.description`
-  const translated = t(key, { language })
-
-  if (translated !== key) {
-    return translated
-  }
-
-  const commonKey = `common.${paramName}.description`
-  const commonTranslated = t(commonKey, { language })
-
-  if (commonTranslated !== commonKey) {
-    return commonTranslated
-  }
-
-  return fallback || ''
+  const param = { name: paramName }
+  const translated = i18nManager.translateParam(param, provider, paramName, language)
+  return translated.description || fallback || ''
 }
 
 /**
@@ -73,22 +43,9 @@ function getParamDescription(provider, paramName, language, fallback = null) {
  * @returns {string} 参数占位符
  */
 function getParamPlaceholder(provider, paramName, language, fallback = null) {
-  const normalizedProvider = getProviderName(provider)
-  const key = `${normalizedProvider}.${paramName}.placeholder`
-  const translated = t(key, { language })
-
-  if (translated !== key) {
-    return translated
-  }
-
-  const commonKey = `common.${paramName}.placeholder`
-  const commonTranslated = t(commonKey, { language })
-
-  if (commonTranslated !== commonKey) {
-    return commonTranslated
-  }
-
-  return fallback || ''
+  const param = { name: paramName }
+  const translated = i18nManager.translateParam(param, provider, paramName, language)
+  return translated.placeholder || fallback || ''
 }
 
 /**
@@ -99,22 +56,9 @@ function getParamPlaceholder(provider, paramName, language, fallback = null) {
  * @returns {string|null} 参数单位
  */
 function getParamUnit(provider, paramName, language) {
-  const normalizedProvider = getProviderName(provider)
-  const key = `${normalizedProvider}.${paramName}.unit`
-  const translated = t(key, { language })
-
-  if (translated !== key) {
-    return translated
-  }
-
-  const commonKey = `common.${paramName}.unit`
-  const commonTranslated = t(commonKey, { language })
-
-  if (commonTranslated !== commonKey) {
-    return commonTranslated
-  }
-
-  return null
+  const param = { name: paramName }
+  const translated = i18nManager.translateParam(param, provider, paramName, language)
+  return translated.unit || null
 }
 
 /**
@@ -125,11 +69,14 @@ function getParamUnit(provider, paramName, language) {
  * @returns {object} 参数翻译信息
  */
 function getParamTranslation(provider, paramName, language) {
+  const param = { name: paramName }
+  const translated = i18nManager.translateParam(param, provider, paramName, language)
+  
   return {
-    label: getParamLabel(provider, paramName, language),
-    description: getParamDescription(provider, paramName, language),
-    placeholder: getParamPlaceholder(provider, paramName, language),
-    unit: getParamUnit(provider, paramName, language)
+    label: translated.label,
+    description: translated.description,
+    placeholder: translated.placeholder,
+    unit: translated.unit
   }
 }
 
@@ -145,15 +92,7 @@ function addTranslationsToParam(param, provider, language) {
     return param
   }
 
-  const translation = getParamTranslation(provider, param.name, language)
-
-  return {
-    ...param,
-    label: translation.label,
-    description: translation.description || param.description,
-    placeholder: translation.placeholder,
-    unit: translation.unit
-  }
+  return i18nManager.translateParam(param, provider, param.name, language)
 }
 
 /**
@@ -178,16 +117,7 @@ function addTranslationsToParams(params, provider, language) {
  * @returns {string} 格式化后的名称
  */
 function formatParamName(paramName) {
-  if (!paramName) {
-    return ''
-  }
-
-  return paramName
-    .split('_')
-    .flatMap(part => part.split(/(?=[A-Z])/))
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ')
-    .trim()
+  return i18nManager.formatParamName(paramName)
 }
 
 /**
@@ -196,17 +126,7 @@ function formatParamName(paramName) {
  * @returns {string} 提供商名称(小写)
  */
 function getProviderName(provider) {
-  const providerMap = {
-    [Providers.LTX]: 'ltx',
-    [Providers.MUREKA]: 'mureka',
-    [Providers.SKYREELS]: 'skyreels',
-    [Providers.VOLCENGINE]: 'volcengine',
-    // skywork 和 skyreels 共享翻译资源
-    'skywork': 'skyreels',
-    'skyreels': 'skyreels'
-  }
-
-  return providerMap[provider] || provider.toLowerCase()
+  return provider.toLowerCase()
 }
 
 module.exports = {

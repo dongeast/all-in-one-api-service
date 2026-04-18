@@ -1,9 +1,9 @@
 /**
  * 翻译资源加载入口
- * 负责加载所有语言的翻译资源
+ * 负责加载所有语言的翻译资源并注册到 I18nManager
  */
 
-const { i18n } = require('../utils/i18n')
+const { i18nManager } = require('../utils/i18n-manager')
 const { Languages } = require('../constants/languages')
 
 const zhCommon = require('./zh/common.json')
@@ -52,15 +52,19 @@ function loadLanguageResources(language) {
 }
 
 /**
- * 初始化所有翻译资源
+ * 初始化所有翻译资源到 I18nManager
  */
 function initializeTranslations() {
+  const resourcesMap = {}
+  
   Object.values(Languages).forEach(language => {
     const resources = loadLanguageResources(language)
     if (Object.keys(resources).length > 0) {
-      i18n.register(language, resources)
+      resourcesMap[language] = resources
     }
   })
+  
+  i18nManager.initialize(resourcesMap)
 }
 
 /**
@@ -72,10 +76,20 @@ function getTranslations(language) {
   return loadLanguageResources(language)
 }
 
+/**
+ * 获取 I18nManager 实例
+ * @returns {I18nManager} I18nManager 实例
+ */
+function getI18nManager() {
+  return i18nManager
+}
+
 initializeTranslations()
 
 module.exports = {
   loadLanguageResources,
   initializeTranslations,
-  getTranslations
+  getTranslations,
+  getI18nManager,
+  i18nManager
 }

@@ -6,6 +6,7 @@ const skyreels = require('./skyreels')
 const ltx = require('./ltx')
 const volcengine = require('./volcengine')
 const mureka = require('./mureka')
+const vidu = require('./vidu')
 
 module.exports = {
   version: '1.0',
@@ -14,7 +15,8 @@ module.exports = {
     skyreels,
     ltx,
     volcengine,
-    mureka
+    mureka,
+    vidu
   },
   logging: {
     level: 'info',

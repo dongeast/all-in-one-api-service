@@ -4,6 +4,8 @@
 
 const { APITypes, MediaTypes, InputOutputTypes } = require('./types')
 const { ModelTags, APITags, ProviderTags } = require('./tags')
+const { HttpMethod, SyncType } = require('./network')
+
 const {
   Providers,
   ProviderPriority,
@@ -40,5 +42,7 @@ module.exports = {
   LanguageAliases,
   normalizeLanguage,
   Series,
-  SeriesMeta
+  SeriesMeta,
+  HttpMethod,
+  SyncType
 }

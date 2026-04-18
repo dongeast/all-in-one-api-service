@@ -3,14 +3,7 @@
  * 负责计算任务预估积分和实际消耗积分
  */
 
-const { 
-  CreditCalculationType, 
-  DefaultBaseCredits,
-  ModelCreditMultipliers,
-  ResolutionCreditMultipliers,
-  DurationCreditFactor
-} = require('../constants/credits')
-const apiRegistry = require('../registry/api-registry')
+const { creditRegistry, CreditCalculationType } = require('./credit-registry')
 const { createLogger } = require('../utils/logger')
 
 const logger = createLogger({ level: 'INFO' })
@@ -35,14 +28,10 @@ class CreditCalculator {
    */
   calculateEstimatedCredits(provider, apiName, params) {
     try {
-      const apiMetadata = apiRegistry.get(apiName)
-      if (!apiMetadata) {
-        logger.warn(`API metadata not found: ${apiName}`)
-        return this.getDefaultCredits(provider, apiName, params)
-      }
-
-      const creditConfig = apiMetadata.credits
+      const creditConfig = creditRegistry.getAPICredits(apiName)
+      
       if (!creditConfig) {
+        logger.debug(`No credit config found for API: ${apiName}, using default`)
         return this.getDefaultCredits(provider, apiName, params)
       }
 
@@ -244,10 +233,20 @@ class CreditCalculator {
     }
 
     if (factor.multipliers && value !== undefined) {
-      const multiplier = factor.multipliers[value] || 1.0
-      cost = currentCost * multiplier
-      detail.multiplier = multiplier
-      detail.effect = `${currentCost} * ${multiplier} = ${cost}`
+      let multipliers = factor.multipliers
+      
+      if (typeof multipliers === 'string' && multipliers === 'modelMultipliers') {
+        multipliers = creditRegistry.getModelMultiplier(provider, value)
+        const multiplier = typeof multipliers === 'number' ? multipliers : 1.0
+        cost = currentCost * multiplier
+        detail.multiplier = multiplier
+        detail.effect = `${currentCost} * ${multiplier} = ${cost}`
+      } else if (typeof multipliers === 'object') {
+        const multiplier = multipliers[value] || 1.0
+        cost = currentCost * multiplier
+        detail.multiplier = multiplier
+        detail.effect = `${currentCost} * ${multiplier} = ${cost}`
+      }
     }
 
     if (factor.formula && value !== undefined) {
@@ -300,22 +299,22 @@ class CreditCalculator {
     let baseCost = 5
     
     if (apiName.includes('video')) {
-      baseCost = DefaultBaseCredits.TEXT_TO_VIDEO
+      baseCost = creditRegistry.getDefaultCredits('text_to_video')
     } else if (apiName.includes('image')) {
-      baseCost = DefaultBaseCredits.TEXT_TO_IMAGE
+      baseCost = creditRegistry.getDefaultCredits('text_to_image')
     } else if (apiName.includes('audio')) {
-      baseCost = DefaultBaseCredits.TEXT_TO_AUDIO
+      baseCost = creditRegistry.getDefaultCredits('text_to_audio')
     } else if (apiName.includes('3d')) {
-      baseCost = DefaultBaseCredits.IMAGE_TO_3D
+      baseCost = creditRegistry.getDefaultCredits('image_to_3d')
     }
 
-    if (params.model && ModelCreditMultipliers[provider]) {
-      const multiplier = ModelCreditMultipliers[provider][params.model] || 1.0
+    if (params.model) {
+      const multiplier = creditRegistry.getModelMultiplier(provider, params.model)
       baseCost = baseCost * multiplier
     }
 
     if (params.duration) {
-      baseCost = baseCost + params.duration * DurationCreditFactor.VIDEO
+      baseCost = baseCost + params.duration * creditRegistry.getDurationFactor('VIDEO')
     }
 
     return {

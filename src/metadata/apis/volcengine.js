@@ -1,168 +1,101 @@
 /**
- * 火山引擎接口元数据定义
- * 作为唯一的API定义源，包含所有API调用信息
+ * Volcengine 接口元数据定义
+ * 仅维护 API 的必要信息
  */
 
-const { APITypes } = require('../../constants')
+const { APITypes, Providers, MediaTypes, HttpMethod } = require('../../constants')
 
-module.exports = {
-  'generate-image': {
-    name: 'generate-image',
-    provider: 'volcengine',
+const APIs = {
+  IMAGES_GENERATIONS: 'volcengine-images-generations',
+  CONTENTS_GENERATIONS_TASKS_VIDEO: 'volcengine-contents-generations-tasks-video',
+  CONTENTS_GENERATIONS_TASK_VIDEO: 'volcengine-contents-generations-task-video',
+  CONTENTS_GENERATIONS_TASKS_LIST_VIDEO: 'volcengine-contents-generations-tasks-list-video',
+  CONTENTS_GENERATIONS_TASK_DELETE_VIDEO: 'volcengine-contents-generations-task-delete-video',
+  CONTENTS_GENERATIONS_TASKS_3D: 'volcengine-contents-generations-tasks-3d',
+  CONTENTS_GENERATIONS_TASK_3D: 'volcengine-contents-generations-task-3d',
+  CONTENTS_GENERATIONS_TASKS_LIST_3D: 'volcengine-contents-generations-tasks-list-3d',
+  CONTENTS_GENERATIONS_TASK_DELETE_3D: 'volcengine-contents-generations-task-delete-3d'
+}
+
+const APIsMeta = {
+  [APIs.IMAGES_GENERATIONS]: {
+    provider: Providers.VOLCENGINE,
     apiType: APITypes.TEXT_TO_IMAGE,
-    category: 'image',
+    resultType: MediaTypes.IMAGE,
     endpoint: '/images/generations',
-    method: 'POST',
-    type: 'sync',
-    paramSchema: require('../../params/providers/volcengine/image/generate-image'),
-    models: [
-      'doubao-seedit-1-0',
-      'doubao-seedream-5-0-260128',
-      'doubao-seedream-4-5-251128',
-      'doubao-seedream-4-0-250828',
-      'doubao-seedream-3-0-t2i-250415'
-    ],
-    tags: ['image', 'generation', 'text-to-image'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/volcengine/image/generate-image'),
     priority: 100
   },
-
-  'create-video-generation-task': {
-    name: 'create-video-generation-task',
-    provider: 'volcengine',
+  [APIs.CONTENTS_GENERATIONS_TASKS_VIDEO]: {
+    provider: Providers.VOLCENGINE,
     apiType: [APITypes.TEXT_TO_VIDEO, APITypes.IMAGE_TO_VIDEO],
-    category: 'video',
+    resultType: MediaTypes.VIDEO,
     endpoint: '/contents/generations/tasks',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/volcengine/video/create-video-generation-task'),
-    models: [
-      'doubao-seedance-2-0-260128',
-      'doubao-seedance-2-0-fast-260128',
-      'doubao-seedance-1-5-pro-251215',
-      'doubao-seedance-1-0-pro-250528',
-      'doubao-seedance-1-0-pro-fast-251015',
-      'doubao-seedance-1-0-lite-t2v-250428'
-    ],
-    tags: ['video', 'generation', 'text-to-video', 'image-to-video'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/volcengine/video/create-video-generation-task'),
     priority: 100
   },
-
-  'query-video-generation-task': {
-    name: 'query-video-generation-task',
-    provider: 'volcengine',
+  [APIs.CONTENTS_GENERATIONS_TASK_VIDEO]: {
+    provider: Providers.VOLCENGINE,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/contents/generations/tasks/{id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/volcengine/video/query-video-generation-task'),
-    models: [
-      'doubao-seedance-2-0-260128',
-      'doubao-seedance-2-0-fast-260128',
-      'doubao-seedance-1-5-pro-251215',
-      'doubao-seedance-1-0-pro-250528',
-      'doubao-seedance-1-0-pro-fast-251015',
-      'doubao-seedance-1-0-lite-t2v-250428'
-    ],
-    tags: ['video', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/volcengine/video/query-video-generation-task'),
     priority: 100
   },
-
-  'query-video-generation-task-list': {
-    name: 'query-video-generation-task-list',
-    provider: 'volcengine',
+  [APIs.CONTENTS_GENERATIONS_TASKS_LIST_VIDEO]: {
+    provider: Providers.VOLCENGINE,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/contents/generations/tasks',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/volcengine/video/query-video-generation-task-list'),
-    models: [
-      'doubao-seedance-2-0-260128',
-      'doubao-seedance-2-0-fast-260128',
-      'doubao-seedance-1-5-pro-251215',
-      'doubao-seedance-1-0-pro-250528',
-      'doubao-seedance-1-0-pro-fast-251015',
-      'doubao-seedance-1-0-lite-t2v-250428'
-    ],
-    tags: ['video', 'query', 'list'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/volcengine/video/query-video-generation-task-list'),
     priority: 100
   },
-
-  'cancel-delete-video-generation-task': {
-    name: 'cancel-delete-video-generation-task',
-    provider: 'volcengine',
+  [APIs.CONTENTS_GENERATIONS_TASK_DELETE_VIDEO]: {
+    provider: Providers.VOLCENGINE,
     apiType: APITypes.TASK_QUERY,
-    category: 'video',
     endpoint: '/contents/generations/tasks/{id}',
-    method: 'DELETE',
-    type: 'sync',
-    paramSchema: require('../../params/providers/volcengine/video/cancel-delete-video-generation-task'),
-    models: [
-      'doubao-seedance-2-0-260128',
-      'doubao-seedance-2-0-fast-260128',
-      'doubao-seedance-1-5-pro-251215',
-      'doubao-seedance-1-0-pro-250528',
-      'doubao-seedance-1-0-pro-fast-251015',
-      'doubao-seedance-1-0-lite-t2v-250428'
-    ],
-    tags: ['video', 'cancel', 'delete'],
+    method: HttpMethod.DELETE,
+    paramSchema: require('../params/volcengine/video/cancel-delete-video-generation-task'),
     priority: 100
   },
-
-  'create-3d-generation-task': {
-    name: 'create-3d-generation-task',
-    provider: 'volcengine',
+  [APIs.CONTENTS_GENERATIONS_TASKS_3D]: {
+    provider: Providers.VOLCENGINE,
     apiType: APITypes.IMAGE_TO_3D,
-    category: '3d',
+    resultType: MediaTypes.MODEL_3D,
     endpoint: '/contents/generations/tasks',
-    method: 'POST',
-    type: 'async',
-    paramSchema: require('../../params/providers/volcengine/3d/create-3d-generation-task'),
-    models: ['doubao-seed3d-1-0-250928'],
-    tags: ['3d', 'generation'],
+    method: HttpMethod.POST,
+    paramSchema: require('../params/volcengine/3d/create-3d-generation-task'),
     priority: 100
   },
-
-  'query-3d-generation-task': {
-    name: 'query-3d-generation-task',
-    provider: 'volcengine',
+  [APIs.CONTENTS_GENERATIONS_TASK_3D]: {
+    provider: Providers.VOLCENGINE,
     apiType: APITypes.TASK_QUERY,
-    category: '3d',
     endpoint: '/contents/generations/tasks/{id}',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/volcengine/3d/query-3d-generation-task'),
-    models: ['doubao-seed3d-1-0-250928'],
-    tags: ['3d', 'query', 'task'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/volcengine/3d/query-3d-generation-task'),
     priority: 100
   },
-
-  'query-3d-generation-task-list': {
-    name: 'query-3d-generation-task-list',
-    provider: 'volcengine',
+  [APIs.CONTENTS_GENERATIONS_TASKS_LIST_3D]: {
+    provider: Providers.VOLCENGINE,
     apiType: APITypes.TASK_QUERY,
-    category: '3d',
     endpoint: '/contents/generations/tasks',
-    method: 'GET',
-    type: 'sync',
-    paramSchema: require('../../params/providers/volcengine/3d/query-3d-generation-task-list'),
-    models: ['doubao-seed3d-1-0-250928'],
-    tags: ['3d', 'query', 'list'],
+    method: HttpMethod.GET,
+    paramSchema: require('../params/volcengine/3d/query-3d-generation-task-list'),
     priority: 100
   },
-
-  'cancel-delete-3d-generation-task': {
-    name: 'cancel-delete-3d-generation-task',
-    provider: 'volcengine',
+  [APIs.CONTENTS_GENERATIONS_TASK_DELETE_3D]: {
+    provider: Providers.VOLCENGINE,
     apiType: APITypes.TASK_QUERY,
-    category: '3d',
     endpoint: '/contents/generations/tasks/{id}',
     method: 'DELETE',
-    type: 'sync',
-    paramSchema: require('../../params/providers/volcengine/3d/cancel-delete-3d-generation-task'),
-    models: ['doubao-seed3d-1-0-250928'],
-    tags: ['3d', 'cancel', 'delete'],
+    paramSchema: require('../params/volcengine/3d/cancel-delete-3d-generation-task'),
     priority: 100
   }
+}
+
+module.exports = {
+  APIs,
+  APIsMeta
 }

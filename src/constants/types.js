@@ -208,6 +208,50 @@ const InputOutputTypes = {
     output: MediaTypes.VIDEO,
     display_name: 'Lip Sync',
     display_flag: true
+  },
+
+  // Vidu 专用类型
+  REFERENCE_TO_IMAGE: {
+    input: MediaTypes.IMAGE,
+    output: MediaTypes.IMAGE,
+    display_name: 'Reference to Image',
+    display_flag: true
+  },
+  REFERENCE_TO_VIDEO: {
+    input: MediaTypes.IMAGE,
+    output: MediaTypes.VIDEO,
+    display_name: 'Reference to Video',
+    display_flag: true
+  },
+  START_END_TO_VIDEO: {
+    input: MediaTypes.IMAGE,
+    output: MediaTypes.VIDEO,
+    display_name: 'Start End to Video',
+    display_flag: true
+  },
+  MULTIFRAME: {
+    input: MediaTypes.IMAGE,
+    output: MediaTypes.VIDEO,
+    display_name: 'Multiframe',
+    display_flag: true
+  },
+  TEMPLATE: {
+    input: MediaTypes.IMAGE,
+    output: MediaTypes.VIDEO,
+    display_name: 'Template',
+    display_flag: true
+  },
+  TEMPLATE_STORY: {
+    input: MediaTypes.IMAGE,
+    output: MediaTypes.VIDEO,
+    display_name: 'Template Story',
+    display_flag: true
+  },
+  TASK_CANCEL: {
+    input: MediaTypes.TEXT,
+    output: MediaTypes.TEXT,
+    display_name: 'Task Cancel',
+    display_flag: false
   }
 }
 
@@ -402,6 +446,57 @@ const APITypes = {
     inputOutput: InputOutputTypes.LIP_SYNC,
     description: 'Synchronize video lip movements with audio',
     display_name: 'Lip Sync',
+    display_flag: false
+  },
+
+  // Vidu 专用类型
+  REFERENCE_TO_IMAGE: {
+    id: 'reference_to_image',
+    inputOutput: InputOutputTypes.REFERENCE_TO_IMAGE,
+    description: 'Generate image from reference images',
+    display_name: 'Reference to Image',
+    display_flag: true
+  },
+  REFERENCE_TO_VIDEO: {
+    id: 'reference_to_video',
+    inputOutput: InputOutputTypes.REFERENCE_TO_VIDEO,
+    description: 'Generate video from reference subjects',
+    display_name: 'Reference to Video',
+    display_flag: false
+  },
+  START_END_TO_VIDEO: {
+    id: 'start_end_to_video',
+    inputOutput: InputOutputTypes.START_END_TO_VIDEO,
+    description: 'Generate video from start and end frames',
+    display_name: 'Start End to Video',
+    display_flag: true
+  },
+  MULTIFRAME: {
+    id: 'multiframe',
+    inputOutput: InputOutputTypes.MULTIFRAME,
+    description: 'Generate video with multiple key frames',
+    display_name: 'Multiframe',
+    display_flag: true
+  },
+  TEMPLATE: {
+    id: 'template',
+    inputOutput: InputOutputTypes.TEMPLATE,
+    description: 'Generate video from scene template',
+    display_name: 'Template',
+    display_flag: true
+  },
+  TEMPLATE_STORY: {
+    id: 'template_story',
+    inputOutput: InputOutputTypes.TEMPLATE_STORY,
+    description: 'Generate video from story template',
+    display_name: 'Template Story',
+    display_flag: true
+  },
+  TASK_CANCEL: {
+    id: 'task_cancel',
+    inputOutput: InputOutputTypes.TASK_CANCEL,
+    description: 'Cancel a task',
+    display_name: 'Task Cancel',
     display_flag: false
   }
 }

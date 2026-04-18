@@ -6,37 +6,25 @@ const BaseRegistry = require('./base-registry')
 const modelRegistry = require('./model-registry')
 const apiRegistry = require('./api-registry')
 const functionRegistry = require('../functions/function-registry')
+const unifiedRegistry = require('./unified-registry')
+const serviceRegistry = require('../services/service-registry')
 
 const { ModelRegistry } = modelRegistry
 const { APIRegistry } = apiRegistry
 const { FunctionRegistry } = functionRegistry
-
-const ltxModels = require('../metadata/models/ltx')
-const volcengineModels = require('../metadata/models/volcengine')
-const skyreelsModels = require('../metadata/models/skyreels')
-const murekaModels = require('../metadata/models/mureka')
-
-const ltxAPIs = require('../metadata/apis/ltx')
-const volcengineAPIs = require('../metadata/apis/volcengine')
-const skyreelsAPIs = require('../metadata/apis/skyreels')
-const murekaAPIs = require('../metadata/apis/mureka')
-
-modelRegistry.registerAll(ltxModels)
-modelRegistry.registerAll(volcengineModels)
-modelRegistry.registerAll(skyreelsModels)
-modelRegistry.registerAll(murekaModels)
-
-apiRegistry.registerAll(ltxAPIs)
-apiRegistry.registerAll(volcengineAPIs)
-apiRegistry.registerAll(skyreelsAPIs)
-apiRegistry.registerAll(murekaAPIs)
+const { UnifiedRegistry } = unifiedRegistry
+const { ServiceRegistry } = serviceRegistry
 
 module.exports = {
   BaseRegistry,
   APIRegistry,
   ModelRegistry,
   FunctionRegistry,
+  UnifiedRegistry,
+  ServiceRegistry,
   modelRegistry,
   apiRegistry,
-  functionRegistry
+  functionRegistry,
+  unifiedRegistry,
+  serviceRegistry
 }

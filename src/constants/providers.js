@@ -4,8 +4,10 @@
 
 const Providers = {
   LIGHTRICKS: 'lightricks',
-  SKYWORK: 'skywork',
-  VOLCENGINE: 'volcengine'
+  SKYREELS: 'skyreels',
+  MUREKA: 'mureka',
+  VOLCENGINE: 'volcengine',
+  VIDU: 'vidu'
 }
 
 /**
@@ -15,8 +17,10 @@ const Providers = {
  */
 const ProviderPriority = {
   [Providers.LIGHTRICKS]: 100,
-  [Providers.SKYWORK]: 90,
-  [Providers.VOLCENGINE]: 80
+  [Providers.SKYREELS]: 90,
+  [Providers.MUREKA]: 90,
+  [Providers.VOLCENGINE]: 80,
+  [Providers.VIDU]: 85
 }
 
 /**
@@ -27,28 +31,36 @@ const ProviderMeta = {
     name: 'lightricks',
     displayName: 'Lightricks',
     description: 'Lightricks - Creator of LTX Studio',
-    region: 'global',
     website: 'https://ltx.video',
-    supportedTypes: ['video'],
     logo: 'lightricks.svg'
   },
-  [Providers.SKYWORK]: {
-    name: 'skywork',
-    displayName: 'Skywork AI',
-    description: 'Skywork AI - Creator of Skyreels and Mureka',
-    region: 'global',
+  [Providers.SKYREELS]: {
+    name: 'skyreels',
+    displayName: 'Skyreels AI',
+    description: 'Skyreels AI - Creator of Skyreels and Mureka',
     website: 'https://skyreels.ai',
-    supportedTypes: ['video', 'audio', 'music'],
-    logo: 'skywork.svg'
+    logo: 'skyreels.svg'
+  },
+  [Providers.MUREKA]: {
+    name: 'mureka',
+    displayName: 'Mureka AI',
+    description: 'Mureka AI - Creator of Skyreels and Mureka',
+    website: 'https://mureka.ai',
+    logo: 'mureka.svg'
   },
   [Providers.VOLCENGINE]: {
     name: 'volcengine',
     displayName: 'Volcengine Seed AI',
     description: 'Bytedance Volcengine Seed AI',
-    region: 'china',
     website: 'https://www.volcengine.com',
-    supportedTypes: ['image', 'video', '3d'],
     logo: 'volcengine.svg'
+  },
+  [Providers.VIDU]: {
+    name: 'vidu',
+    displayName: 'Vidu AI',
+    description: 'Vidu AI Video Generation Platform',
+    website: 'https://www.vidu.cn',
+    logo: 'vidu.svg'
   }
 }
 

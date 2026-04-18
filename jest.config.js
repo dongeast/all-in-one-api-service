@@ -23,5 +23,10 @@ module.exports = {
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
   verbose: true,
-  testTimeout: 10000
+  testTimeout: 10000,
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.test.json'
+    }]
+  }
 }

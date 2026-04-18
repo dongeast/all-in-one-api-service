@@ -8,7 +8,8 @@ const Series = {
   MUREKA: 'mureka',
   SEEDANCE: 'seedance',
   SEEDREAM: 'seedream',
-  SEED3D: 'seed3d'
+  SEED3D: 'seed3d',
+  VIDU: 'vidu'
 }
 
 const SeriesMeta = {
@@ -59,6 +60,14 @@ const SeriesMeta = {
     provider: 'volcengine',
     mediaType: '3d',
     logo: 'seed3d.svg'
+  },
+  [Series.VIDU]: {
+    name: 'vidu',
+    displayName: 'Vidu',
+    description: 'Vidu video generation model series',
+    provider: 'vidu',
+    mediaType: 'video',
+    logo: 'vidu.svg'
   }
 }
 

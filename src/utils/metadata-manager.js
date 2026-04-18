@@ -184,18 +184,33 @@ class MetadataManager {
    */
   loadTranslations() {
     try {
+      logger.info('Loading translations...')
+      
+      const zhFunctions = require('../locales/zh/functions.json')
+      const zhMetadata = require('../locales/zh/metadata.json')
+      const enFunctions = require('../locales/en/functions.json')
+      const enMetadata = require('../locales/en/metadata.json')
+      
+      logger.info('Translation files loaded successfully')
+      logger.info('zhMetadata keys:', Object.keys(zhMetadata))
+      logger.info('zhMetadata.scenes exists:', !!zhMetadata.scenes)
+      logger.info('zhMetadata.scenes count:', zhMetadata.scenes ? Object.keys(zhMetadata.scenes).length : 0)
+      
       this.translations = {
         zh: {
-          functions: require('../locales/zh/functions.json').functions,
-          metadata: require('../locales/zh/metadata.json')
+          functions: zhFunctions.functions,
+          metadata: zhMetadata
         },
         en: {
-          functions: require('../locales/en/functions.json').functions,
-          metadata: require('../locales/en/metadata.json')
+          functions: enFunctions.functions,
+          metadata: enMetadata
         }
       }
+      
+      logger.info('Translations loaded successfully')
     } catch (error) {
-      logger.warn('Failed to load translations:', error.message)
+      logger.error('Failed to load translations:', error)
+      logger.error('Error stack:', error.stack)
       this.translations = {}
     }
   }
@@ -350,7 +365,29 @@ class MetadataManager {
    * @returns {object} 翻译后的元数据
    */
   translateModelMetadata(metadata, language) {
-    return this.translateMetadata(metadata, language, 'models')
+    const name = metadata.name
+    const series = metadata.series
+
+    // 优先使用系列名称查找翻译（因为翻译文件按系列分组）
+    let translation = null
+    if (series) {
+      translation = this.translations[language]?.metadata?.models?.[series]?.[name]
+    }
+
+    // 如果找不到，再尝试使用提供商名称查找
+    if (!translation) {
+      translation = this.translations[language]?.metadata?.models?.[metadata.provider]?.[name]
+    }
+
+    if (!translation) {
+      return metadata
+    }
+
+    return {
+      ...metadata,
+      displayName: translation.displayName || metadata.displayName,
+      description: translation.description || metadata.description
+    }
   }
 
   /**
@@ -560,6 +597,16 @@ class MetadataManager {
 
 const metadataManager = new MetadataManager()
 
+/**
+ * 获取翻译文本的便捷方法
+ * @param {string} key - 翻译键
+ * @param {string} language - 语言代码
+ * @returns {string} 翻译文本
+ */
+function getTranslation(key, language = 'zh') {
+  return metadataManager.getTranslation(key, language)
+}
+
 module.exports = {
   MetadataManager,
   metadataManager,
@@ -570,5 +617,6 @@ module.exports = {
   getAPIMetadata,
   getModelMetadata,
   getAllAPIsMetadata,
-  getAllModelsMetadata
+  getAllModelsMetadata,
+  getTranslation
 }

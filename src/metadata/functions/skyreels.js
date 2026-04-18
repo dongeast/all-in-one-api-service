@@ -4,180 +4,192 @@
  * 只引用API名称，不定义endpoint和method
  */
 
-module.exports = {
-  'text-to-video-generation': {
+const { Providers, SyncType, APITypes } = require('../../constants')
+const { Models } = require('../models/skyreels')
+const { APIs } = require('../apis/skyreels')
+
+const Functions = {
+  TEXT_TO_VIDEO_GENERATION: 'text-to-video-generation',
+  IMAGE_TO_VIDEO_GENERATION: 'image-to-video-generation',
+  LIP_SYNC: 'lip-sync',
+  SINGLE_ACTOR_AVATAR: 'single-actor-avatar',
+  MULTI_ACTOR_AVATAR: 'multi-actor-avatar',
+  SEGMENTED_CAMERA_MOTION: 'segmented-camera-motion',
+  REFERENCE_TO_VIDEO: 'reference-to-video',
+  OMNI_REFERENCE: 'omni-reference',
+  SINGLE_SHOT_VIDEO_EXTENSION: 'single-shot-video-extension',
+  SHOT_SWITCHING_VIDEO_EXTENSION: 'shot-switching-video-extension',
+  VIDEO_RESTYLING: 'video-restyling'
+}
+
+const FunctionsMeta = {
+  [Functions.TEXT_TO_VIDEO_GENERATION]: {
     name: 'text-to-video-generation',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'video',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.TEXT_TO_VIDEO,
     
     apis: {
-      request: 'text-to-video-generation-task-submission',
-      query: 'text-to-video-generation-task-query'
+      request: APIs.API_V1_VIDEO_TEXT2VIDEO_SUBMIT,
+      query: APIs.API_V1_VIDEO_TEXT2VIDEO_TASK
     },
     
-    models: ['skyreels-v4'],
-    tags: ['video', 'generation', 'text-to-video'],
+    models: [Models.SKYREELS_V4],
     priority: 100
   },
   
-  'image-to-video-generation': {
+  [Functions.IMAGE_TO_VIDEO_GENERATION]: {
     name: 'image-to-video-generation',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'video',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.IMAGE_TO_VIDEO,
     
     apis: {
-      request: 'image-to-video-generation-task-submission',
-      query: 'image-to-video-generation-task-query'
+      request: APIs.API_V1_VIDEO_IMAGE2VIDEO_SUBMIT,
+      query: APIs.API_V1_VIDEO_IMAGE2VIDEO_TASK
     },
     
-    models: ['skyreels-v4'],
-    tags: ['video', 'generation', 'image-to-video'],
+    models: [Models.SKYREELS_V4],
     priority: 100
   },
   
-  'lip-sync': {
+  [Functions.LIP_SYNC]: {
     name: 'lip-sync',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'avatar',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.LIP_SYNC,
     
     apis: {
-      request: 'lip-sync-task-submit',
-      query: 'lip-sync-task-query'
+      request: APIs.API_V1_VIDEO_RETALKING_SUBMIT,
+      query: APIs.API_V1_VIDEO_RETALKING_TASK
     },
     
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar', 'lip-sync'],
+    models: [Models.SKYREELS_AVATAR],
     priority: 100
   },
   
-  'single-actor-avatar': {
+  [Functions.SINGLE_ACTOR_AVATAR]: {
     name: 'single-actor-avatar',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'avatar',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.AVATAR_GENERATION,
     
     apis: {
-      request: 'single-actor-avatar-task-submission',
-      query: 'single-actor-avatar-task-query'
+      request: APIs.API_V1_VIDEO_AUDIO2VIDEO_SINGLE_SUBMIT,
+      query: APIs.API_V1_VIDEO_AUDIO2VIDEO_SINGLE_TASK
     },
     
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar'],
+    models: [Models.SKYREELS_AVATAR],
     priority: 100
   },
   
-  'multi-actor-avatar': {
+  [Functions.MULTI_ACTOR_AVATAR]: {
     name: 'multi-actor-avatar',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'avatar',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.AVATAR_GENERATION,
     
     apis: {
-      request: 'multi-actor-avatar-task-submission',
-      query: 'multi-actor-avatar-task-query'
+      request: APIs.API_V1_VIDEO_AUDIO2VIDEO_MULTI_SUBMIT,
+      query: APIs.API_V1_VIDEO_AUDIO2VIDEO_MULTI_TASK
     },
     
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar'],
+    models: [Models.SKYREELS_AVATAR],
     priority: 100
   },
   
-  'segmented-camera-motion': {
+  [Functions.SEGMENTED_CAMERA_MOTION]: {
     name: 'segmented-camera-motion',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'avatar',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.AVATAR_GENERATION,
     
     apis: {
-      request: 'segmented-camera-motion-task-submit',
-      query: 'segmented-camera-motion-task-query'
+      request: APIs.API_V1_VIDEO_AUDIO2VIDEO_CAMERA_SUBMIT,
+      query: APIs.API_V1_VIDEO_AUDIO2VIDEO_CAMERA_TASK
     },
     
-    models: ['skyreels-avatar'],
-    tags: ['video', 'avatar', 'camera-motion'],
+    models: [Models.SKYREELS_AVATAR],
     priority: 100
   },
   
-  'reference-to-video': {
+  [Functions.REFERENCE_TO_VIDEO]: {
     name: 'reference-to-video',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'video',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.VIDEO_EDITING,
     
     apis: {
-      request: 'reference-to-video-task-submission',
-      query: 'reference-to-video-task-query'
+      request: APIs.API_V1_VIDEO_MULTIOBJECT_SUBMIT,
+      query: APIs.API_V1_VIDEO_MULTIOBJECT_TASK
     },
     
-    models: ['skyreels-v3'],
-    tags: ['video', 'generation'],
+    models: [Models.SKYREELS_V3],
     priority: 100
   },
   
-  'omni-reference': {
+  [Functions.OMNI_REFERENCE]: {
     name: 'omni-reference',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'video',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.VIDEO_REFERENCE,
     
     apis: {
-      request: 'omni-reference-task-submission',
-      query: 'omni-reference-task-query'
+      request: APIs.API_V1_VIDEO_OMNI_VIDEO_SUBMIT,
+      query: APIs.API_V1_VIDEO_OMNI_VIDEO_TASK
     },
     
-    models: ['skyreels-v4'],
-    tags: ['video', 'generation'],
+    models: [Models.SKYREELS_V4],
     priority: 100
   },
   
-  'single-shot-video-extension': {
+  [Functions.SINGLE_SHOT_VIDEO_EXTENSION]: {
     name: 'single-shot-video-extension',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'video',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.VIDEO_EXTENSION,
     
     apis: {
-      request: 'single-shot-video-extension-task-submission',
-      query: 'single-shot-video-extension-task-query'
+      request: APIs.API_V1_VIDEO_EXTENSION_SUBMIT,
+      query: APIs.API_V1_VIDEO_EXTENSION_TASK
     },
     
-    models: ['skyreels-v3'],
-    tags: ['video', 'extension'],
+    models: [Models.SKYREELS_V3],
     priority: 100
   },
   
-  'shot-switching-video-extension': {
+  [Functions.SHOT_SWITCHING_VIDEO_EXTENSION]: {
     name: 'shot-switching-video-extension',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'video',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.VIDEO_EXTENSION,
     
     apis: {
-      request: 'shot-switching-video-extension-task-submission',
-      query: 'shot-switching-video-extension-task-query'
+      request: APIs.API_V1_VIDEO_EXTENSION_CUTSHOT_SUBMIT,
+      query: APIs.API_V1_VIDEO_EXTENSION_CUTSHOT_TASK
     },
     
-    models: ['skyreels-v3'],
-    tags: ['video', 'extension'],
+    models: [Models.SKYREELS_V3],
     priority: 100
   },
   
-  'video-restyling': {
+  [Functions.VIDEO_RESTYLING]: {
     name: 'video-restyling',
-    type: 'async',
-    provider: 'skyreels',
-    category: 'video',
+    type: SyncType.ASYNC,
+    provider: Providers.SKYREELS,
+    apiType: APITypes.VIDEO_EDITING,
     
     apis: {
-      request: 'video-restyling-task-submission',
-      query: 'video-restyling-task-query'
+      request: APIs.API_V1_VIDEO_STYLETRANSFER_SUBMIT,
+      query: APIs.API_V1_VIDEO_STYLETRANSFER_TASK
     },
     
-    models: ['skyreels-v3'],
-    tags: ['video', 'restyling'],
+    models: [Models.SKYREELS_V3],
     priority: 100
   }
+}
+
+module.exports = {
+  Functions,
+  FunctionsMeta
 }

@@ -4,249 +4,244 @@
  * 只引用API名称，不定义endpoint和method
  */
 
-const { APITypes } = require('../../constants')
+const { APITypes, Providers } = require('../../constants')
+const { APIs } = require('../apis/mureka')
+const { Models } = require('../models/mureka')
 
-module.exports = {
-  'generate-song': {
+const Functions = {
+  GENERATE_SONG: 'generate-song',
+  EXTEND_SONG: 'extend-song',
+  GENERATE_LYRICS: 'generate-lyrics',
+  EXTEND_LYRICS: 'extend-lyrics',
+  GENERATE_INSTRUMENTAL: 'generate-instrumental',
+  CREATE_SPEECH: 'create-speech',
+  CREATE_PODCAST: 'create-podcast',
+  VOCAL_CLONING: 'vocal-cloning',
+  UPLOAD_FILE: 'upload-file',
+  CREATE_UPLOAD: 'create-upload',
+  ADD_UPLOAD_PART: 'add-upload-part',
+  COMPLETE_UPLOAD: 'complete-upload',
+  DESCRIBE_SONG: 'describe-song',
+  RECOGNIZE_SONG: 'recognize-song',
+  STEM_SONG: 'stem-song'
+}
+
+const FunctionsMeta = {
+  [Functions.GENERATE_SONG]: {
     name: 'generate-song',
     type: 'async',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.SONG_GENERATION,
-    category: 'song',
     
     apis: {
-      request: 'generate-song',
-      query: 'query-song-task'
+      request: APIs.SONG_GENERATE,
+      query: APIs.SONG_QUERY
     },
     
-    models: ['auto', 'mureka-7.5', 'mureka-7.6', 'mureka-o2', 'mureka-8'],
-    tags: ['audio', 'generation', 'music', 'song'],
+    models: [Models.AUTO, Models.MUREKA_7_5, Models.MUREKA_7_6, Models.MUREKA_O2, Models.MUREKA_8],
     priority: 100
   },
   
-  'extend-song': {
+  [Functions.EXTEND_SONG]: {
     name: 'extend-song',
     type: 'async',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.SONG_GENERATION,
-    category: 'song',
     
     apis: {
-      request: 'extend-song',
-      query: 'query-song-task'
+      request: APIs.SONG_EXTEND,
+      query: APIs.SONG_QUERY
     },
     
-    models: ['auto', 'mureka-7.5', 'mureka-7.6', 'mureka-o2', 'mureka-8'],
-    tags: ['audio', 'generation', 'music', 'song'],
+    models: [Models.AUTO, Models.MUREKA_7_5, Models.MUREKA_7_6, Models.MUREKA_O2, Models.MUREKA_8],
     priority: 95
   },
   
-  'generate-lyrics': {
+  [Functions.GENERATE_LYRICS]: {
     name: 'generate-lyrics',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.TEXT_GENERATION,
-    category: 'lyrics',
     
     apis: {
-      request: 'generate-lyrics'
+      request: APIs.LYRICS_GENERATE
     },
     
     models: [],
-    tags: ['text', 'generation', 'lyrics'],
     priority: 100
   },
   
-  'extend-lyrics': {
+  [Functions.EXTEND_LYRICS]: {
     name: 'extend-lyrics',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.TEXT_GENERATION,
-    category: 'lyrics',
     
     apis: {
-      request: 'extend-lyrics'
+      request: APIs.LYRICS_EXTEND
     },
     
     models: [],
-    tags: ['text', 'generation', 'lyrics'],
     priority: 95
   },
   
-  'generate-instrumental': {
+  [Functions.GENERATE_INSTRUMENTAL]: {
     name: 'generate-instrumental',
     type: 'async',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.INSTRUMENTAL_GENERATION,
-    category: 'instrumental',
     
     apis: {
-      request: 'generate-instrumental',
-      query: 'query-instrumental-task'
+      request: APIs.INSTRUMENTAL_GENERATE,
+      query: APIs.INSTRUMENTAL_QUERY
     },
     
-    models: ['auto', 'mureka-7.5', 'mureka-7.6', 'mureka-8'],
-    tags: ['audio', 'generation', 'music', 'instrumental'],
+    models: [Models.AUTO, Models.MUREKA_7_5, Models.MUREKA_7_6, Models.MUREKA_8],
     priority: 100
   },
   
-  'create-speech': {
+  [Functions.CREATE_SPEECH]: {
     name: 'create-speech',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.TEXT_TO_SPEECH,
-    category: 'tts',
     
     apis: {
-      request: 'create-speech'
+      request: APIs.TTS_SPEECH
     },
     
-    models: ['mureka-tts'],
-    tags: ['audio', 'tts', 'speech'],
+    models: [Models.MUREKA_TTS],
     priority: 100
   },
   
-  'create-podcast': {
+  [Functions.CREATE_PODCAST]: {
     name: 'create-podcast',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.TEXT_TO_SPEECH,
-    category: 'tts',
     
     apis: {
-      request: 'create-podcast'
+      request: APIs.TTS_PODCAST
     },
     
-    models: ['mureka-tts'],
-    tags: ['audio', 'tts', 'podcast'],
+    models: [Models.MUREKA_TTS],
     priority: 100
   },
   
-  'vocal-cloning': {
+  [Functions.VOCAL_CLONING]: {
     name: 'vocal-cloning',
     type: 'async',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.VOCAL_CLONING,
-    category: 'vocal',
     
     apis: {
-      request: 'vocal-cloning'
+      request: APIs.VOCAL_CLONING
     },
     
-    models: ['mureka-vocal-cloning'],
-    tags: ['audio', 'vocal', 'cloning'],
+    models: [Models.MUREKA_VOCAL_CLONING],
     priority: 100
   },
   
-  'upload-file': {
+  [Functions.UPLOAD_FILE]: {
     name: 'upload-file',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.FILE_UPLOAD,
-    category: 'files',
     
     apis: {
-      request: 'upload-file'
+      request: APIs.FILES_UPLOAD
     },
     
     models: [],
-    tags: ['file', 'upload'],
     priority: 100
   },
   
-  'create-upload': {
+  [Functions.CREATE_UPLOAD]: {
     name: 'create-upload',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.FILE_UPLOAD,
-    category: 'upload',
     
     apis: {
-      request: 'create-upload'
+      request: APIs.UPLOAD_CREATE
     },
     
     models: [],
-    tags: ['file', 'upload'],
     priority: 100
   },
   
-  'add-upload-part': {
+  [Functions.ADD_UPLOAD_PART]: {
     name: 'add-upload-part',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.FILE_UPLOAD,
-    category: 'upload',
     
     apis: {
-      request: 'add-upload-part'
+      request: APIs.UPLOAD_PART
     },
     
     models: [],
-    tags: ['file', 'upload'],
     priority: 100
   },
   
-  'complete-upload': {
+  [Functions.COMPLETE_UPLOAD]: {
     name: 'complete-upload',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.FILE_UPLOAD,
-    category: 'upload',
     
     apis: {
-      request: 'complete-upload'
+      request: APIs.UPLOAD_COMPLETE
     },
     
     models: [],
-    tags: ['file', 'upload'],
     priority: 100
   },
   
-  'describe-song': {
+  [Functions.DESCRIBE_SONG]: {
     name: 'describe-song',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.TASK_QUERY,
-    category: 'song',
     
     apis: {
-      request: 'describe-song'
+      request: APIs.SONG_DESCRIBE
     },
     
     models: [],
-    tags: ['audio', 'analysis', 'song'],
     priority: 100
   },
   
-  'recognize-song': {
+  [Functions.RECOGNIZE_SONG]: {
     name: 'recognize-song',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.TASK_QUERY,
-    category: 'song',
     
     apis: {
-      request: 'recognize-song'
+      request: APIs.SONG_RECOGNIZE
     },
     
     models: [],
-    tags: ['audio', 'analysis', 'song'],
     priority: 100
   },
   
-  'stem-song': {
+  [Functions.STEM_SONG]: {
     name: 'stem-song',
     type: 'sync',
-    provider: 'mureka',
+    provider: Providers.MUREKA,
     apiType: APITypes.AUDIO_GENERATION,
-    category: 'song',
     
     apis: {
-      request: 'stem-song'
+      request: APIs.SONG_STEM
     },
     
     models: [],
-    tags: ['audio', 'processing', 'song'],
     priority: 100
   }
+}
+
+module.exports = {
+  Functions,
+  FunctionsMeta
 }

@@ -4,16 +4,22 @@
 
 const BaseService = require('./base-service')
 const SkyreelsService = require('./skyreels-service')
-const LTXService = require('./ltx-service')
+const LightricksService = require('./lightricks-service')
 const VolcengineService = require('./volcengine-service')
 const MurekaService = require('./mureka-service')
+const ViduService = require('./vidu-service')
 const CustomService = require('./custom-service')
+const serviceRegistry = require('./service-registry')
 
 module.exports = {
   BaseService,
   Skyreels: SkyreelsService,
-  LTX: LTXService,
+  LTX: LightricksService,
+  Lightricks: LightricksService,
   Volcengine: VolcengineService,
   Mureka: MurekaService,
-  Custom: CustomService
+  Vidu: ViduService,
+  Custom: CustomService,
+  serviceRegistry,
+  ServiceRegistry: serviceRegistry.ServiceRegistry
 }

@@ -1,106 +1,80 @@
 /**
- * Param基类
- * 参数模式定义和处理
+ * 参数基类
+ * 提供参数验证、转换和输出提取功能
  */
 
-const { deepMerge, deepClone } = require('../utils/helpers')
-const { validateParams, checkDependencies } = require('./validators')
-const { transformParams } = require('./transformers')
-const { extractOutput, extractSingleField } = require('./extractors')
-const { ModelConstraintValidator } = require('./model-constraint-validator')
-
-/**
- * Param基类
- */
 class BaseParam {
   /**
    * 创建参数实例
    * @param {object} schema - 参数模式
+   * @param {object} schema.input - 输入参数模式
+   * @param {object} schema.output - 输出参数模式
+   * @param {Array} schema.cases - 参数约束配置
    */
   constructor(schema = {}) {
     this.schema = {
       input: schema.input || {},
-      output: schema.output || {}
+      output: schema.output || {},
+      cases: schema.cases || null
     }
     this.modelCapabilities = schema.modelCapabilities || null
-    this.compositeConstraints = schema.compositeConstraints || null
-    this.mutuallyExclusive = schema.mutuallyExclusive || null
-    this.transformFn = schema.transform || null
   }
 
   /**
-   * 验证参数值
+   * 验证参数
    * @param {object} params - 参数对象
    * @returns {{valid: boolean, errors: string[]}} 验证结果
    */
   validate(params) {
-    const validationResult = validateParams(params, this.schema, {
-      modelCapabilities: this.modelCapabilities,
-      compositeConstraints: this.compositeConstraints,
-      mutuallyExclusive: this.mutuallyExclusive
+    const errors = []
+    
+    if (!params || typeof params !== 'object') {
+      return { valid: false, errors: ['Parameters must be an object'] }
+    }
+
+    Object.entries(this.schema.input).forEach(([key, field]) => {
+      if (field.required && (params[key] === undefined || params[key] === null)) {
+        errors.push(`Missing required parameter: ${key}`)
+      }
+      
+      if (params[key] !== undefined && field.type) {
+        const actualType = Array.isArray(params[key]) ? 'array' : typeof params[key]
+        if (actualType !== field.type && !(field.type === 'number' && actualType === 'string')) {
+          errors.push(`Parameter ${key} must be of type ${field.type}, got ${actualType}`)
+        }
+      }
     })
-    if (!validationResult.valid) {
-      return validationResult
-    }
 
-    return checkDependencies(params, this.schema)
+    return {
+      valid: errors.length === 0,
+      errors
+    }
   }
 
   /**
-   * 获取模型可用参数选项
-   * @param {string} model - 模型名称
-   * @param {object} context - 上下文参数
-   * @returns {object|null} 可用选项
-   */
-  getAvailableOptions(model, context = {}) {
-    if (!this.modelCapabilities || !this.modelCapabilities[model]) {
-      return null
-    }
-
-    const validator = new ModelConstraintValidator()
-    return validator.getAvailableOptions(model, this.modelCapabilities, context)
-  }
-
-  /**
-   * 转换参数值
+   * 转换参数
    * @param {object} params - 参数对象
-   * @param {string} model - 模型名称（可选）
+   * @param {string} model - 模型名称
    * @returns {object} 转换后的参数
    */
   transform(params, model) {
-    let result = transformParams(params, this.schema, model)
+    const transformed = { ...params }
     
-    if (this.transformFn && typeof this.transformFn === 'function') {
-      result = this.transformFn(result)
-    }
-    
-    return result
+    Object.entries(this.schema.input).forEach(([key, field]) => {
+      if (transformed[key] !== undefined && field.transform) {
+        transformed[key] = field.transform(transformed[key])
+      }
+    })
+
+    return transformed
   }
 
   /**
-   * 获取参数模式
+   * 获取完整参数模式
    * @returns {object} 参数模式
    */
   getSchema() {
-    const schema = deepClone(this.schema)
-    if (this.modelCapabilities) {
-      schema.modelCapabilities = deepClone(this.modelCapabilities)
-    }
-    if (this.compositeConstraints) {
-      schema.compositeConstraints = deepClone(this.compositeConstraints)
-    }
-    if (this.mutuallyExclusive) {
-      schema.mutuallyExclusive = deepClone(this.mutuallyExclusive)
-    }
-    return schema
-  }
-
-  /**
-   * 获取复合约束定义
-   * @returns {Array|null} 复合约束定义
-   */
-  getCompositeConstraints() {
-    return this.compositeConstraints ? deepClone(this.compositeConstraints) : null
+    return this.schema
   }
 
   /**
@@ -108,7 +82,7 @@ class BaseParam {
    * @returns {object} 输入参数模式
    */
   getInputSchema() {
-    return deepClone(this.schema.input)
+    return this.schema.input
   }
 
   /**
@@ -116,89 +90,106 @@ class BaseParam {
    * @returns {object} 输出参数模式
    */
   getOutputSchema() {
-    return deepClone(this.schema.output)
+    return this.schema.output
   }
 
   /**
-   * 从原始响应提取标准化结果
-   * @param {any} rawResponse - 原始响应
-   * @returns {object} 提取的结果
+   * 提取输出
+   * @param {object} rawResponse - 原始响应
+   * @returns {object} 提取后的输出
    */
   extractOutput(rawResponse) {
-    return extractOutput(rawResponse, this.schema)
+    if (!rawResponse || typeof rawResponse !== 'object') {
+      return {}
+    }
+
+    const output = {}
+    Object.entries(this.schema.output).forEach(([key, field]) => {
+      const value = this.extractField(rawResponse, field.path || key)
+      if (value !== undefined) {
+        output[key] = value
+      }
+    })
+
+    return output
   }
 
   /**
-   * 提取单个字段
-   * @param {any} rawResponse - 原始响应
-   * @param {string} fieldName - 字段名
-   * @returns {any} 提取的值
+   * 提取字段
+   * @param {object} rawResponse - 原始响应
+   * @param {string} fieldName - 字段名称
+   * @returns {any} 字段值
    */
   extractField(rawResponse, fieldName) {
-    return extractSingleField(rawResponse, fieldName, this.schema)
+    if (!rawResponse || typeof rawResponse !== 'object') {
+      return undefined
+    }
+
+    const paths = fieldName.split('.')
+    let value = rawResponse
+    
+    for (const path of paths) {
+      if (value && typeof value === 'object' && path in value) {
+        value = value[path]
+      } else {
+        return undefined
+      }
+    }
+
+    return value
   }
 
   /**
    * 获取输入参数信息列表
-   * @returns {Array<{name: string, type: string, required: boolean, description: string, ...}>}
+   * @returns {Array} 参数信息列表
    */
   getInputInfo() {
-    const info = []
-    for (const [name, schema] of Object.entries(this.schema.input)) {
-      info.push({
-        name,
-        type: schema.type,
-        required: schema.required || false,
-        default: schema.default,
-        description: schema.description,
-        options: schema.options,
-        min: schema.min,
-        max: schema.max,
-        minLength: schema.minLength,
-        maxLength: schema.maxLength,
-        mutuallyExclusiveWith: schema.mutuallyExclusiveWith
-      })
-    }
-    return info
+    return Object.entries(this.schema.input).map(([key, field]) => ({
+      name: key,
+      type: field.type || 'any',
+      required: field.required || false,
+      description: field.description || '',
+      defaultValue: field.defaultValue
+    }))
   }
 
   /**
    * 获取输出参数信息列表
-   * @returns {Array<{name: string, type: string, description: string, ...}>}
+   * @returns {Array} 输出信息列表
    */
   getOutputInfo() {
-    const info = []
-    for (const [name, schema] of Object.entries(this.schema.output)) {
-      info.push({
-        name,
-        type: schema.type,
-        description: schema.description,
-        path: schema.path,
-        required: schema.required
-      })
-    }
-    return info
+    return Object.entries(this.schema.output).map(([key, field]) => ({
+      name: key,
+      type: field.type || 'any',
+      description: field.description || ''
+    }))
   }
 
   /**
-   * 获取单个参数详情
+   * 获取参数详情
    * @param {string} paramName - 参数名
    * @returns {object|null} 参数详情
    */
   getParamDetail(paramName) {
-    const inputSchema = this.schema.input[paramName]
-    if (inputSchema) {
+    const inputField = this.schema.input[paramName]
+    if (inputField) {
       return {
         name: paramName,
-        ...inputSchema
+        type: inputField.type || 'any',
+        required: inputField.required || false,
+        description: inputField.description || '',
+        defaultValue: inputField.defaultValue,
+        ...inputField
       }
     }
 
-    const outputSchema = this.schema.output[paramName]
-    if (outputSchema) {
+    const outputField = this.schema.output[paramName]
+    if (outputField) {
       return {
         name: paramName,
-        ...outputSchema
+        type: outputField.type || 'any',
+        description: outputField.description || '',
+        ...outputField
       }
     }
 
@@ -206,47 +197,61 @@ class BaseParam {
   }
 
   /**
-   * 增量重写参数
+   * 获取可用选项
+   * @param {string} model - 模型名称
+   * @param {object} context - 上下文参数
+   * @returns {object|null} 可用选项
+   */
+  getAvailableOptions(model, context = {}) {
+    if (!this.modelCapabilities) {
+      return null
+    }
+
+    if (model && this.modelCapabilities[model]) {
+      return this.modelCapabilities[model]
+    }
+
+    return this.modelCapabilities
+  }
+
+  /**
+   * 覆盖配置
    * @param {object} newConfig - 新配置
    * @returns {BaseParam} 新的参数实例
    */
   override(newConfig) {
-    const newSchema = BaseParam.override(this.schema, newConfig)
-    return new BaseParam(newSchema)
+    return BaseParam.override(this.schema, newConfig)
   }
 
   /**
-   * 扩展参数
+   * 扩展字段
    * @param {object} newFields - 新字段
    * @returns {BaseParam} 新的参数实例
    */
   extend(newFields) {
-    const newSchema = BaseParam.extend(this.schema, newFields)
-    return new BaseParam(newSchema)
+    return BaseParam.extend(this.schema, newFields)
   }
 
   /**
-   * 删除参数
-   * @param {object} fields - 要删除的字段 {input: [], output: []}
+   * 省略字段
+   * @param {object} fields - 要省略的字段
    * @returns {BaseParam} 新的参数实例
    */
   omit(fields) {
-    const newSchema = BaseParam.omit(this.schema, fields)
-    return new BaseParam(newSchema)
+    return BaseParam.omit(this.schema, fields)
   }
 
   /**
-   * 选择参数
-   * @param {object} fields - 要保留的字段 {input: [], output: []}
+   * 选择字段
+   * @param {object} fields - 要选择的字段
    * @returns {BaseParam} 新的参数实例
    */
   pick(fields) {
-    const newSchema = BaseParam.pick(this.schema, fields)
-    return new BaseParam(newSchema)
+    return BaseParam.pick(this.schema, fields)
   }
 
   /**
-   * 创建参数实例
+   * 静态方法：创建参数实例
    * @param {object} schema - 参数模式
    * @returns {BaseParam} 参数实例
    */
@@ -255,130 +260,89 @@ class BaseParam {
   }
 
   /**
-   * 静态重写方法
+   * 静态方法：覆盖配置
    * @param {object} baseSchema - 基础模式
    * @param {object} overrideConfig - 覆盖配置
-   * @returns {object} 新的模式
+   * @returns {object} 新的参数模式
    */
   static override(baseSchema, overrideConfig) {
-    const result = deepMerge(deepClone(baseSchema), overrideConfig)
-    
-    if (baseSchema.compositeConstraints && !overrideConfig.compositeConstraints) {
-      result.compositeConstraints = deepClone(baseSchema.compositeConstraints)
+    return {
+      input: { ...baseSchema.input, ...overrideConfig.input },
+      output: { ...baseSchema.output, ...overrideConfig.output },
+      modelCapabilities: overrideConfig.modelCapabilities || baseSchema.modelCapabilities
     }
-    
-    return result
   }
 
   /**
-   * 静态扩展方法
+   * 静态方法：扩展字段
    * @param {object} baseSchema - 基础模式
    * @param {object} newFields - 新字段
-   * @returns {object} 新的模式
+   * @returns {object} 新的参数模式
    */
   static extend(baseSchema, newFields) {
-    const result = deepClone(baseSchema)
-
-    if (newFields.input) {
-      result.input = {
-        ...result.input,
-        ...newFields.input
-      }
+    return {
+      input: { ...baseSchema.input, ...(newFields.input || {}) },
+      output: { ...baseSchema.output, ...(newFields.output || {}) },
+      modelCapabilities: newFields.modelCapabilities || baseSchema.modelCapabilities
     }
-
-    if (newFields.output) {
-      result.output = {
-        ...result.output,
-        ...newFields.output
-      }
-    }
-
-    return result
   }
 
   /**
-   * 静态删除方法
+   * 静态方法：省略字段
    * @param {object} baseSchema - 基础模式
-   * @param {object} fields - 要删除的字段
-   * @returns {object} 新的模式
+   * @param {object} fields - 要省略的字段
+   * @returns {object} 新的参数模式
    */
   static omit(baseSchema, fields) {
-    const result = deepClone(baseSchema)
+    const newSchema = {
+      input: { ...baseSchema.input },
+      output: { ...baseSchema.output }
+    }
 
-    if (fields.input && Array.isArray(fields.input)) {
-      fields.input.forEach(key => {
-        delete result.input[key]
+    if (fields.input) {
+      fields.input.forEach(field => {
+        delete newSchema.input[field]
       })
     }
 
-    if (fields.output && Array.isArray(fields.output)) {
-      fields.output.forEach(key => {
-        delete result.output[key]
+    if (fields.output) {
+      fields.output.forEach(field => {
+        delete newSchema.output[field]
       })
     }
 
-    return result
+    return newSchema
   }
 
   /**
-   * 静态选择方法
+   * 静态方法：选择字段
    * @param {object} baseSchema - 基础模式
-   * @param {object} fields - 要保留的字段
-   * @returns {object} 新的模式
+   * @param {object} fields - 要选择的字段
+   * @returns {object} 新的参数模式
    */
   static pick(baseSchema, fields) {
-    const result = {
+    const newSchema = {
       input: {},
       output: {}
     }
 
-    if (fields.input && Array.isArray(fields.input)) {
-      fields.input.forEach(key => {
-        if (baseSchema.input && baseSchema.input[key]) {
-          result.input[key] = baseSchema.input[key]
+    if (fields.input) {
+      fields.input.forEach(field => {
+        if (baseSchema.input[field]) {
+          newSchema.input[field] = baseSchema.input[field]
         }
       })
     }
 
-    if (fields.output && Array.isArray(fields.output)) {
-      fields.output.forEach(key => {
-        if (baseSchema.output && baseSchema.output[key]) {
-          result.output[key] = baseSchema.output[key]
+    if (fields.output) {
+      fields.output.forEach(field => {
+        if (baseSchema.output[field]) {
+          newSchema.output[field] = baseSchema.output[field]
         }
       })
     }
 
-    return result
-  }
-
-  /**
-   * 组合多个模式
-   * @param {...object} schemas - 模式列表
-   * @returns {object} 组合后的模式
-   */
-  static compose(...schemas) {
-    return schemas.reduce((result, schema) => {
-      return deepMerge(result, schema)
-    }, { input: {}, output: {} })
-  }
-
-  /**
-   * 继承父模式
-   * @param {object} parentSchema - 父模式
-   * @param {object} childConfig - 子配置
-   * @returns {object} 新的模式
-   */
-  static inherit(parentSchema, childConfig) {
-    return BaseParam.extend(parentSchema, childConfig)
-  }
-
-  /**
-   * 从模板创建
-   * @param {object} template - 模板对象
-   * @returns {object} 新的模式
-   */
-  static fromTemplate(template) {
-    return deepClone(template)
+    return newSchema
   }
 }
 

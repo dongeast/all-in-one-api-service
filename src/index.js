@@ -2,8 +2,7 @@
  * 源码入口
  */
 
-require('./locales')
-
+const { initializer, Initializer } = require('./core')
 const Services = require('./services')
 const APIs = require('./apis')
 const Params = require('./params')
@@ -13,12 +12,14 @@ const Functions = require('./functions')
 
 const Constants = require('./constants')
 const Registry = require('./registry')
+const Query = require('./query')
 
 const { setLanguage, getLanguage, t } = require('./utils/i18n')
 const { metadataManager } = require('./utils/metadata-manager')
 const { functionManager, FunctionManager } = require('./functions/function-manager')
 const { CacheManager, CacheItem, cacheManager } = require('./utils/cache-manager')
 const { creditCalculator, CreditCalculator } = require('./credits/credit-calculator')
+const { getTranslations } = require('./locales')
 
 const {
   APITypes,
@@ -44,11 +45,18 @@ const {
 
 const QueryService = functionManager
 
-const { apiRegistry, modelRegistry, functionRegistry } = Registry
+const { apiRegistry, modelRegistry, functionRegistry, unifiedRegistry, serviceRegistry } = Registry
+const { metadataQuery, MetadataQuery } = Query
 const { BaseService } = Services
 const { APIDefinition } = APIs
 const { BaseParam } = Params
 const { BaseFunction } = Functions
+
+if (process.env.NODE_ENV !== 'test') {
+  initializer.initialize().catch(error => {
+    console.error('Failed to initialize framework:', error)
+  })
+}
 
 module.exports = {
   Services,
@@ -59,11 +67,16 @@ module.exports = {
   Functions,
   Constants,
   Registry,
+  Query,
   QueryService,
+  
+  initializer,
+  Initializer,
   
   setLanguage,
   getLanguage,
   t,
+  getTranslations,
   
   APITypes,
   MediaTypes,
@@ -106,6 +119,11 @@ module.exports = {
   apiRegistry,
   modelRegistry,
   functionRegistry,
+  unifiedRegistry,
+  serviceRegistry,
+  
+  metadataQuery,
+  MetadataQuery,
   
   BaseService,
   APIDefinition,

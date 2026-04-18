@@ -17,6 +17,7 @@ const Registry = require('../src/registry')
 const { setLanguage, getLanguage, t } = require('../src/utils/i18n')
 const { metadataManager } = require('../src/utils/metadata-manager')
 const { functionManager } = require('../src/functions/function-manager')
+const { i18nManager } = require('../src/utils/i18n-manager')
 
 const {
   APITypes,
@@ -52,6 +53,7 @@ module.exports = {
   Constants,
   Registry,
   QueryService,
+  i18nManager,
   
   setLanguage,
   getLanguage,

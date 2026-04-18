@@ -3,22 +3,48 @@
  * 支持多语言翻译
  */
 
-const ltx = require('./ltx')
-const volcengine = require('./volcengine')
-const skyreels = require('./skyreels')
-const mureka = require('./mureka')
+const { Models: LightricksModels, ModelsMeta: LightricksModelsMeta } = require('./lightricks')
+const { Models: VolcengineModels, ModelsMeta: VolcengineModelsMeta } = require('./volcengine')
+const { Models: SkyreelsModels, ModelsMeta: SkyreelsModelsMeta } = require('./skyreels')
+const { Models: MurekaModels, ModelsMeta: MurekaModelsMeta } = require('./mureka')
+const { Models: ViduModels, ModelsMeta: ViduModelsMeta } = require('./vidu')
 const { registerModelsMetadata, getModelsMetadata, getModelMetadata, getAllModelsMetadata } = require('../../utils/metadata-manager')
 
-registerModelsMetadata('ltx', ltx)
-registerModelsMetadata('volcengine', volcengine)
-registerModelsMetadata('skyreels', skyreels)
-registerModelsMetadata('mureka', mureka)
+const Models = {
+  ...LightricksModels,
+  ...VolcengineModels,
+  ...SkyreelsModels,
+  ...MurekaModels,
+  ...ViduModels
+}
+
+const ModelsMeta = {
+  ...LightricksModelsMeta,
+  ...VolcengineModelsMeta,
+  ...SkyreelsModelsMeta,
+  ...MurekaModelsMeta,
+  ...ViduModelsMeta
+}
+
+registerModelsMetadata('lightricks', LightricksModelsMeta)
+registerModelsMetadata('volcengine', VolcengineModelsMeta)
+registerModelsMetadata('skyreels', SkyreelsModelsMeta)
+registerModelsMetadata('mureka', MurekaModelsMeta)
+registerModelsMetadata('vidu', ViduModelsMeta)
 
 module.exports = {
-  ltx,
-  volcengine,
-  skyreels,
-  mureka,
+  Models,
+  ModelsMeta,
+  LightricksModels,
+  LightricksModelsMeta,
+  VolcengineModels,
+  VolcengineModelsMeta,
+  SkyreelsModels,
+  SkyreelsModelsMeta,
+  MurekaModels,
+  MurekaModelsMeta,
+  ViduModels,
+  ViduModelsMeta,
   getModelsMetadata,
   getModelMetadata,
   getAllModelsMetadata

@@ -187,6 +187,48 @@
         "displayName": "生成图片",
         "description": "根据文本生成图片"
       }
+    },
+    "vidu": {
+      "reference-to-image": {
+        "displayName": "参考生图",
+        "description": "根据参考图片生成图片"
+      },
+      "text-to-video": {
+        "displayName": "文生视频",
+        "description": "根据文本描述生成视频"
+      },
+      "image-to-video": {
+        "displayName": "图生视频",
+        "description": "根据图片生成视频"
+      },
+      "reference-to-video": {
+        "displayName": "参考生视频",
+        "description": "根据参考主体生成视频"
+      },
+      "start-end-to-video": {
+        "displayName": "首尾帧",
+        "description": "根据首尾帧图片生成视频"
+      },
+      "multiframe": {
+        "displayName": "智能多帧",
+        "description": "根据多个关键帧生成视频"
+      },
+      "template": {
+        "displayName": "场景特效模板",
+        "description": "根据场景模板生成视频"
+      },
+      "template-story": {
+        "displayName": "模板成片",
+        "description": "根据故事模板生成视频"
+      },
+      "query-task": {
+        "displayName": "查询任务",
+        "description": "查询任务状态"
+      },
+      "cancel-task": {
+        "displayName": "取消任务",
+        "description": "取消任务"
+      }
     }
   },
   "models": {
@@ -313,6 +355,56 @@
         "displayName": "火山引擎图片 V1",
         "description": "火山引擎图片生成模型"
       }
+    },
+    "vidu": {
+      "viduq3-mix": {
+        "displayName": "Vidu Q3 Mix",
+        "description": "画质强劲，智能切镜，音画同步，动态丰富，最佳平衡"
+      },
+      "viduq3": {
+        "displayName": "Vidu Q3",
+        "description": "智能切镜，音画同步，多机位一致性更好"
+      },
+      "viduq3-turbo": {
+        "displayName": "Vidu Q3 Turbo",
+        "description": "智能切镜，音画同步，生成最快，性价比最高"
+      },
+      "viduq3-pro": {
+        "displayName": "Vidu Q3 Pro",
+        "description": "智能切镜，音画同步，多机位一致性更好"
+      },
+      "viduq3-pro-fast": {
+        "displayName": "Vidu Q3 Pro Fast",
+        "description": "高画质音画，生成更快，性价比高"
+      },
+      "viduq2-pro": {
+        "displayName": "Vidu Q2 Pro",
+        "description": "支持参考视频，视频编辑，视频替换"
+      },
+      "viduq2-pro-fast": {
+        "displayName": "Vidu Q2 Pro Fast",
+        "description": "价格最低，质量稳定，比 viduq2-turbo 快2-3倍"
+      },
+      "viduq2-turbo": {
+        "displayName": "Vidu Q2 Turbo",
+        "description": "新模型，质量好，生成快"
+      },
+      "viduq2": {
+        "displayName": "Vidu Q2",
+        "description": "动态好，细节丰富"
+      },
+      "viduq1": {
+        "displayName": "Vidu Q1",
+        "description": "画面清晰，转场流畅，运镜稳定"
+      },
+      "viduq1-classic": {
+        "displayName": "Vidu Q1 Classic",
+        "description": "画面清晰，转场和运镜更丰富"
+      },
+      "vidu2.0": {
+        "displayName": "Vidu 2.0",
+        "description": "生成速度快"
+      }
     }
   },
   "functions": {
@@ -353,6 +445,234 @@
         "displayName": "上传文件",
         "description": "上传一个文件"
       }
+    },
+    "vidu": {
+      "reference-to-image": {
+        "displayName": "参考生图",
+        "description": "根据参考图片生成图片"
+      },
+      "text-to-video": {
+        "displayName": "文生视频",
+        "description": "根据文本描述生成视频"
+      },
+      "image-to-video": {
+        "displayName": "图生视频",
+        "description": "根据图片生成视频"
+      },
+      "reference-to-video": {
+        "displayName": "参考生视频",
+        "description": "根据参考主体生成视频"
+      },
+      "start-end-to-video": {
+        "displayName": "首尾帧",
+        "description": "根据首尾帧图片生成视频"
+      },
+      "multiframe": {
+        "displayName": "智能多帧",
+        "description": "根据多个关键帧生成视频"
+      },
+      "template": {
+        "displayName": "场景特效模板",
+        "description": "根据场景模板生成视频"
+      },
+      "template-story": {
+        "displayName": "模板成片",
+        "description": "根据故事模板生成视频"
+      },
+      "query-task": {
+        "displayName": "查询任务",
+        "description": "查询任务状态"
+      },
+      "cancel-task": {
+        "displayName": "取消任务",
+        "description": "取消任务"
+      }
+    }
+  },
+  "series": {
+    "ltx": {
+      "displayName": "LTX 系列",
+      "description": "LTX 视频生成模型系列"
+    },
+    "skyreels": {
+      "displayName": "SkyReels 系列",
+      "description": "SkyReels 视频生成模型系列"
+    },
+    "mureka": {
+      "displayName": "Mureka 系列",
+      "description": "Mureka 音乐生成模型系列"
+    },
+    "seedance": {
+      "displayName": "豆包 Seedance 系列",
+      "description": "火山引擎视频生成模型系列"
+    },
+    "seedream": {
+      "displayName": "豆包 Seedream 系列",
+      "description": "火山引擎图片生成模型系列"
+    },
+    "seed3d": {
+      "displayName": "豆包 Seed3D 系列",
+      "description": "火山引擎3D模型生成系列"
+    },
+    "vidu": {
+      "displayName": "Vidu 系列",
+      "description": "Vidu 视频生成模型系列"
+    },
+    "viduq1": {
+      "displayName": "Vidu Q1 系列",
+      "description": "Vidu Q1 视频生成模型系列"
+    },
+    "viduq2": {
+      "displayName": "Vidu Q2 系列",
+      "description": "Vidu Q2 视频生成模型系列"
+    },
+    "viduq3": {
+      "displayName": "Vidu Q3 系列",
+      "description": "Vidu Q3 视频生成模型系列"
+    }
+  },
+  "scenes": {
+    "text_to_image": {
+      "displayName": "文本生成图片",
+      "description": "根据文本描述生成图片"
+    },
+    "image_to_image": {
+      "displayName": "图片转换",
+      "description": "将输入图片转换为另一种风格"
+    },
+    "image_editing": {
+      "displayName": "图片编辑",
+      "description": "编辑和修改图片"
+    },
+    "image_upscaling": {
+      "displayName": "图片放大",
+      "description": "增强图片分辨率和质量"
+    },
+    "text_to_video": {
+      "displayName": "文本生成视频",
+      "description": "根据文本描述生成视频"
+    },
+    "image_to_video": {
+      "displayName": "图片生成视频",
+      "description": "将静态图片转换为动态视频"
+    },
+    "audio_to_video": {
+      "displayName": "音频生成视频",
+      "description": "根据音频内容生成视频"
+    },
+    "video_editing": {
+      "displayName": "视频编辑",
+      "description": "编辑和修改视频"
+    },
+    "video_reference": {
+      "displayName": "视频参考",
+      "description": "参考图片和视频"
+    },
+    "video_extension": {
+      "displayName": "视频延长",
+      "description": "延长视频时长"
+    },
+    "text_to_audio": {
+      "displayName": "文本生成音频",
+      "description": "根据文本描述生成音频"
+    },
+    "text_to_speech": {
+      "displayName": "文本转语音",
+      "description": "将文本转换为语音"
+    },
+    "speech_to_text": {
+      "displayName": "语音转文本",
+      "description": "将语音转换为文本"
+    },
+    "audio_generation": {
+      "displayName": "音频生成",
+      "description": "生成各种类型的音频"
+    },
+    "music_generation": {
+      "displayName": "音乐生成",
+      "description": "根据描述生成音乐"
+    },
+    "song_generation": {
+      "displayName": "歌曲生成",
+      "description": "生成完整的歌曲"
+    },
+    "instrumental_generation": {
+      "displayName": "伴奏生成",
+      "description": "生成器乐伴奏"
+    },
+    "vocal_cloning": {
+      "displayName": "声音克隆",
+      "description": "克隆特定的声音特征"
+    },
+    "text_generation": {
+      "displayName": "文本生成",
+      "description": "生成文本内容"
+    },
+    "text_editing": {
+      "displayName": "文本编辑",
+      "description": "编辑和修改文本"
+    },
+    "image_to_3d": {
+      "displayName": "图片生成3D",
+      "description": "根据图片生成3D模型"
+    },
+    "text_to_3d": {
+      "displayName": "文本生成3D",
+      "description": "根据文本描述生成3D模型"
+    },
+    "avatar_generation": {
+      "displayName": "数字人生成",
+      "description": "生成数字人形象"
+    },
+    "lip_sync": {
+      "displayName": "口型同步",
+      "description": "同步视频口型与音频"
+    },
+    "reference_to_image": {
+      "displayName": "参考图生成图片",
+      "description": "根据参考图片生成图片"
+    },
+    "reference_to_video": {
+      "displayName": "参考图生成视频",
+      "description": "根据参考主体生成视频"
+    },
+    "start_end_to_video": {
+      "displayName": "首尾帧生成视频",
+      "description": "根据首尾帧生成视频"
+    },
+    "multiframe": {
+      "displayName": "多帧生成视频",
+      "description": "使用多个关键帧生成视频"
+    },
+    "template": {
+      "displayName": "模板生成视频",
+      "description": "根据场景模板生成视频"
+    },
+    "template_story": {
+      "displayName": "故事模板生成视频",
+      "description": "根据故事模板生成视频"
+    }
+  },
+  "providers": {
+    "lightricks": {
+      "displayName": "Lightricks",
+      "description": "Lightricks - LTX Studio 视频创作平台"
+    },
+    "skyreels": {
+      "displayName": "Skyreels AI",
+      "description": "Skyreels AI - Skyreels AI 视频生成平台"
+    },
+    "mureka": {
+      "displayName": "Mureka AI",
+      "description": "Mureka AI - Mureka AI 音乐创作平台"
+    },
+    "volcengine": {
+      "displayName": "火山引擎",
+      "description": "字节跳动火山引擎 Seed AI"
+    },
+    "vidu": {
+      "displayName": "Vidu AI",
+      "description": "Vidu AI 视频生成平台"
     }
   }
 }

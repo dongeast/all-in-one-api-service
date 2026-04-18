@@ -15,7 +15,7 @@ const Languages = {
 /**
  * 默认语言
  */
-const DEFAULT_LANGUAGE = Languages.EN
+const DEFAULT_LANGUAGE = Languages.ZH
 
 /**
  * 语言显示名称
@@ -56,11 +56,19 @@ function normalizeLanguage(language) {
   }
   
   const lowerLang = language.toLowerCase()
-  if (lowerLang.startsWith('zh')) {
-    return Languages.ZH
+  if (LanguageAliases[lowerLang]) {
+    return LanguageAliases[lowerLang]
   }
   
-  return Languages.EN
+  if (lowerLang.startsWith('zh')) {
+    return Languages.ZH_CN
+  }
+  
+  if (lowerLang.startsWith('en')) {
+    return Languages.EN
+  }
+  
+  return DEFAULT_LANGUAGE
 }
 
 module.exports = {

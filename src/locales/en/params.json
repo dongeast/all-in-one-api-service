@@ -174,7 +174,7 @@
     "duration": {
       "label": "Duration",
       "description": "Video duration in seconds",
-      "unit": "seconds"
+      "unit": "s"
     },
     "resolution": {
       "label": "Resolution",
@@ -249,7 +249,7 @@
     "duration": {
       "label": "Duration",
       "description": "Video duration in seconds",
-      "unit": "seconds"
+      "unit": "s"
     },
     "seed": {
       "label": "Seed",
@@ -302,7 +302,7 @@
     "duration": {
       "label": "Duration",
       "description": "Video duration in seconds",
-      "unit": "seconds"
+      "unit": "s"
     },
     "seed": {
       "label": "Seed",
@@ -347,6 +347,158 @@
     "resolution": {
       "label": "Resolution",
       "description": "Output video resolution, supports 480p, 720p, and 1080p"
+    }
+  },
+  "vidu": {
+    "prompt": {
+      "label": "Prompt",
+      "description": "Text description for generation",
+      "placeholder": "Enter your prompt here"
+    },
+    "model": {
+      "label": "Model",
+      "description": "Model to use for generation"
+    },
+    "duration": {
+      "label": "Duration",
+      "description": "Video duration in seconds",
+      "unit": "s"
+    },
+    "resolution": {
+      "label": "Resolution",
+      "description": "Video resolution (360p, 540p, 720p, 1080p, 2K, 4K)"
+    },
+    "aspect_ratio": {
+      "label": "Aspect Ratio",
+      "description": "Video aspect ratio"
+    },
+    "seed": {
+      "label": "Seed",
+      "description": "Random seed, 0 for random"
+    },
+    "style": {
+      "label": "Style",
+      "description": "Style type (general, anime)"
+    },
+    "audio": {
+      "label": "Audio-Video Sync",
+      "description": "Enable audio-video sync"
+    },
+    "audio_type": {
+      "label": "Audio Type",
+      "description": "Audio type when audio is enabled"
+    },
+    "bgm": {
+      "label": "Background Music",
+      "description": "Add background music"
+    },
+    "movement_amplitude": {
+      "label": "Movement Amplitude",
+      "description": "Movement amplitude (auto, small, medium, large)"
+    },
+    "voice_id": {
+      "label": "Voice ID",
+      "description": "Voice ID for video"
+    },
+    "images": {
+      "label": "Images",
+      "description": "Image URLs or base64 encoded images"
+    },
+    "callback_url": {
+      "label": "Callback URL",
+      "description": "Callback URL for task status notification"
+    },
+    "payload": {
+      "label": "Payload",
+      "description": "Pass-through parameter"
+    },
+    "off_peak": {
+      "label": "Off-Peak Mode",
+      "description": "Off-peak mode (lower cost, within 48 hours)"
+    },
+    "watermark": {
+      "label": "Watermark",
+      "description": "Add watermark"
+    },
+    "wm_position": {
+      "label": "Watermark Position",
+      "description": "Watermark position"
+    },
+    "wm_url": {
+      "label": "Watermark URL",
+      "description": "Watermark image URL"
+    },
+    "meta_data": {
+      "label": "Metadata",
+      "description": "Metadata identifier (JSON format)"
+    },
+    "is_rec": {
+      "label": "Recommended Prompt",
+      "description": "Use recommended prompt"
+    },
+    "auto_subjects": {
+      "label": "Auto Subjects",
+      "description": "Use intelligent subject library"
+    },
+    "subjects": {
+      "label": "Subjects",
+      "description": "Subject list for reference-to-video"
+    },
+    "template": {
+      "label": "Template",
+      "description": "Scene template parameter"
+    },
+    "story": {
+      "label": "Story",
+      "description": "Story template parameter"
+    },
+    "start_image": {
+      "label": "Start Image",
+      "description": "Start frame image for multiframe"
+    },
+    "image_settings": {
+      "label": "Image Settings",
+      "description": "Key frame configuration for multiframe"
+    },
+    "area": {
+      "label": "Area",
+      "description": "Exotic princess effect parameter"
+    },
+    "beast": {
+      "label": "Beast",
+      "description": "Beast companion effect parameter"
+    },
+    "task_id": {
+      "label": "Task ID",
+      "description": "Task ID"
+    },
+    "state": {
+      "label": "State",
+      "description": "Processing status"
+    },
+    "video_url": {
+      "label": "Video URL",
+      "description": "Generated video URL"
+    },
+    "watermarked_url": {
+      "label": "Watermarked URL",
+      "description": "Watermarked video URL"
+    },
+    "credits": {
+      "label": "Credits",
+      "description": "Credits used"
+    },
+    "created_at": {
+      "label": "Created At",
+      "description": "Task creation time"
+    },
+    "finished_at": {
+      "label": "Finished At",
+      "description": "Task completion time"
+    },
+    "failed_reason": {
+      "label": "Failed Reason",
+      "description": "Failure reason"
     }
   }
 }

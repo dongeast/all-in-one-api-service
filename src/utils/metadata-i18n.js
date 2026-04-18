@@ -3,7 +3,7 @@
  * 提供元数据的多语言翻译功能
  */
 
-const { t } = require('./i18n')
+const { i18nManager } = require('./i18n-manager')
 const { Providers } = require('../constants')
 
 /**
@@ -15,23 +15,8 @@ const { Providers } = require('../constants')
  * @returns {object} 翻译后的元数据
  */
 function getTranslatedAPIMetadata(provider, apiName, language, originalMetadata = null) {
-  const displayNameKey = `apis.${provider}.${apiName}.displayName`
-  const descriptionKey = `apis.${provider}.${apiName}.description`
-  
-  const translatedDisplayName = t(displayNameKey, { language })
-  const translatedDescription = t(descriptionKey, { language })
-  
-  const hasDisplayNameTranslation = translatedDisplayName !== displayNameKey
-  const hasDescriptionTranslation = translatedDescription !== descriptionKey
-  
-  return {
-    displayName: hasDisplayNameTranslation 
-      ? translatedDisplayName 
-      : (originalMetadata?.displayName || apiName),
-    description: hasDescriptionTranslation 
-      ? translatedDescription 
-      : (originalMetadata?.description || '')
-  }
+  const metadata = originalMetadata || { name: apiName, provider }
+  return i18nManager.translateMetadata(metadata, 'apis', language)
 }
 
 /**
@@ -43,23 +28,8 @@ function getTranslatedAPIMetadata(provider, apiName, language, originalMetadata 
  * @returns {object} 翻译后的元数据
  */
 function getTranslatedModelMetadata(provider, modelName, language, originalMetadata = null) {
-  const displayNameKey = `models.${provider}.${modelName}.displayName`
-  const descriptionKey = `models.${provider}.${modelName}.description`
-  
-  const translatedDisplayName = t(displayNameKey, { language })
-  const translatedDescription = t(descriptionKey, { language })
-  
-  const hasDisplayNameTranslation = translatedDisplayName !== displayNameKey
-  const hasDescriptionTranslation = translatedDescription !== descriptionKey
-  
-  return {
-    displayName: hasDisplayNameTranslation 
-      ? translatedDisplayName 
-      : (originalMetadata?.displayName || modelName),
-    description: hasDescriptionTranslation 
-      ? translatedDescription 
-      : (originalMetadata?.description || '')
-  }
+  const metadata = originalMetadata || { name: modelName, provider }
+  return i18nManager.translateMetadata(metadata, 'models', language)
 }
 
 /**
@@ -74,13 +44,7 @@ function addTranslationsToAPIMetadata(metadata, provider, language) {
     return metadata
   }
   
-  const translated = getTranslatedAPIMetadata(provider, metadata.name, language, metadata)
-  
-  return {
-    ...metadata,
-    displayName: translated.displayName,
-    description: translated.description
-  }
+  return i18nManager.translateMetadata(metadata, 'apis', language)
 }
 
 /**
@@ -95,13 +59,29 @@ function addTranslationsToModelMetadata(metadata, provider, language) {
     return metadata
   }
   
-  const translated = getTranslatedModelMetadata(provider, metadata.name, language, metadata)
-  
-  return {
-    ...metadata,
-    displayName: translated.displayName,
-    description: translated.description
-  }
+  return i18nManager.translateMetadata(metadata, 'models', language)
+}
+
+/**
+ * 翻译 API 元数据（简化接口）
+ * @param {object} metadata - API 元数据
+ * @param {string} provider - 提供商名称
+ * @param {string} language - 语言代码(可选)
+ * @returns {object} 翻译后的元数据
+ */
+function translateAPIMetadata(metadata, provider, language) {
+  return addTranslationsToAPIMetadata(metadata, provider, language)
+}
+
+/**
+ * 翻译 Model 元数据（简化接口）
+ * @param {object} metadata - Model 元数据
+ * @param {string} provider - 提供商名称
+ * @param {string} language - 语言代码(可选)
+ * @returns {object} 翻译后的元数据
+ */
+function translateModelMetadata(metadata, provider, language) {
+  return addTranslationsToModelMetadata(metadata, provider, language)
 }
 
 /**
@@ -144,14 +124,7 @@ function addTranslationsToModels(modelsMetadata, provider, language) {
  * @returns {string} 提供商名称(小写)
  */
 function getProviderName(provider) {
-  const providerMap = {
-    [Providers.LTX]: 'ltx',
-    [Providers.MUREKA]: 'mureka',
-    [Providers.SKYREELS]: 'skyreels',
-    [Providers.VOLCENGINE]: 'volcengine'
-  }
-  
-  return providerMap[provider] || provider.toLowerCase()
+  return provider.toLowerCase()
 }
 
 module.exports = {
@@ -161,5 +134,7 @@ module.exports = {
   addTranslationsToModelMetadata,
   addTranslationsToAPIs,
   addTranslationsToModels,
-  getProviderName
+  getProviderName,
+  translateAPIMetadata,
+  translateModelMetadata
 }

@@ -21,6 +21,11 @@
       "apiKey": "xxxxx",
       "baseURL": "https://api.mureka.ai/v1",
       "timeout": 120000
+    },
+    "vidu": {
+      "apiKey": "xxxxx",
+      "baseURL": "https://api.vidu.cn",
+      "timeout": 300000
     }
   },
   "logging": {

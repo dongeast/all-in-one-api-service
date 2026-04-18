@@ -3,7 +3,7 @@
  * 提供 Function 的多语言翻译功能
  */
 
-const { t } = require('./i18n')
+const { i18nManager } = require('./i18n-manager')
 const { Providers } = require('../constants')
 
 /**
@@ -15,16 +15,8 @@ const { Providers } = require('../constants')
  * @returns {object} 翻译后的元数据
  */
 function getTranslatedFunctionMetadata(provider, functionName, language, originalMetadata = null) {
-  const displayNameKey = `functions.${provider}.${functionName}.displayName`
-  const descriptionKey = `functions.${provider}.${functionName}.description`
-  
-  const translatedDisplayName = t(displayNameKey, { language })
-  const translatedDescription = t(descriptionKey, { language })
-  
-  return {
-    displayName: translatedDisplayName !== displayNameKey ? translatedDisplayName : (originalMetadata?.displayName || displayNameKey),
-    description: translatedDescription !== descriptionKey ? translatedDescription : (originalMetadata?.description || descriptionKey)
-  }
+  const metadata = originalMetadata || { name: functionName, provider }
+  return i18nManager.translateMetadata(metadata, 'functions', language)
 }
 
 /**
@@ -38,11 +30,12 @@ function getTranslatedFunctionMetadata(provider, functionName, language, origina
  */
 function getTranslatedMethodDescription(provider, functionName, methodName, language, originalMetadata = null) {
   const descriptionKey = `functions.${provider}.${functionName}.methods.${methodName}.description`
-  
-  const translatedDescription = t(descriptionKey, { language })
+  const translatedDescription = i18nManager.t(descriptionKey, { language })
   
   return {
-    description: translatedDescription !== descriptionKey ? translatedDescription : (originalMetadata?.description || descriptionKey)
+    description: translatedDescription !== descriptionKey 
+      ? translatedDescription 
+      : (originalMetadata?.description || descriptionKey)
   }
 }
 
@@ -58,7 +51,7 @@ function addTranslationsToFunctionMetadata(metadata, provider, language) {
     return metadata
   }
   
-  const translated = getTranslatedFunctionMetadata(provider, metadata.name, language, metadata)
+  const translated = i18nManager.translateMetadata(metadata, 'functions', language)
   
   const result = {
     ...metadata,
@@ -103,14 +96,7 @@ function addTranslationsToFunctions(functionsMetadata, provider, language) {
  * @returns {string} 提供商名称(小写)
  */
 function getProviderName(provider) {
-  const providerMap = {
-    [Providers.LTX]: 'ltx',
-    [Providers.MUREKA]: 'mureka',
-    [Providers.SKYREELS]: 'skyreels',
-    [Providers.VOLCENGINE]: 'volcengine'
-  }
-  
-  return providerMap[provider] || provider.toLowerCase()
+  return provider.toLowerCase()
 }
 
 /**
@@ -122,21 +108,7 @@ function getProviderName(provider) {
  * @returns {object} 带翻译的参数模式
  */
 function addTranslationsToInputSchema(inputSchema, provider, functionName, language) {
-  const result = {}
-  
-  for (const [paramName, paramSchema] of Object.entries(inputSchema)) {
-    const paramKey = `params.${provider}.${functionName}.input.${paramName}`
-    const descriptionKey = `${paramKey}.description`
-    
-    const translatedDescription = t(descriptionKey, { language })
-    
-    result[paramName] = {
-      ...paramSchema,
-      description: translatedDescription !== descriptionKey ? translatedDescription : (paramSchema.description || descriptionKey)
-    }
-  }
-  
-  return result
+  return i18nManager.translateParamConfig(inputSchema, provider, language)
 }
 
 /**
@@ -148,21 +120,7 @@ function addTranslationsToInputSchema(inputSchema, provider, functionName, langu
  * @returns {object} 带翻译的结果模式
  */
 function addTranslationsToOutputSchema(outputSchema, provider, functionName, language) {
-  const result = {}
-  
-  for (const [fieldName, fieldSchema] of Object.entries(outputSchema)) {
-    const fieldKey = `params.${provider}.${functionName}.output.${fieldName}`
-    const descriptionKey = `${fieldKey}.description`
-    
-    const translatedDescription = t(descriptionKey, { language })
-    
-    result[fieldName] = {
-      ...fieldSchema,
-      description: translatedDescription !== descriptionKey ? translatedDescription : (fieldSchema.description || descriptionKey)
-    }
-  }
-  
-  return result
+  return i18nManager.translateParamConfig(outputSchema, provider, language)
 }
 
 module.exports = {

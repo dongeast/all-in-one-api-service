@@ -277,6 +277,128 @@
           }
         }
       }
+    },
+    "vidu": {
+      "reference-to-image": {
+        "displayName": "参考生图",
+        "description": "根据参考图片生成图片",
+        "methods": {
+          "request": {
+            "description": "发起参考生图请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "text-to-video": {
+        "displayName": "文生视频",
+        "description": "根据文本描述生成视频",
+        "methods": {
+          "request": {
+            "description": "发起文生视频请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "image-to-video": {
+        "displayName": "图生视频",
+        "description": "根据图片生成视频",
+        "methods": {
+          "request": {
+            "description": "发起图生视频请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "reference-to-video": {
+        "displayName": "参考生视频",
+        "description": "根据参考主体生成视频",
+        "methods": {
+          "request": {
+            "description": "发起参考生视频请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "start-end-to-video": {
+        "displayName": "首尾帧",
+        "description": "根据首尾帧图片生成视频",
+        "methods": {
+          "request": {
+            "description": "发起首尾帧请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "multiframe": {
+        "displayName": "智能多帧",
+        "description": "根据多个关键帧生成视频",
+        "methods": {
+          "request": {
+            "description": "发起智能多帧请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "template": {
+        "displayName": "场景特效模板",
+        "description": "根据场景模板生成视频",
+        "methods": {
+          "request": {
+            "description": "发起场景特效模板请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      },
+      "template-story": {
+        "displayName": "模板成片",
+        "description": "根据故事模板生成视频",
+        "methods": {
+          "request": {
+            "description": "发起模板成片请求"
+          },
+          "response": {
+            "description": "获取任务结果"
+          },
+          "execute": {
+            "description": "执行完整流程"
+          }
+        }
+      }
     }
   }
 }
