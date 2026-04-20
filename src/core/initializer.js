@@ -6,7 +6,8 @@
 const { unifiedRegistry, serviceRegistry } = require('../registry')
 const { createLogger } = require('../utils/logger')
 
-const logger = createLogger({ level: 'INFO' })
+const logLevel = process.env.AI_SERVICE_LOG_LEVEL || 'DEBUG'
+const logger = createLogger({ level: logLevel })
 
 /**
  * 初始化器类

@@ -124,6 +124,14 @@ class ParamConfigManager {
       param.max = field.max
     }
 
+    if (field.minLength !== undefined) {
+      param.minLength = field.minLength
+    }
+
+    if (field.maxLength !== undefined) {
+      param.maxLength = field.maxLength
+    }
+
     if (field.step !== undefined) {
       param.step = field.step
     }

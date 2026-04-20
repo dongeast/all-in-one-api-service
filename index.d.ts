@@ -631,6 +631,20 @@ export function setLanguage(language: string): void
 export function getLanguage(): string
 export function t(key: string, params?: Record<string, any>): string
 
+export interface InitializerOptions {
+  autoLoadConfig?: boolean
+  configPath?: string
+}
+
+export class Initializer {
+  constructor(options?: InitializerOptions)
+  initialize(): Promise<void>
+  isInitialized(): boolean
+  reset(): void
+}
+
+export const initializer: Initializer
+
 export function getFunction(name: string, language?: string): FunctionMetadata | null
 export function getFunctions(options?: Record<string, any>, language?: string): FunctionMetadata[]
 export function getFunctionByAPI(apiName: string, language?: string): FunctionMetadata | null

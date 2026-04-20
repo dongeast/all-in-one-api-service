@@ -9,16 +9,14 @@ module.exports = {
   input: {
     video_uri: {
       type: ParamType.STRING,
-      elementType: ElementType.UPLOAD,
+      elementType: ElementType.VIDEO_UPLOAD,
       required: true,
-      description: 'Input video URI for extension. Aspect ratio: 16:9 and 9:16. Max resolution: 3840x2160 (4K). Min frames: 73 (about 3 seconds @24fps)'
     },
 
     duration: {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: true,
-      description: 'Extended video duration (seconds). Min 2 seconds, max 20 seconds (480 frames @24fps)',
       min: 2,
       max: 20,
       default: 8,
@@ -29,17 +27,15 @@ module.exports = {
       type: ParamType.STRING,
       elementType: ElementType.TEXTAREA,
       required: false,
-      description: 'Describe what should happen in the extended section',
       minLength: 1,
       maxLength: 5000
     },
 
     mode: {
       type: ParamType.ENUM,
-      elementType: ElementType.SELECT,
+      elementType: ElementType.RADIO,
       required: false,
       default: 'end',
-      description: 'Where to extend the video',
       options: ['end', 'start']
     },
 
@@ -48,7 +44,6 @@ module.exports = {
       elementType: ElementType.SELECT,
       required: false,
       default: 'ltx-2-3-pro',
-      description: 'Model to use (only Pro models supported: ltx-2-pro, ltx-2-3-pro)',
       options: ['ltx-2-pro', 'ltx-2-3-pro']
     },
 
@@ -56,9 +51,9 @@ module.exports = {
       type: ParamType.NUMBER,
       elementType: ElementType.SLIDER,
       required: false,
-      description: 'Context duration from input video (seconds). Max 20 seconds. Context + duration frames ≤ 505 frames (about 21 seconds @24fps)',
-      min: 0,
+      min: 1,
       max: 20,
+      step: 1,
       unit: 's'
     }
   },
@@ -67,7 +62,8 @@ module.exports = {
     video: {
       type: 'buffer',
       description: 'Video binary data',
-      path: 'video'
+      path: 'video',
+      isResult: true
     },
 
     contentType: {
@@ -81,16 +77,5 @@ module.exports = {
       description: 'Error information',
       path: 'error'
     }
-  },
-
-  cases: [
-    {
-      dependsOn: 'model',
-      value: 'ltx-2-3-pro'
-    },
-    {
-      dependsOn: 'model',
-      value: 'ltx-2-pro'
-    }
-  ]
+  }
 }

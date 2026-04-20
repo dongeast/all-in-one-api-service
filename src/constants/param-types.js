@@ -30,6 +30,7 @@ const ElementType = {
   RESOLUTION: 'resolution',
   IMAGE_UPLOAD: 'image-upload',
   AUDIO_UPLOAD: 'audio-upload',
+  VIDEO_UPLOAD: 'video-upload',
   CAMERA_MOTION: 'camera-motion',
   THREE_D_CONTENT: '3d-content',
 }

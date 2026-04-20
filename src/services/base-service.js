@@ -310,12 +310,11 @@ class BaseService {
    * @param {object} options - 请求选项
    * @returns {Promise<any>} 响应结果
    */
-  async executeWithTimeout(url, fetchOptions, options = {}) {
+  async executeWithTimeout(url, fetchOptions = {}, options = {}) {
     const controller = new AbortController()
-    const timeoutId = setTimeout(
-      () => controller.abort(),
-      options.timeout || this.config.timeout
-    )
+    const timeout = options.timeout || this.config.timeout || 30000
+
+    const timeoutId = setTimeout(() => controller.abort(), timeout)
 
     try {
       const fetch = getFetch()
@@ -326,14 +325,44 @@ class BaseService {
 
       clearTimeout(timeoutId)
 
+      this.logger.debug(`[${this.providerName}] HTTP Response received`, {
+        url: url,
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      })
+
       if (!response.ok) {
         const errorData = await this.parseErrorResponse(response)
+        this.logger.error(`[${this.providerName}] API error response`, {
+          url: url,
+          status: response.status,
+          errorData: JSON.stringify(errorData).substring(0, 500)
+        })
         throw this.createError(response.status, errorData)
       }
 
-      return await this.parseResponse(response)
+      const result = await this.parseResponse(response)
+
+      this.logger.debug(`[${this.providerName}] Response parsed successfully`, {
+        url: url,
+        resultType: typeof result,
+        hasVideoBuffer: result?.video ? 'yes' : 'no',
+        resultKeys: result ? Object.keys(result) : []
+      })
+
+      return result
     } catch (error) {
       clearTimeout(timeoutId)
+
+      this.logger.error(`[${this.providerName}] Request failed`, {
+        url: url,
+        errorName: error.name,
+        errorMessage: error.message,
+        errorCode: error.code,
+        willRetry: options.retryCount > 0
+      })
+
       throw error
     }
   }
@@ -354,6 +383,11 @@ class BaseService {
 
     this.logger.debug(`Calling ${this.providerName} API`, {
       endpoint,
+      fullUrl: url,
+      headers: {
+        ...headers,
+        Authorization: headers.Authorization ? `${headers.Authorization.substring(0, 20)}...` : undefined
+      },
       params: this.sanitizeParams(params)
     })
 
@@ -363,11 +397,21 @@ class BaseService {
       body: options.method === 'GET' ? undefined : body
     }, options)
 
-    return retry(executeRequest, {
+    const result = await retry(executeRequest, {
       maxRetries: options.retryCount || this.config.retryCount,
       delay: options.retryDelay || this.config.retryDelay,
       shouldRetry: (error) => this.shouldRetry(error)
     })
+
+    this.logger.debug(`[${this.providerName}] API response`, {
+      endpoint,
+      hasResult: !!result,
+      resultKeys: result ? Object.keys(result) : [],
+      hasVideo: result?.video ? 'yes (buffer)' : 'no',
+      resultPreview: result ? JSON.stringify(result).substring(0, 500) : null
+    })
+
+    return result
   }
 
   /**

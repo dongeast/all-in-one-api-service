@@ -207,6 +207,80 @@
       "placeholder": "https://example.com/video.mp4"
     }
   },
+  "lightricks": {
+    "prompt": {
+      "label": "Prompt",
+      "description": "Text prompt describing the desired video content",
+      "placeholder": "Enter your prompt here"
+    },
+    "model": {
+      "label": "Model",
+      "description": "Model name to use"
+    },
+    "duration": {
+      "label": "Duration",
+      "description": "Video duration (seconds), different available duration options depending on model and resolution",
+      "unit": "s"
+    },
+    "resolution": {
+      "label": "Resolution",
+      "description": "Output video resolution"
+    },
+    "fps": {
+      "label": "Frame Rate",
+      "description": "Frame rate, different available frame rates depending on model and resolution",
+      "unit": "fps"
+    },
+    "generate_audio": {
+      "label": "Generate Audio",
+      "description": "Whether to generate audio for video, true includes AI-generated audio, false generates silent video only"
+    },
+    "camera_motion": {
+      "label": "Camera Motion",
+      "description": "Apply camera motion effect to generated video"
+    },
+    "image_uri": {
+      "label": "Image",
+      "description": "Image URI to use as the first frame of the video"
+    },
+    "audio_uri": {
+      "label": "Audio",
+      "description": "Audio file URI to use as video soundtrack. Duration must be between 2 and 20 seconds"
+    },
+    "video_uri": {
+      "label": "Video",
+      "description": "Input video URI"
+    },
+    "guidance_scale": {
+      "label": "Guidance Scale",
+      "description": "Video generation guidance scale (CFG). Default is 5 for text-to-video, 9 when image is provided"
+    },
+    "seed": {
+      "label": "Seed",
+      "description": "Random seed for reproducibility"
+    },
+    "negative_prompt": {
+      "label": "Negative Prompt",
+      "description": "Negative prompt to avoid unwanted content",
+      "placeholder": "Enter negative prompt"
+    },
+    "start_frame": {
+      "label": "Start Frame",
+      "description": "Start frame time of the video (seconds)"
+    },
+    "end_frame": {
+      "label": "End Frame",
+      "description": "End frame time of the video (seconds)"
+    },
+    "extension_duration": {
+      "label": "Extension Duration",
+      "description": "Duration of video extension (seconds)"
+    },
+    "extension_direction": {
+      "label": "Extension Direction",
+      "description": "Direction of video extension (start or end)"
+    }
+  },
   "ltx": {
     "prompt": {
       "label": "Prompt",

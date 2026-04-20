@@ -13,14 +13,12 @@ module.exports = {
       required: true,
       maxItems: 1,
       maxSizeMB: 10,
-      description: 'Image URI to use as the first frame of the video'
     },
 
     prompt: {
       type: ParamType.STRING,
       elementType: ElementType.TEXTAREA,
       required: true,
-      description: 'Text describing how the image should be animated',
       minLength: 1,
       maxLength: 5000
     },
@@ -29,7 +27,6 @@ module.exports = {
       type: ParamType.ENUM,
       elementType: ElementType.SELECT,
       required: true,
-      description: 'Model to use (supports: ltx-2-fast, ltx-2-pro, ltx-2-3-fast, ltx-2-3-pro)',
       options: ['ltx-2-fast', 'ltx-2-pro', 'ltx-2-3-fast', 'ltx-2-3-pro']
     },
 
@@ -75,24 +72,20 @@ module.exports = {
       type: ParamType.BOOLEAN,
       elementType: ElementType.SWITCH,
       required: false,
-      description: 'Whether to generate audio for video',
       default: true
     },
 
     last_frame_uri: {
+      // 根据模型适配
       type: ParamType.STRING,
-      elementType: ElementType.IMAGE_UPLOAD,
       required: false,
-      maxItems: 1,
-      maxSizeMB: 10,
-      description: 'Image URI to use as the last frame of the video. Video will interpolate between first and last frame. Only supported by ltx-2-3 models'
+      elementType: ElementType.DEFAULT
     },
 
     camera_motion: {
       type: ParamType.ENUM,
       elementType: ElementType.CAMERA_MOTION,
       required: false,
-      description: 'Apply camera motion effect to generated video',
       options: [
         'dolly_in',
         'dolly_out',
@@ -110,7 +103,8 @@ module.exports = {
     video: {
       type: 'buffer',
       description: 'Video binary data',
-      path: 'video'
+      path: 'video',
+      isResult: true
     },
 
     contentType: {
@@ -144,11 +138,11 @@ module.exports = {
           '2160x3840'
         ]
       },
+      // 待完善，缺少对 	1080p	24, 25	6, 8, 10, 12, 14, 16, 18, 20 的多级限制支持
       fps: {
         type: ParamType.NUMBER,
-        elementType: ElementType.SLIDER,
+        elementType: ElementType.RADIO,
         required: false,
-        description: 'Frame rate (LTX-2.3 supports 24, 25, 48, 50 fps)',
         options: [24, 25, 48, 50],
         default: 24
       },
@@ -156,9 +150,10 @@ module.exports = {
         type: ParamType.NUMBER,
         elementType: ElementType.SLIDER,
         required: true,
-        description: 'Video duration (1080p: 6-20s, other resolutions: 6-10s)',
-        options: [6, 8, 10, 12, 14, 16, 18, 20],
-        default: 8
+        min: 6,
+        max: 10,
+        step: 2,
+        default: 6
       },
       last_frame_uri: {
         type: ParamType.STRING,
@@ -166,7 +161,6 @@ module.exports = {
         required: false,
         maxItems: 1,
         maxSizeMB: 10,
-        description: 'Image URI to use as the last frame of the video. Video will interpolate between first and last frame. Only supported by ltx-2-3 models'
       }
     },
     {
@@ -188,9 +182,8 @@ module.exports = {
       },
       fps: {
         type: ParamType.NUMBER,
-        elementType: ElementType.SLIDER,
+        elementType: ElementType.RADIO,
         required: false,
-        description: 'Frame rate (LTX-2.3 supports 24, 25, 48, 50 fps)',
         options: [24, 25, 48, 50],
         default: 24
       },
@@ -198,9 +191,10 @@ module.exports = {
         type: ParamType.NUMBER,
         elementType: ElementType.SLIDER,
         required: true,
-        description: 'Video duration (LTX-2.3 Pro supports 6, 8, 10 seconds)',
-        options: [6, 8, 10],
-        default: 8
+        min: 6,
+        max: 10,
+        step: 2,
+        default: 6
       },
       last_frame_uri: {
         type: ParamType.STRING,
@@ -208,7 +202,6 @@ module.exports = {
         required: false,
         maxItems: 1,
         maxSizeMB: 10,
-        description: 'Image URI to use as the last frame of the video. Video will interpolate between first and last frame. Only supported by ltx-2-3 models'
       }
     },
     {
@@ -218,18 +211,17 @@ module.exports = {
         type: ParamType.ENUM,
         elementType: ElementType.RESOLUTION,
         required: true,
-        description: 'Output video resolution (LTX-2 only supports landscape 16:9)',
         options: [
           '1920x1080',
           '2560x1440',
           '3840x2160'
         ]
       },
+      // 待完善，缺少对 	1080p	25	6, 8, 10, 12, 14, 16, 18, 20 的多级限制支持
       fps: {
         type: ParamType.NUMBER,
         elementType: ElementType.SLIDER,
         required: false,
-        description: 'Frame rate (LTX-2 supports 25, 50 fps)',
         options: [25, 50],
         default: 25
       },
@@ -237,9 +229,10 @@ module.exports = {
         type: ParamType.NUMBER,
         elementType: ElementType.SLIDER,
         required: true,
-        description: 'Video duration (1080p: 6-20s, other resolutions: 6-10s)',
-        options: [6, 8, 10, 12, 14, 16, 18, 20],
-        default: 8
+        min: 6,
+        max: 10,
+        step: 2,
+        default: 6
       }
     },
     {
@@ -249,7 +242,6 @@ module.exports = {
         type: ParamType.ENUM,
         elementType: ElementType.RESOLUTION,
         required: true,
-        description: 'Output video resolution (LTX-2 only supports landscape 16:9)',
         options: [
           '1920x1080',
           '2560x1440',
@@ -260,7 +252,6 @@ module.exports = {
         type: ParamType.NUMBER,
         elementType: ElementType.SLIDER,
         required: false,
-        description: 'Frame rate (LTX-2 supports 25, 50 fps)',
         options: [25, 50],
         default: 25
       },

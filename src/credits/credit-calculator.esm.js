@@ -131,20 +131,20 @@ class CreditCalculator {
    */
   calculateByType(creditConfig, params, provider) {
     switch (creditConfig.type) {
-      case CreditCalculationType.FIXED:
-        return this.calculateFixed(creditConfig, params)
+    case CreditCalculationType.FIXED:
+      return this.calculateFixed(creditConfig, params)
       
-      case CreditCalculationType.FORMULA:
-        return this.calculateFormula(creditConfig, params, provider)
+    case CreditCalculationType.FORMULA:
+      return this.calculateFormula(creditConfig, params, provider)
       
-      case CreditCalculationType.TIERED:
-        return this.calculateTiered(creditConfig, params)
+    case CreditCalculationType.TIERED:
+      return this.calculateTiered(creditConfig, params)
       
-      case CreditCalculationType.DYNAMIC:
-        return this.calculateDynamic(creditConfig, params, provider)
+    case CreditCalculationType.DYNAMIC:
+      return this.calculateDynamic(creditConfig, params, provider)
       
-      default:
-        return { cost: creditConfig.baseCost || 5, breakdown: {} }
+    default:
+      return { cost: creditConfig.baseCost || 5, breakdown: {} }
     }
   }
 

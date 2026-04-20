@@ -7,7 +7,7 @@
       "baseURL": "https://api-gateway.skyreels.ai/api/v1",
       "timeout": 120000
     },
-    "ltx": {
+    "lightricks": {
       "apiKey": "xxxxx",
       "baseURL": "https://api.ltx.video",
       "timeout": 300000

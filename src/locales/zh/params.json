@@ -207,6 +207,80 @@
       "placeholder": "https://example.com/video.mp4"
     }
   },
+  "lightricks": {
+    "prompt": {
+      "label": "提示词",
+      "description": "描述视频内容的文本提示词",
+      "placeholder": "请输入提示词"
+    },
+    "model": {
+      "label": "模型",
+      "description": "使用的模型名称"
+    },
+    "duration": {
+      "label": "时长",
+      "description": "视频时长（秒），根据模型和分辨率不同有不同的可用时长选项",
+      "unit": "秒"
+    },
+    "resolution": {
+      "label": "分辨率",
+      "description": "输出视频分辨率"
+    },
+    "fps": {
+      "label": "帧率",
+      "description": "每秒帧数，根据模型和分辨率不同有不同的可用帧率选项",
+      "unit": "fps"
+    },
+    "generate_audio": {
+      "label": "生成音频",
+      "description": "是否为视频生成音频，true 包含 AI 生成的音频，false 仅生成无声视频"
+    },
+    "camera_motion": {
+      "label": "摄像机运动",
+      "description": "为生成的视频应用摄像机运动效果"
+    },
+    "image_uri": {
+      "label": "图片",
+      "description": "用作视频第一帧的图片 URI"
+    },
+    "audio_uri": {
+      "label": "音频",
+      "description": "用作视频音轨的音频文件 URI，时长必须在 2 到 20 秒之间"
+    },
+    "video_uri": {
+      "label": "视频",
+      "description": "输入视频 URI"
+    },
+    "guidance_scale": {
+      "label": "引导比例",
+      "description": "视频生成引导比例（CFG），文本生成视频默认为 5，提供图片时为 9"
+    },
+    "seed": {
+      "label": "随机种子",
+      "description": "随机种子，用于复现结果"
+    },
+    "negative_prompt": {
+      "label": "负向提示词",
+      "description": "负向提示词，避免生成不需要的内容",
+      "placeholder": "请输入负向提示词"
+    },
+    "start_frame": {
+      "label": "起始帧",
+      "description": "视频的起始帧时间（秒）"
+    },
+    "end_frame": {
+      "label": "结束帧",
+      "description": "视频的结束帧时间（秒）"
+    },
+    "extension_duration": {
+      "label": "延长时长",
+      "description": "延长的视频时长（秒）"
+    },
+    "extension_direction": {
+      "label": "延长方向",
+      "description": "视频延长的方向（开始或结束）"
+    }
+  },
   "ltx": {
     "prompt": {
       "label": "提示词",

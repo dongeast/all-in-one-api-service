@@ -130,7 +130,7 @@ const FunctionsMeta = {
   
   [Functions.VOCAL_CLONING]: {
     name: 'vocal-cloning',
-    type: 'async',
+    type: 'sync',
     provider: Providers.MUREKA,
     apiType: APITypes.VOCAL_CLONING,
     

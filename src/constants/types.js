@@ -308,14 +308,14 @@ const APITypes = {
     inputOutput: InputOutputTypes.AUDIO_TO_VIDEO,
     description: 'Generate video from audio content',
     display_name: 'Audio to Video',
-    display_flag: false
+    display_flag: true
   },
   VIDEO_EDITING: {
     id: 'video_editing',
     inputOutput: InputOutputTypes.VIDEO_EDITING,
     description: 'Edit and modify videos',
     display_name: 'Video Editing',
-    display_flag: false
+    display_flag: true
   },
   VIDEO_REFERENCE: {
     id: 'video_reference',
@@ -329,7 +329,7 @@ const APITypes = {
     inputOutput: InputOutputTypes.VIDEO_EXTENSION,
     description: 'Extend video duration',
     display_name: 'Video Extension',
-    display_flag: false
+    display_flag: true
   },
 
   TEXT_TO_AUDIO: {

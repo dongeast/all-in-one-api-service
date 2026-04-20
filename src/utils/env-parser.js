@@ -10,7 +10,7 @@ const KNOWN_PROVIDERS = [
   'volcengine', 'baidu', 'alibaba', 'tencent', 'huawei',
   'moonshot', 'zhipu', 'deepseek', 'minimax', 'baichuan',
   'stability', 'midjourney', 'runway', 'pika',
-  'ltx', 'skyreels', 'replicate', 'gemini', 'custom'
+  'ltx', 'lightricks', 'skyreels', 'replicate', 'gemini', 'custom'
 ]
 
 const PROVIDER_KEY_MAPPINGS = {
