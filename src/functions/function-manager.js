@@ -112,7 +112,10 @@ class FunctionManager {
       throw new Error(`Unknown provider: ${provider}`)
     }
 
-    return new ServiceClass()
+    const presetConfig = require('../config/presets')
+    const providerConfig = presetConfig.providers?.[provider] || {}
+
+    return new ServiceClass(providerConfig)
   }
 
   /**
