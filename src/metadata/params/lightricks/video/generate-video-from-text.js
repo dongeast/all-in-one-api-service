@@ -169,7 +169,7 @@ module.exports = {
       // 待完善，缺少对 	1080p	25	6, 8, 10, 12, 14, 16, 18, 20 的多级限制支持
       fps: {
         type: ParamType.NUMBER,
-        elementType: ElementType.SLIDER,
+        elementType: ElementType.RADIO,
         required: false,
         options: [25, 50],
         default: 25
@@ -199,7 +199,7 @@ module.exports = {
       },
       fps: {
         type: ParamType.NUMBER,
-        elementType: ElementType.SLIDER,
+        elementType: ElementType.RADIO,
         required: false,
         options: [25, 50],
         default: 25
